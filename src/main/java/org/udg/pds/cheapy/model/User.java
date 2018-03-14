@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Entity(name = "usuaris")
+@Entity(name = "usuari")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"correu", "nom"}))
 public class User implements Serializable {
     /**
@@ -32,6 +32,19 @@ public class User implements Serializable {
         this.correu = correu;
         this.contrasenya = contrasenya;
         this.ubicacio = ubicacio;
+        this.missatges = new ArrayList<>();
+        this.converses = new ArrayList<>();
+        this.valoracions = new ArrayList<>();
+        this.compres = new ArrayList<>();
+        this.vendes = new ArrayList<>();
+        this.favorits = new ArrayList<>();
+        this.prodVenda = new ArrayList<>();
+    }
+
+    public User(String nom, String correu, String contrasenya){
+        this.nom = nom;
+        this.correu = correu;
+        this.contrasenya = contrasenya;
         this.missatges = new ArrayList<>();
         this.converses = new ArrayList<>();
         this.valoracions = new ArrayList<>();
@@ -82,31 +95,31 @@ public class User implements Serializable {
 
     //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Missatge> missatges;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Conversacio> converses;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Valoracio> valoracions;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> compres;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> vendes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Producte> favorits;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Producte> prodVenda;
 
