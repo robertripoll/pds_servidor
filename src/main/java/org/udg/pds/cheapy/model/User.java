@@ -225,6 +225,10 @@ public class User implements Serializable {
         valoracions.add(valoracio);
     }
 
+    public int getNumValoracions(){
+        return valoracions.size();
+    }
+
     public Collection<Transaccio> getCompres(){
         compres.size();
         return compres;
@@ -238,6 +242,10 @@ public class User implements Serializable {
         compres.add(compra);
     }
 
+    public int getNumCompres(){
+        return compres.size();
+    }
+
     public Collection<Transaccio> getVendes(){
         vendes.size();
         return vendes;
@@ -249,6 +257,10 @@ public class User implements Serializable {
 
     public void addVenda(Transaccio venda){
         vendes.add(venda);
+    }
+
+    public int getNumVendes(){
+        return vendes.size();
     }
 
     public Collection<Producte> getFavorits(){
