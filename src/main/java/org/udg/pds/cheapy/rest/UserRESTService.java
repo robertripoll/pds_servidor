@@ -17,8 +17,9 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
 // This class is used to process all the authentication related URLs
-@Path("/users")
+@Path("/usuaris")
 @RequestScoped
 public class UserRESTService extends RESTService {
 
@@ -29,8 +30,8 @@ public class UserRESTService extends RESTService {
   @Inject
   ToJSON toJSON;
 
+  @Path("/autenticar")
   @POST
-  @Path("auth")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response auth(@Context HttpServletRequest req,
@@ -39,13 +40,13 @@ public class UserRESTService extends RESTService {
 
     checkNotLoggedIn(req);
 
-    User u = userService.matchPassword(user.username, user.password);
+    User u = userService.matchPassword(user.correu, user.contrasenya);
     req.getSession().setAttribute("simpleapp_auth_id", u.getId());
     return buildResponseWithView(Views.Private.class, u);
   }
 
-  @DELETE
   @Path("{id}")
+  @DELETE
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId) {
 
@@ -57,8 +58,7 @@ public class UserRESTService extends RESTService {
     return buildResponse(userService.remove(userId));
   }
 
-
-  @Path("register")
+  @Path("/registrar")
   @POST
   @Produces(MediaType.APPLICATION_JSON)
   public Response register(RegisterUser ru, @Context HttpServletRequest req) {
@@ -66,21 +66,23 @@ public class UserRESTService extends RESTService {
     try {
       Long userId = getLoggedUser(req);
     } catch (WebApplicationException ex) {
-      return buildResponse(userService.register(ru.username, ru.email, ru.password));
+      return buildResponse(userService.register(ru.nom, ru.correu, ru.contrasenya));
     }
 
     throw new WebApplicationException("Cannot register while user is logged in");
   }
 
+
+
   static class LoginUser {
-    @NotNull public String username;
-    @NotNull public String password;
+    @NotNull public String correu;
+    @NotNull public String contrasenya;
   }
 
   static class RegisterUser {
-    @NotNull public String username;
-    @NotNull public String email;
-    @NotNull public String password;
+    @NotNull public String nom;
+    @NotNull public String correu;
+    @NotNull public String contrasenya;
   }
 
   static class ID {
@@ -92,3 +94,4 @@ public class UserRESTService extends RESTService {
   }
 
 }
+
