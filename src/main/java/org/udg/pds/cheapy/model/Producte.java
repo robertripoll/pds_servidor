@@ -62,8 +62,10 @@ public class Producte implements Serializable{
 
     }
 
-    public Producte(String nom, Double preu, Boolean preuNegociable, Boolean intercanviAcceptat)
+    public Producte(Categoria categoria, User venedor, String nom, Double preu, Boolean preuNegociable, Boolean intercanviAcceptat)
     {
+        this.categoria          = categoria;
+        this.venedor            = venedor;
         this.nom                = nom;
         this.preu               = preu;
         this.preuNegociable     = preuNegociable;
@@ -73,9 +75,9 @@ public class Producte implements Serializable{
         this.dataPublicacio     = new DateTime();
     }
 
-    public Producte(String nom, Double preu, String descripcio, Boolean preuNegociable, Boolean intercanviAcceptat)
+    public Producte(Categoria categoria, User venedor, String nom, Double preu, String descripcio, Boolean preuNegociable, Boolean intercanviAcceptat)
     {
-        this(nom, preu, preuNegociable, intercanviAcceptat);
+        this(categoria, venedor, nom, preu, preuNegociable, intercanviAcceptat);
         this.descripcio = descripcio;
     }
 
@@ -124,6 +126,21 @@ public class Producte implements Serializable{
         return reservat;
     }
 
+    public Categoria getCategoria()
+    {
+        return categoria;
+    }
+
+    public User getVenedor()
+    {
+        return venedor;
+    }
+
+    public Transaccio getTransaccio()
+    {
+        return transaccio;
+    }
+
     public void setNom(String nouNom)
     {
         this.nom = nouNom;
@@ -157,20 +174,5 @@ public class Producte implements Serializable{
     public void setReservat(Boolean nouReservat)
     {
         this.reservat = nouReservat;
-    }
-
-    public Categoria getCategoria()
-    {
-        return categoria;
-    }
-
-    public User getVenedor()
-    {
-        return venedor;
-    }
-
-    public Transaccio getTransaccio()
-    {
-        return transaccio;
     }
 }
