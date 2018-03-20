@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "usuaris")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"correu", "nom", "telefon"}))
 public class User implements Serializable {
     /**
      * Default value included to remove warning. Remove or modify at will. *
@@ -68,6 +67,7 @@ public class User implements Serializable {
 
     @NotNull
     @JsonView(Views.Private.class)
+    @Column(unique = true)
     private String correu;
 
     @NotNull
@@ -84,6 +84,7 @@ public class User implements Serializable {
 
     @NotNull
     @JsonView(Views.Private.class)
+    @Column(unique = true)
     private String telefon;
 
     @NotNull
