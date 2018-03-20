@@ -17,8 +17,8 @@ public class Transaccio implements Serializable{
     protected Long id;
 
     @ManyToOne
-    private User comprador;
+    private User usuari_comprador;
 
     @ManyToOne
-    private  User venedor;
+    private  User usuari_venedor;
 }

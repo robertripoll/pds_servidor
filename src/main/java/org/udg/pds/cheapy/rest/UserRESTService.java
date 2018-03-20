@@ -66,7 +66,7 @@ public class UserRESTService extends RESTService {
     try {
       Long userId = getLoggedUser(req);
     } catch (WebApplicationException ex) {
-      return buildResponse(userService.register(ru.nom, ru.correu, ru.contrasenya));
+      return buildResponse(userService.register(ru.nom,ru.cognom, ru.correu, ru.contrasenya));
     }
 
     throw new WebApplicationException("Cannot register while user is logged in");
@@ -83,6 +83,7 @@ public class UserRESTService extends RESTService {
     @NotNull public String nom;
     @NotNull public String correu;
     @NotNull public String contrasenya;
+    @NotNull public String cognom;
   }
 
   static class ID {

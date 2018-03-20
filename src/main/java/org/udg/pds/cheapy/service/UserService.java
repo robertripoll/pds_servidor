@@ -18,7 +18,7 @@ public class UserService {
   private EntityManager em;
 
   public User matchPassword(String correu, String contrasenya) {
-    Query q = em.createQuery("select u from User u where u.correu=:correu");
+    Query q = em.createQuery("select u from usuaris u where u.correu=:correu");
     q.setParameter("correu", correu);
 
     User u;
@@ -34,9 +34,9 @@ public class UserService {
       throw new EJBException("Password does not match");
   }
 
-  public User register(String nom, String correu, String contrasenya) {
+  public User register(String nom, String cognom, String correu, String contrasenya) {
 
-    Query q = em.createQuery("select u from User u where u.correu=:correu");
+    Query q = em.createQuery("select u from usuaris u where u.correu=:correu");
     q.setParameter("correu", correu);
     try {
       User u = (User) q.getSingleResult();
@@ -44,15 +44,7 @@ public class UserService {
       throw new EJBException("Email already exist");
     }
 
-    q = em.createQuery("select u from User u where u.nom=:nom");
-    q.setParameter("nom", nom);
-    try {
-      User u = (User) q.getSingleResult();
-    } catch (Exception e) {
-      throw new EJBException("Username already exists");
-    }
-
-    User nu = new User(nom, correu, contrasenya);
+    User nu = new User(nom, cognom, correu, contrasenya);
     em.persist(nu);
     return nu;
   }
