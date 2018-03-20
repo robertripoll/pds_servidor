@@ -91,37 +91,37 @@ public class User implements Serializable {
     @JsonView(Views.Private.class)
     private DateTime dataNaix;
 
-    @NotNull
+    //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuari_ub")
     @JsonView(Views.Private.class)
     private Ubicacio ubicacio;
-
-    //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Complete.class)
     private Collection<Missatge> missatges;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_conv")
     @JsonView(Views.Complete.class)
     private Collection<Conversacio> converses;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_val")
     @JsonView(Views.Complete.class)
     private Collection<Valoracio> valoracions;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_comprador")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> compres;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_venedor")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> vendes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_fav")
     @JsonView(Views.Complete.class)
     private Collection<Producte> favorits;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_ven")
     @JsonView(Views.Complete.class)
     private Collection<Producte> prodVenda;
 

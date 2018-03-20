@@ -1,6 +1,8 @@
 package org.udg.pds.cheapy.model;
 
-import javax.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -11,4 +13,12 @@ public class Valoracio implements Serializable{
     public Valoracio(){
 
     }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Private.class)
+    protected Long id;
+
+    @ManyToOne
+    private User usuari_val;
 }
