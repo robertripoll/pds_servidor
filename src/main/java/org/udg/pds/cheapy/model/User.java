@@ -41,8 +41,9 @@ public class User implements Serializable {
         this.prodVenda = new ArrayList<>();
     }
 
-    public User(String nom, String correu, String contrasenya){
+    public User(String nom, String cognom, String correu, String contrasenya){
         this.nom = nom;
+        this.cognoms = cognom;
         this.correu = correu;
         this.contrasenya = contrasenya;
         this.missatges = new ArrayList<>();
