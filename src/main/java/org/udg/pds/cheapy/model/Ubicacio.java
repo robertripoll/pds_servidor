@@ -1,4 +1,14 @@
 package org.udg.pds.cheapy.model;
 
-public class Ubicacio {
+import javax.persistence.Entity;
+import java.io.Serializable;
+
+@Entity
+public class Ubicacio implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
+    public Ubicacio(){
+
+    }
 }

@@ -1,4 +1,14 @@
 package org.udg.pds.cheapy.model;
 
-public class Conversacio {
+import javax.persistence.Entity;
+import java.io.Serializable;
+
+@Entity
+public class Conversacio implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
+    public Conversacio(){
+
+    }
 }

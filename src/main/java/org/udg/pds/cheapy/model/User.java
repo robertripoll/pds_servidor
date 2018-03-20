@@ -2,6 +2,7 @@ package org.udg.pds.cheapy.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -12,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Entity(name = "usuari")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"correu", "nom"}))
+@Entity(name = "usuaris")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"correu", "nom", "telefon"}))
 public class User implements Serializable {
     /**
      * Default value included to remove warning. Remove or modify at will. *
@@ -107,11 +108,11 @@ public class User implements Serializable {
     @JsonView(Views.Complete.class)
     private Collection<Valoracio> valoracions;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> compres;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> vendes;
 
