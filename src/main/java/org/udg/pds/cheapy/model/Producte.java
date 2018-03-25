@@ -175,4 +175,9 @@ public class Producte implements Serializable{
     {
         this.reservat = nouReservat;
     }
+
+    public void setCategoria(Categoria novaCategoria)
+    {
+        this.categoria = novaCategoria;
+    }
 }
