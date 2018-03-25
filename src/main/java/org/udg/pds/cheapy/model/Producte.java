@@ -49,12 +49,15 @@ public class Producte implements Serializable{
     private Boolean reservat;
 
     @ManyToOne(optional = false)
-    private User venedor;
+    @JsonView(Views.Public.class)
+    private User venedor; // Nomes hauria de retornar el nom de l'Usuari
 
     @OneToOne
-    private Transaccio transaccio;
+    @JsonView(Views.Private.class)
+    private Transaccio transaccio; // Nomes interessa a venedor i comprador
 
     @ManyToOne(optional = false)
+    @JsonView(Views.Public.class)
     private Categoria categoria;
 
     public Producte()
