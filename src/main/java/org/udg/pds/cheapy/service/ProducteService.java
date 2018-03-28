@@ -39,7 +39,9 @@ public class ProducteService
         try
         {
             return em.find(Producte.class, id);
-        } catch (Exception ex)
+        }
+
+        catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
@@ -55,6 +57,7 @@ public class ProducteService
             em.persist(producte);
             return producte;
         }
+
         catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
@@ -71,10 +74,25 @@ public class ProducteService
             em.persist(producte);
             return producte;
         }
+
         catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
+            throw new EJBException(ex);
+        }
+    }
+
+    public Producte actualitzar(Producte nouProducte)
+    {
+        try
+        {
+            em.merge(nouProducte);
+            return nouProducte;
+        }
+
+        catch (Exception ex)
+        {
             throw new EJBException(ex);
         }
     }
