@@ -14,6 +14,7 @@ public class Producte implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     @JsonView(Views.Private.class)
     protected Long id;
 
@@ -143,6 +144,8 @@ public class Producte implements Serializable{
     {
         return transaccio;
     }
+
+    public void setId(Long novaId) { this.id = novaId; }
 
     public void setNom(String nouNom)
     {
