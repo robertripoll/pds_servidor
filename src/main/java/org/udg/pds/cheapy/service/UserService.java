@@ -1,6 +1,8 @@
 package org.udg.pds.cheapy.service;
 
+import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.model.Valoracio;
 import org.udg.pds.cheapy.rest.RESTService;
 
 import javax.ejb.EJBException;
@@ -9,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Collection;
 
 @Stateless
 @LocalBean
@@ -47,6 +50,18 @@ public class UserService {
     User nu = new User(nom, cognom, correu, contrasenya);
     em.persist(nu);
     return nu;
+  }
+
+  public Collection<Valoracio> getValoracions(long id){
+    User u = getUser(id);
+
+    return u.getValoracions();
+  }
+
+  public Collection<Producte> getProductesVenda(long id){
+    User u = getUser(id);
+
+    return u.getProdVenda();
   }
 
   public User getUser(long id) {
