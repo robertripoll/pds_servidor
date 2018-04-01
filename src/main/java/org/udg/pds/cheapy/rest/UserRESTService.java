@@ -72,6 +72,48 @@ public class UserRESTService extends RESTService {
     throw new WebApplicationException("Cannot register while user is logged in");
   }
 
+  @Path("{id}")
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response veurePerfil(@Context HttpServletRequest req, @PathParam("id") Long userId){
+
+    Long loggedUserId = getLoggedUser(req);
+
+    if(!loggedUserId.equals(userId)){
+      throw new WebApplicationException("Cannot get profile from other users!");
+    }
+
+    return buildResponseWithView(Views.Private.class, userService.getUserComplete(loggedUserId));
+  }
+
+  @Path("{id}/valoracions")
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId){
+
+    Long loggedUserId = getLoggedUser(req);
+
+    if(!loggedUserId.equals(userId)){
+      throw  new WebApplicationException("Cannot get marks from other users");
+    }
+
+    return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
+  }
+
+  @Path("{id}/productes")
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response veureProductesEnVenda(@Context HttpServletRequest req, @PathParam("id") Long userId){
+
+    Long loggedUserId = getLoggedUser(req);
+
+    if(!loggedUserId.equals(userId)){
+      throw  new WebApplicationException("Cannot get marks from other users");
+    }
+
+    return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
+
+  }
 
 
   static class LoginUser {
