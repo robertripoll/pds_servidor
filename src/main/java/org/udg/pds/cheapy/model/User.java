@@ -23,7 +23,7 @@ public class User implements Serializable {
     public User(){
     }
 
-    public User(String sexe, String nom, String cognoms, String telefon, DateTime dataNaix, String correu, String contrasenya, Ubicacio ubicacio){
+    public User(String sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya, Ubicacio ubicacio){
         this.sexe = sexe;
         this.nom = nom;
         this.cognoms = cognoms;
@@ -90,7 +90,8 @@ public class User implements Serializable {
 
     @NotNull
     @JsonView(Views.Private.class)
-    private DateTime dataNaix;
+    @Temporal(TemporalType.DATE)
+    private java.util.Date dataNaix;
 
     //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
 
@@ -184,11 +185,11 @@ public class User implements Serializable {
         this.telefon = telefon;
     }
 
-    public DateTime getDataNaix(){
+    public java.util.Date getDataNaix(){
         return dataNaix;
     }
 
-    public void setDataNaix(DateTime dataNaix){
+    public void setDataNaix(java.util.Date dataNaix){
         this.dataNaix = dataNaix;
     }
 
