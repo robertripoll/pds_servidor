@@ -118,11 +118,11 @@ public class User implements Serializable {
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> vendes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_fav")
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonView(Views.Complete.class)
     private Collection<Producte> favorits;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_ven")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
     @JsonView(Views.Complete.class)
     private Collection<Producte> prodVenda;
 
