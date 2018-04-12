@@ -14,7 +14,7 @@ import java.util.Date;
  * Created by imartin on 14/02/17.
  */
 public class JsonDateDeserializer extends JsonDeserializer<Date> {
-  private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+  private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
   @Override
   public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {

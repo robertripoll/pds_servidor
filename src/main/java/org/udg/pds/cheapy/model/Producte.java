@@ -1,7 +1,10 @@
 package org.udg.pds.cheapy.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import org.joda.time.DateTime;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
+import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -31,7 +34,9 @@ public class Producte implements Serializable{
 
     @NotNull
     @JsonView(Views.Private.class)
-    private DateTime dataPublicacio;
+    @JsonSerialize(using = JsonDateSerializer.class)
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    private java.util.Date dataPublicacio;
 
     @NotNull
     @JsonView(Views.Public.class)
@@ -76,7 +81,7 @@ public class Producte implements Serializable{
         this.intercanviAcceptat = intercanviAcceptat;
 
         this.numVisites         = 0;
-        this.dataPublicacio     = new DateTime();
+        this.dataPublicacio     = new java.util.Date();
     }
 
     public Producte(Categoria categoria, User venedor, String nom, Double preu, String descripcio, Boolean preuNegociable, Boolean intercanviAcceptat)
@@ -105,7 +110,7 @@ public class Producte implements Serializable{
         return descripcio;
     }
 
-    public DateTime getDataPublicacio()
+    public java.util.Date getDataPublicacio()
     {
         return dataPublicacio;
     }

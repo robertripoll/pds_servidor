@@ -3,8 +3,6 @@ package org.udg.pds.cheapy.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
 import javax.swing.text.View;
 import javax.validation.constraints.NotNull;
