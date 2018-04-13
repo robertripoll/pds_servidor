@@ -34,8 +34,8 @@ public class ToJSON {
 
   public String Object(Class<?> view, Object o) throws IOException {
     StringWriter sw = new StringWriter();
-    mapper.writerWithView(view).writeValue(sw, o);
-    return sw.toString();
+    return new ObjectMapper().writerWithView(view).writeValueAsString(o);
+
   }
 
   public String buildError(String type, String message) {

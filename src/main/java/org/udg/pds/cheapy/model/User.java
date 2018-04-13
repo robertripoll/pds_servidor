@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "usuaris")
+
 public class User implements Serializable {
     /**
      * Default value included to remove warning. Remove or modify at will. *
@@ -30,13 +31,6 @@ public class User implements Serializable {
         this.correu = correu;
         this.contrasenya = contrasenya;
         this.ubicacio = ubicacio;
-        this.missatges = new ArrayList<>();
-        this.converses = new ArrayList<>();
-        this.valoracions = new ArrayList<>();
-        this.compres = new ArrayList<>();
-        this.vendes = new ArrayList<>();
-        this.favorits = new ArrayList<>();
-        this.prodVenda = new ArrayList<>();
     }
 
     public User(String nom, String cognom, String correu, String contrasenya){
@@ -44,13 +38,6 @@ public class User implements Serializable {
         this.cognoms = cognom;
         this.correu = correu;
         this.contrasenya = contrasenya;
-        this.missatges = new ArrayList<>();
-        this.converses = new ArrayList<>();
-        this.valoracions = new ArrayList<>();
-        this.compres = new ArrayList<>();
-        this.vendes = new ArrayList<>();
-        this.favorits = new ArrayList<>();
-        this.prodVenda = new ArrayList<>();
     }
 
     //-------------------- ATRIBUTS DE LA CLASSE --------------------//
@@ -97,16 +84,16 @@ public class User implements Serializable {
     @JsonView(Views.Private.class)
     private Ubicacio ubicacio;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
-    @JsonView(Views.Complete.class)
     private Collection<Missatge> missatges;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_conv")
     @JsonView(Views.Complete.class)
     private Collection<Conversacio> converses;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_val")
-    @JsonView(Views.Complete.class)
     private Collection<Valoracio> valoracions;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_comprador")
@@ -227,6 +214,7 @@ public class User implements Serializable {
         converses.add(conversacio);
     }
 
+    @JsonIgnore
     public Collection<Valoracio> getValoracions(){
         valoracions.size();
         return valoracions;
@@ -238,10 +226,6 @@ public class User implements Serializable {
 
     public void addValoracio(Valoracio valoracio){
         valoracions.add(valoracio);
-    }
-
-    public int getNumValoracions(){
-        return valoracions.size();
     }
 
     public Collection<Transaccio> getCompres(){
@@ -257,10 +241,6 @@ public class User implements Serializable {
         compres.add(compra);
     }
 
-    public int getNumCompres(){
-        return compres.size();
-    }
-
     public Collection<Transaccio> getVendes(){
         vendes.size();
         return vendes;
@@ -272,10 +252,6 @@ public class User implements Serializable {
 
     public void addVenda(Transaccio venda){
         vendes.add(venda);
-    }
-
-    public int getNumVendes(){
-        return vendes.size();
     }
 
     public Collection<Producte> getFavorits(){
