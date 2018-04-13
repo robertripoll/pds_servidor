@@ -37,17 +37,15 @@ public class UserService {
       throw new EJBException("Password does not match");
   }
 
-  public User register(String nom, String cognom, String correu, String contrasenya) {
+  public User register(String nom, String cognom, String correu, String contrasenya, String sexe, String telefon, java.util.Date dataNaix) {
 
     Query q = em.createQuery("select u from usuaris u where u.correu=:correu");
     q.setParameter("correu", correu);
-    try {
-      User u = (User) q.getSingleResult();
-    } catch (Exception e) {
+    if(q.getResultList().size() > 0){
       throw new EJBException("Email already exist");
     }
 
-    User nu = new User(nom, cognom, correu, contrasenya);
+    User nu = new User(nom,cognom,correu,contrasenya, sexe, telefon, dataNaix);
     em.persist(nu);
     return nu;
   }

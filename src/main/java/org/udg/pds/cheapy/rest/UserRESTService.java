@@ -63,13 +63,9 @@ public class UserRESTService extends RESTService {
   @Produces(MediaType.APPLICATION_JSON)
   public Response register(RegisterUser ru, @Context HttpServletRequest req) {
 
-    try {
-      Long userId = getLoggedUser(req);
-    } catch (WebApplicationException ex) {
-      return buildResponse(userService.register(ru.nom,ru.cognom, ru.correu, ru.contrasenya));
-    }
+    checkNotLoggedIn(req);
 
-    throw new WebApplicationException("Cannot register while user is logged in");
+    return buildResponseWithView(Views.Private.class, userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix));
   }
 
   @Path("{id}")
@@ -126,6 +122,9 @@ public class UserRESTService extends RESTService {
     @NotNull public String correu;
     @NotNull public String contrasenya;
     @NotNull public String cognom;
+    @NotNull public String sexe;
+    @NotNull public String telefon;
+    @NotNull public java.util.Date dataNaix;
   }
 
   static class ID {

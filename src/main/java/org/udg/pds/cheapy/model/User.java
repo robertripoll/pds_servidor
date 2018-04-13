@@ -2,6 +2,10 @@ package org.udg.pds.cheapy.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
+import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 
 import javax.persistence.*;
 import javax.swing.text.View;
@@ -33,11 +37,14 @@ public class User implements Serializable {
         this.ubicacio = ubicacio;
     }
 
-    public User(String nom, String cognom, String correu, String contrasenya){
+    public User(String nom, String cognom, String correu, String contrasenya, String sexe, String telefon, java.util.Date dataNaix){
         this.nom = nom;
         this.cognoms = cognom;
         this.correu = correu;
         this.contrasenya = contrasenya;
+        this.sexe = sexe;
+        this.telefon = telefon;
+        this.dataNaix = dataNaix;
     }
 
     //-------------------- ATRIBUTS DE LA CLASSE --------------------//
@@ -76,6 +83,8 @@ public class User implements Serializable {
     @NotNull
     @JsonView(Views.Private.class)
     @Temporal(TemporalType.DATE)
+    @JsonSerialize(using = JsonDateSerializer.class)
+    @JsonDeserialize(as=JsonDateDeserializer.class)
     private java.util.Date dataNaix;
 
     //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
