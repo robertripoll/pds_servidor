@@ -45,6 +45,12 @@ public class UserService {
       throw new EJBException("Email already exist");
     }
 
+    q = em.createQuery("select u from usuaris u where u.telefon=:telefon");
+    q.setParameter("telefon", telefon);
+    if(q.getResultList().size() > 0){
+        throw new EJBException("Telefon already exist");
+    }
+
     User nu = new User(nom,cognom,correu,contrasenya, sexe, telefon, dataNaix);
     em.persist(nu);
     return nu;
