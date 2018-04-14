@@ -32,11 +32,11 @@ public class Producte implements Serializable
     @JsonView(Views.Public.class)
     private String descripcio;
 
-    @NotNull
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonView(Views.Private.class)
     @JsonSerialize(using = JsonDateSerializer.class)
     @JsonDeserialize(using = JsonDateDeserializer.class)
-    private java.util.Date dataPublicacio;
+    private java.sql.Timestamp dataPublicacio;
 
     @NotNull
     @JsonView(Views.Public.class)
@@ -52,7 +52,7 @@ public class Producte implements Serializable
 
     @NotNull
     @JsonView(Views.Public.class)
-    private Boolean reservat;
+    private Boolean reservat = false;
 
     @ManyToOne(optional = false)
     @JsonView(Views.Public.class)
@@ -81,7 +81,6 @@ public class Producte implements Serializable
         this.intercanviAcceptat = intercanviAcceptat;
 
         this.numVisites = 0;
-        this.dataPublicacio = new java.util.Date();
     }
 
     public Producte(Categoria categoria, User venedor, String nom, Double preu, String descripcio, Boolean preuNegociable, Boolean intercanviAcceptat)
