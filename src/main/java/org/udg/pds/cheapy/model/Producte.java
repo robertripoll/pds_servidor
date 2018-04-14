@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity(name = "productes")
-public class Producte implements Serializable{
-
+public class Producte implements Serializable
+{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -73,15 +73,15 @@ public class Producte implements Serializable{
 
     public Producte(Categoria categoria, User venedor, String nom, Double preu, Boolean preuNegociable, Boolean intercanviAcceptat)
     {
-        this.categoria          = categoria;
-        this.venedor            = venedor;
-        this.nom                = nom;
-        this.preu               = preu;
-        this.preuNegociable     = preuNegociable;
+        this.categoria = categoria;
+        this.venedor = venedor;
+        this.nom = nom;
+        this.preu = preu;
+        this.preuNegociable = preuNegociable;
         this.intercanviAcceptat = intercanviAcceptat;
 
-        this.numVisites         = 0;
-        this.dataPublicacio     = new java.util.Date();
+        this.numVisites = 0;
+        this.dataPublicacio = new java.util.Date();
     }
 
     public Producte(Categoria categoria, User venedor, String nom, Double preu, String descripcio, Boolean preuNegociable, Boolean intercanviAcceptat)
@@ -150,7 +150,10 @@ public class Producte implements Serializable{
         return transaccio;
     }
 
-    public void setId(Long novaId) { this.id = novaId; }
+    public void setId(Long novaId)
+    {
+        this.id = novaId;
+    }
 
     public void setNom(String nouNom)
     {

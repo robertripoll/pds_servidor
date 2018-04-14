@@ -17,74 +17,82 @@ import java.util.Map;
 
 @Path("/images")
 @RequestScoped
-public class ImageRESTService {
+public class ImageRESTService
+{
+    @Inject
+    ToJSON toJSON;
 
-  @Inject
-  ToJSON toJSON;
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String upload(@Context HttpServletRequest req,
+                         MultipartFormDataInput input)
+    {
+        Map<String, List<InputPart>> formParts = input.getFormDataMap();
 
-  @POST
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
-  public String upload(@Context HttpServletRequest req,
-                       MultipartFormDataInput input) {
+        List<InputPart> inPart = formParts.get("file");
 
-    Map<String, List<InputPart>> formParts = input.getFormDataMap();
+        for (InputPart inputPart : inPart)
+        {
 
-    List<InputPart> inPart = formParts.get("file");
+            try
+            {
+                // Retrieve headers, read the Content-Disposition header to obtain the original name of the file
+                MultivaluedMap<String, String> headers = inputPart.getHeaders();
+                String fileName = parseFileName(headers);
 
-    for (InputPart inputPart : inPart) {
+                // Handle the body of that part with an InputStream
+                InputStream istream = inputPart.getBody(InputStream.class, null);
 
-      try {
-        // Retrieve headers, read the Content-Disposition header to obtain the original name of the file
-        MultivaluedMap<String, String> headers = inputPart.getHeaders();
-        String fileName = parseFileName(headers);
+                fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
 
-        // Handle the body of that part with an InputStream
-        InputStream istream = inputPart.getBody(InputStream.class, null);
+                saveFile(istream, fileName);
 
-        fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
+            } catch (Exception e)
+            {
+                throw new WebApplicationException("Error saving file: " + e.getMessage());
+            }
+        }
 
-        saveFile(istream, fileName);
-
-      } catch (Exception e) {
-        throw new WebApplicationException("Error saving file: " + e.getMessage());
-      }
+        return "{}";
     }
 
-    return "{}";
-  }
+    // Parse Content-Disposition header to get the original file name
+    private String parseFileName(MultivaluedMap<String, String> headers)
+    {
 
-  // Parse Content-Disposition header to get the original file name
-  private String parseFileName(MultivaluedMap<String, String> headers) {
+        String[] contentDispositionHeader = headers.getFirst("Content-Disposition").split(";");
 
-    String[] contentDispositionHeader = headers.getFirst("Content-Disposition").split(";");
+        for (String name : contentDispositionHeader)
+        {
 
-    for (String name : contentDispositionHeader) {
+            if ((name.trim().startsWith("filename")))
+            {
 
-      if ((name.trim().startsWith("filename"))) {
+                String[] tmp = name.split("=");
 
-        String[] tmp = name.split("=");
+                String fileName = tmp[1].trim().replaceAll("\"", "");
 
-        String fileName = tmp[1].trim().replaceAll("\"", "");
-
-        return fileName;
-      }
+                return fileName;
+            }
+        }
+        return "randomName";
     }
-    return "randomName";
-  }
 
-  // save uploaded file to a defined location on the server
-  private void saveFile(InputStream uploadedInputStream,
-                        String serverLocation) throws IOException {
+    // save uploaded file to a defined location on the server
+    private void saveFile(InputStream uploadedInputStream,
+                          String serverLocation) throws IOException
+    {
 
-    int read;
-    byte[] bytes = new byte[1024];
+        int read;
+        byte[] bytes = new byte[1024];
 
-    OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
-    while ((read = uploadedInputStream.read(bytes)) != -1) {
-      outpuStream.write(bytes, 0, read);
+        OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
+        while ((read = uploadedInputStream.read(bytes)) != -1)
+        {
+            outpuStream.write(bytes, 0, read);
+        }
+        outpuStream.flush();
+        outpuStream.close();
     }
-    outpuStream.flush();
-    outpuStream.close();
-  }
 }

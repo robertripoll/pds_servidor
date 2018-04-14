@@ -6,10 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Transaccio implements Serializable{
-
+public class Transaccio implements Serializable
+{
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +19,5 @@ public class Transaccio implements Serializable{
     private User usuari_comprador;
 
     @ManyToOne
-    private  User usuari_venedor;
+    private User usuari_venedor;
 }

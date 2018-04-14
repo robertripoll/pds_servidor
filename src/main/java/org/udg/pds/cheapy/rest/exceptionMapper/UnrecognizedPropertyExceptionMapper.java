@@ -9,14 +9,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-
 @Provider
-public class UnrecognizedPropertyExceptionMapper implements ExceptionMapper<UnrecognizedPropertyException> {
-  @Inject ToJSON toJSON;
+public class UnrecognizedPropertyExceptionMapper implements ExceptionMapper<UnrecognizedPropertyException>
+{
+    @Inject
+    ToJSON toJSON;
 
-  @Override
-  public Response toResponse(UnrecognizedPropertyException e) {
-      return Response.serverError().entity(toJSON.buildError("Validation error", e.toString())).type(MediaType.APPLICATION_JSON_TYPE).build();
-  }
+    @Override
+    public Response toResponse(UnrecognizedPropertyException e)
+    {
+        return Response.serverError().entity(toJSON.buildError("Validation error", e.toString())).type(MediaType.APPLICATION_JSON_TYPE).build();
+    }
 }
 

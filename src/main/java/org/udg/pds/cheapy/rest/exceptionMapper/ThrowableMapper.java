@@ -8,14 +8,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-
 @Provider
-public class ThrowableMapper implements ExceptionMapper<Throwable> {
-  @Inject ToJSON toJSON;
+public class ThrowableMapper implements ExceptionMapper<Throwable>
+{
+    @Inject
+    ToJSON toJSON;
 
-  @Override
-  public Response toResponse(Throwable e) {
-      return Response.serverError().entity(toJSON.buildError("Unknown error", e.getMessage())).type(MediaType.APPLICATION_JSON_TYPE).build();
-  }
+    @Override
+    public Response toResponse(Throwable e)
+    {
+        return Response.serverError().entity(toJSON.buildError("Unknown error", e.getMessage())).type(MediaType.APPLICATION_JSON_TYPE).build();
+    }
 }
 

@@ -17,123 +17,143 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
 // This class is used to process all the authentication related URLs
 @Path("/usuaris")
 @RequestScoped
-public class UserRESTService extends RESTService {
+public class UserRESTService extends RESTService
+{
+    // This is the EJB used to access user data
+    @EJB
+    UserService userService;
 
-  // This is the EJB used to access user data
-  @EJB
-  UserService userService;
+    @Inject
+    ToJSON toJSON;
 
-  @Inject
-  ToJSON toJSON;
+    @Path("/autenticar")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response auth(@Context HttpServletRequest req,
+                         @CookieParam("JSESSIONID") Cookie cookie,
+                         @Valid LoginUser user)
+    {
 
-  @Path("/autenticar")
-  @POST
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response auth(@Context HttpServletRequest req,
-                       @CookieParam("JSESSIONID") Cookie cookie,
-                       @Valid LoginUser user) {
+        checkNotLoggedIn(req);
 
-    checkNotLoggedIn(req);
-
-    User u = userService.matchPassword(user.correu, user.contrasenya);
-    req.getSession().setAttribute("simpleapp_auth_id", u.getId());
-    return buildResponseWithView(Views.Private.class, u);
-  }
-
-  @Path("{id}")
-  @DELETE
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId) {
-
-    Long loggedUserId = getLoggedUser(req);
-
-    if (!loggedUserId.equals(userId))
-      throw new WebApplicationException("Cannot delet other users!");
-
-    return buildResponse(userService.remove(userId));
-  }
-
-  @Path("/registrar")
-  @POST
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response register(RegisterUser ru, @Context HttpServletRequest req) {
-
-    checkNotLoggedIn(req);
-
-    return buildResponseWithView(Views.Private.class, userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix));
-  }
-
-  @Path("{id}")
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response veurePerfil(@Context HttpServletRequest req, @PathParam("id") Long userId){
-
-    Long loggedUserId = getLoggedUser(req);
-
-    if(!loggedUserId.equals(userId)){
-      throw new WebApplicationException("Cannot get profile from other users!");
+        User u = userService.matchPassword(user.correu, user.contrasenya);
+        req.getSession().setAttribute("simpleapp_auth_id", u.getId());
+        return buildResponseWithView(Views.Private.class, u);
     }
 
-    return buildResponseWithView(Views.Private.class, userService.getUserComplete(loggedUserId));
-  }
+    @Path("{id}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    {
 
-  @Path("{id}/valoracions")
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId){
+        Long loggedUserId = getLoggedUser(req);
 
-    Long loggedUserId = getLoggedUser(req);
+        if (!loggedUserId.equals(userId))
+            throw new WebApplicationException("Cannot delet other users!");
 
-    if(!loggedUserId.equals(userId)){
-      throw  new WebApplicationException("Cannot get marks from other users");
+        return buildResponse(userService.remove(userId));
     }
 
-    return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
-  }
+    @Path("/registrar")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response register(RegisterUser ru, @Context HttpServletRequest req)
+    {
 
-  @Path("{id}/productes")
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response veureProductesEnVenda(@Context HttpServletRequest req, @PathParam("id") Long userId){
+        checkNotLoggedIn(req);
 
-    Long loggedUserId = getLoggedUser(req);
-
-    if(!loggedUserId.equals(userId)){
-      throw  new WebApplicationException("Cannot get marks from other users");
+        return buildResponseWithView(Views.Private.class, userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix));
     }
 
-    return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
+    @Path("{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veurePerfil(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    {
 
-  }
+        Long loggedUserId = getLoggedUser(req);
 
+        if (!loggedUserId.equals(userId))
+        {
+            throw new WebApplicationException("Cannot get profile from other users!");
+        }
 
-  static class LoginUser {
-    @NotNull public String correu;
-    @NotNull public String contrasenya;
-  }
-
-  static class RegisterUser {
-    @NotNull public String nom;
-    @NotNull public String correu;
-    @NotNull public String contrasenya;
-    @NotNull public String cognom;
-    @NotNull public String sexe;
-    @NotNull public String telefon;
-    @NotNull public java.util.Date dataNaix;
-  }
-
-  static class ID {
-    public Long id;
-
-    public ID(Long id) {
-      this.id = id;
+        return buildResponseWithView(Views.Private.class, userService.getUserComplete(loggedUserId));
     }
-  }
+
+    @Path("{id}/valoracions")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    {
+
+        Long loggedUserId = getLoggedUser(req);
+
+        if (!loggedUserId.equals(userId))
+        {
+            throw new WebApplicationException("Cannot get marks from other users");
+        }
+
+        return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
+    }
+
+    @Path("{id}/productes")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureProductesEnVenda(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    {
+
+        Long loggedUserId = getLoggedUser(req);
+
+        if (!loggedUserId.equals(userId))
+        {
+            throw new WebApplicationException("Cannot get marks from other users");
+        }
+
+        return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
+
+    }
+
+    static class LoginUser
+    {
+        @NotNull
+        public String correu;
+        @NotNull
+        public String contrasenya;
+    }
+
+    static class RegisterUser
+    {
+        @NotNull
+        public String nom;
+        @NotNull
+        public String correu;
+        @NotNull
+        public String contrasenya;
+        @NotNull
+        public String cognom;
+        @NotNull
+        public String sexe;
+        @NotNull
+        public String telefon;
+        @NotNull
+        public java.util.Date dataNaix;
+    }
+
+    static class ID
+    {
+        public Long id;
+
+        public ID(Long id)
+        {
+            this.id = id;
+        }
+    }
 
 }
 

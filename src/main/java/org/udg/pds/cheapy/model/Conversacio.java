@@ -6,11 +6,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Conversacio implements Serializable{
-
+public class Conversacio implements Serializable
+{
     private static final long serialVersionUID = 1L;
 
-    public Conversacio(){
+    public Conversacio()
+    {
 
     }
 

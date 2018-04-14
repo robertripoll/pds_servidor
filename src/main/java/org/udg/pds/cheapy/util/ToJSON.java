@@ -17,32 +17,38 @@ import java.io.StringWriter;
  * @author imartin
  */
 @Singleton
-public class ToJSON {
+public class ToJSON
+{
+    ObjectMapper mapper;
 
-  ObjectMapper mapper;
-
-  @PostConstruct
-  void init() {
-      mapper = new ObjectMapper();
-  }
-
-  public String Object(Object o) throws IOException {
-    StringWriter sw = new StringWriter();
-    mapper.writeValue(sw, o);
-    return sw.toString();
-  }
-
-  public String Object(Class<?> view, Object o) throws IOException {
-    StringWriter sw = new StringWriter();
-    return new ObjectMapper().writerWithView(view).writeValueAsString(o);
-
-  }
-
-  public String buildError(String type, String message) {
-    try {
-      return this.Object(new Error(type, message));
-    } catch (Exception e) {
-      return "{\"type\": \"Serialize error\", \"message\": \"" + e.getMessage() + "\", \"originalMsg\": " + message + "\"}";
+    @PostConstruct
+    void init()
+    {
+        mapper = new ObjectMapper();
     }
-  }
+
+    public String Object(Object o) throws IOException
+    {
+        StringWriter sw = new StringWriter();
+        mapper.writeValue(sw, o);
+        return sw.toString();
+    }
+
+    public String Object(Class<?> view, Object o) throws IOException
+    {
+        StringWriter sw = new StringWriter();
+        return new ObjectMapper().writerWithView(view).writeValueAsString(o);
+
+    }
+
+    public String buildError(String type, String message)
+    {
+        try
+        {
+            return this.Object(new Error(type, message));
+        } catch (Exception e)
+        {
+            return "{\"type\": \"Serialize error\", \"message\": \"" + e.getMessage() + "\", \"originalMsg\": " + message + "\"}";
+        }
+    }
 }

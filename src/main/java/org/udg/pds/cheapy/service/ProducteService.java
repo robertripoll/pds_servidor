@@ -25,9 +25,7 @@ public class ProducteService
         try
         {
             return em.createQuery("SELECT producte FROM productes producte WHERE producte.transaccio IS NULL").getResultList();
-        }
-
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
@@ -40,9 +38,7 @@ public class ProducteService
         try
         {
             return em.find(Producte.class, id);
-        }
-
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
@@ -57,9 +53,7 @@ public class ProducteService
             Producte producte = new Producte(categoria, venedor, nom, preu, preuNegociable, intercanviAcceptat);
             em.persist(producte);
             return producte;
-        }
-
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
@@ -74,9 +68,7 @@ public class ProducteService
             Producte producte = new Producte(categoria, venedor, nom, preu, descripcio, preuNegociable, intercanviAcceptat);
             em.persist(producte);
             return producte;
-        }
-
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
@@ -103,14 +95,13 @@ public class ProducteService
             if (nouProducte.descripcio != null)
                 p.setDescripcio(nouProducte.descripcio);
 
-            if (nouProducte.idCategoria != null) {
+            if (nouProducte.idCategoria != null)
+            {
                 Categoria novaCategoria = em.find(Categoria.class, nouProducte.idCategoria);
                 p.setCategoria(novaCategoria);
             }
 
-            em.persist(p);
-
-            return p;
+            return em.merge(p);
         }
 
         catch (Exception ex)

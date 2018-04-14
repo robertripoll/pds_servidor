@@ -6,14 +6,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Ubicacio implements Serializable{
-
+public class Ubicacio implements Serializable
+{
     private static final long serialVersionUID = 1L;
 
-    public Ubicacio(){
+    public Ubicacio()
+    {
 
     }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
