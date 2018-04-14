@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
@@ -66,6 +67,10 @@ public class RESTService {
     }
   }
 
+  protected Response accessDenied()
+  {
+    return Response.status(403).entity(toJSON.buildError("Error 403", "Access denied")).type(MediaType.APPLICATION_JSON_TYPE).build();
+  }
 
   public static class ID {
     public Long id;

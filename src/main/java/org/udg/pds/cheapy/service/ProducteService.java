@@ -84,12 +84,10 @@ public class ProducteService
         }
     }
 
-    public Producte actualitzar(Long id, ProducteRESTService.R_Producte_Update nouProducte)
+    public Producte actualitzar(Producte p, ProducteRESTService.R_Producte_Update nouProducte)
     {
         try
         {
-            Producte p = em.find(Producte.class, id);
-
             if (nouProducte.nom != null)
                 p.setNom(nouProducte.nom);
 

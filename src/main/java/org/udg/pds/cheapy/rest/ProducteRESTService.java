@@ -65,16 +65,22 @@ public class ProducteRESTService extends RESTService {
   @Path("{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response updateProduct(@Valid R_Producte_Update producte,
+  public Response updateProduct(@Valid R_Producte_Update nouProducte,
                                 @Context HttpServletRequest req,
                                 @PathParam("id") Long id)
   {
       Categoria c = null; // Falta crear el servei Categoria
       Long userId = getLoggedUser(req);
 
-      producteService.actualitzar(id, producte);
+      Producte p = producteService.get(id);
 
-      return Response.ok().build();
+      if (p.getVenedor().getId() == userId)
+      {
+          producteService.actualitzar(p, nouProducte);
+          return Response.ok().build();
+      }
+
+      return accessDenied();
   }
 
   @DELETE
@@ -86,7 +92,12 @@ public class ProducteRESTService extends RESTService {
 
     Long userId = getLoggedUser(req);
 
-    return buildResponse(producteService.esborrar(id));
+      Producte p = producteService.get(id);
+
+      if (p.getVenedor().getId() == userId)
+          return buildResponse(producteService.esborrar(id));
+
+      return accessDenied();
   }
 
   static class ID {
