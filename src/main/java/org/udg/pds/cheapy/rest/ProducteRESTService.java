@@ -19,6 +19,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 @Path("/productes")
 @RequestScoped
@@ -47,9 +48,16 @@ public class ProducteRESTService extends RESTService
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll(@Context HttpServletRequest req)
+    public Response getAll(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("1")@QueryParam("offset") int offset)
     {
-        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda());
+        Map<String, String[]> parameters = req.getParameterMap();
+        String[] sort = null;
+
+        if (parameters.containsKey("sort"))
+            sort = parameters.get("sort");
+
+        return Response.ok().build();
+        //return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort));
     }
 
     @POST
@@ -64,7 +72,7 @@ public class ProducteRESTService extends RESTService
         if (producte.descripcio == null)
             producte.descripcio = "";
 
-        return buildResponseWithView(Views.Public.class, producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.preuNegociable, producte.intercanviAcceptat));
+        return buildResponseWithView(Views.Public.class, producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.descripcio, producte.preuNegociable, producte.intercanviAcceptat));
     }
 
     @PUT
@@ -75,12 +83,11 @@ public class ProducteRESTService extends RESTService
                                   @Context HttpServletRequest req,
                                   @PathParam("id") Long id)
     {
-        Categoria c = null; // Falta crear el servei Categoria
         Long userId = getLoggedUser(req);
 
         Producte p = producteService.get(id);
 
-        if (p.getVenedor().getId() == userId)
+        if (p.getVenedor().getId().equals(userId))
         {
             producteService.actualitzar(p, nouProducte);
             return Response.ok().build();
@@ -100,7 +107,7 @@ public class ProducteRESTService extends RESTService
 
         Producte p = producteService.get(id);
 
-        if (p.getVenedor().getId() == userId)
+        if (p.getVenedor().getId().equals(userId))
             return buildResponse(producteService.esborrar(id));
 
         return accessDenied();

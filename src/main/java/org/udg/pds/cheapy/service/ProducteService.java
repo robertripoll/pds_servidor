@@ -11,7 +11,12 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collection;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.Map;
 
 @Stateless
 @LocalBean
@@ -20,12 +25,60 @@ public class ProducteService
     @PersistenceContext
     protected EntityManager em;
 
-    public Collection<Producte> getProductesEnVenda()
+    public List<Object> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort)
     {
         try
         {
-            return em.createQuery("SELECT producte FROM productes producte WHERE producte.transaccio IS NULL").getResultList();
-        } catch (Exception ex)
+            CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+            CriteriaQuery<Object> queryObj = criteriaBuilder.createQuery();
+            Root<Producte> from = queryObj.from(Producte.class);
+
+            CriteriaQuery<Object> selectQuery = queryObj.select(from);
+
+            if (sort != null)
+            {
+                for (String criteria : sort)
+                {
+                    String[] splitted = criteria.split(",");
+
+                    if (splitted[1].equals("asc"))
+                        selectQuery.orderBy(criteriaBuilder.asc(from.get(splitted[0])));
+
+                    else if (splitted[1].equals("desc"))
+                        selectQuery.orderBy(criteriaBuilder.asc(from.get(splitted[0])));
+                }
+            }
+
+            for (String filter : filters.keySet())
+            {
+                if (filter.equals("categoria"))
+                    queryObj.where(from.get("categoria").in((Object[])filters.get(filter)));
+
+                if (filter.equals("venedor"))
+                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
+
+                if (filter.equals("preuNegociable"))
+                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
+
+                if (filter.equals("intercanviAcceptat"))
+                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
+
+                if (filter.equals("nom"))
+                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
+            }
+
+            TypedQuery<Object> ascTypedQuery = em.createQuery(selectQuery);
+            return ascTypedQuery.getResultList();
+
+            /*Query query = em.createQuery("SELECT producte FROM productes producte WHERE producte.transaccio IS NULL");
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+
+            return query.getResultList();*/
+        }
+
+        catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
@@ -38,21 +91,6 @@ public class ProducteService
         try
         {
             return em.find(Producte.class, id);
-        } catch (Exception ex)
-        {
-            // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
-            // We catch the normal exception and then transform it in a EJBException
-            throw new EJBException(ex);
-        }
-    }
-
-    public Producte crear(Categoria categoria, User venedor, String nom, Double preu, Boolean preuNegociable, Boolean intercanviAcceptat)
-    {
-        try
-        {
-            Producte producte = new Producte(categoria, venedor, nom, preu, preuNegociable, intercanviAcceptat);
-            em.persist(producte);
-            return producte;
         } catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
