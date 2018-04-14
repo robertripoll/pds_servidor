@@ -65,7 +65,7 @@ public class ProducteRESTService extends RESTService {
   @Path("{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response updateProduct(@Valid R_Producte producte,
+  public Response updateProduct(@Valid R_Producte_Update producte,
                                 @Context HttpServletRequest req,
                                 @PathParam("id") Long id)
   {
@@ -113,4 +113,14 @@ public class ProducteRESTService extends RESTService {
       @NotNull public ID idCategoria;
       @NotNull public ID idVenedor;
   }
+
+    static class R_Producte_Update {
+        public String nom;
+        public double preu;
+        public String descripcio;
+        public boolean preuNegociable;
+        public boolean intercanviAcceptat;
+        public ID idCategoria;
+        public ID idVenedor;
+    }
 }

@@ -10,7 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "productes")
 public class Producte implements Serializable{
 
     private static final long serialVersionUID = 1L;
