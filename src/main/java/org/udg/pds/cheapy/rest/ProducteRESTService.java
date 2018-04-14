@@ -45,7 +45,7 @@ public class ProducteRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll(@Context HttpServletRequest req)
     {
-        return buildResponse(producteService.getProductesEnVenda());
+        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda());
     }
 
     @POST
