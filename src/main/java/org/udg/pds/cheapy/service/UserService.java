@@ -85,9 +85,7 @@ public class UserService
         User u = getUser(id);
         u.removeFavorit(p);
 
-        em.merge(u);
-
-        return u.getFavorits();
+        return em.merge(u).getFavorits();
     }
 
     public Collection<Producte> getProductesVenda(long id)

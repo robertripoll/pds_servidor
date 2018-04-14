@@ -9,6 +9,7 @@ import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity(name = "productes")
 public class Producte implements Serializable
@@ -192,5 +193,11 @@ public class Producte implements Serializable
     public void setCategoria(Categoria novaCategoria)
     {
         this.categoria = novaCategoria;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        return ((Producte)o).id.equals(this.id);
     }
 }

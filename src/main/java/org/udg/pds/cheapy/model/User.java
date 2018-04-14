@@ -116,7 +116,7 @@ public class User implements Serializable
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> vendes;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JsonView(Views.Complete.class)
     private Collection<Producte> favorits;
 
