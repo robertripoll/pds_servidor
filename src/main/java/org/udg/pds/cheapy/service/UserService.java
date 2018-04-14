@@ -80,6 +80,16 @@ public class UserService
         return u.getFavorits();
     }
 
+    public Collection<Producte> suprimirProducteDeFavorits(Long id, Producte p)
+    {
+        User u = getUser(id);
+        u.removeFavorit(p);
+
+        em.merge(u);
+
+        return u.getFavorits();
+    }
+
     public Collection<Producte> getProductesVenda(long id)
     {
         User u = getUser(id);

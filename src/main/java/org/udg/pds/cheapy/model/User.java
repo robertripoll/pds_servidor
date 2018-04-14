@@ -315,6 +315,11 @@ public class User implements Serializable
         favorits.add(prod);
     }
 
+    public void removeFavorit(Producte prod)
+    {
+        favorits.remove(prod);
+    }
+
     public Collection<Producte> getProdVenda()
     {
         prodVenda.size();

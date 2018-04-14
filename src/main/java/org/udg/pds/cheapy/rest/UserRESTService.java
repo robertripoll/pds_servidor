@@ -136,6 +136,18 @@ public class UserRESTService extends RESTService
 
     }
 
+    @Path("/favorits/{id}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response suprimirDeFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId){
+
+        Producte p = producteService.get(productId); // obtenim el producte
+        Long id = getLoggedUser(req);
+
+        return buildResponseWithView(Views.Public.class, userService.suprimirProducteDeFavorits(id,p));
+
+    }
+
     static class LoginUser
     {
         @NotNull
