@@ -69,6 +69,15 @@ public class UserService
         return u.getValoracions();
     }
 
+
+    public Collection<Producte> afegirProducteAFavorit(long id, Producte p){
+
+        User u = getUser(id);
+        u.addFavorit(p);
+
+        return u.getFavorits();
+    }
+
     public Collection<Producte> getProductesVenda(long id)
     {
         User u = getUser(id);

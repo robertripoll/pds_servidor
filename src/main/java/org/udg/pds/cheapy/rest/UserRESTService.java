@@ -1,7 +1,9 @@
 package org.udg.pds.cheapy.rest;
 
+import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
 import org.udg.pds.cheapy.util.ToJSON;
 
@@ -25,6 +27,9 @@ public class UserRESTService extends RESTService
     // This is the EJB used to access user data
     @EJB
     UserService userService;
+
+    @EJB
+    ProducteService producteService;
 
     @Inject
     ToJSON toJSON;
@@ -116,6 +121,18 @@ public class UserRESTService extends RESTService
         }
 
         return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
+
+    }
+
+    @Path("/favorits/{id}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response afegirAFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId){
+
+        Producte p = producteService.get(productId); // obtenim el producte
+        Long id = getLoggedUser(req);
+
+        return buildResponse(userService.afegirProducteAFavorit(id,p));
 
     }
 

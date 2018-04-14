@@ -3,6 +3,7 @@ package org.udg.pds.cheapy.rest;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.model.Views;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
 import org.udg.pds.cheapy.util.ToJSON;
@@ -37,7 +38,7 @@ public class ProducteRESTService extends RESTService
     public Response get(@Context HttpServletRequest req,
                         @PathParam("id") Long id)
     {
-        return buildResponse(producteService.get(id));
+        return buildResponseWithView(Views.Public.class, producteService.get(id));
     }
 
     @GET

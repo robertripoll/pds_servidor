@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public class Categoria implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Public.class)
     protected Long id;
 
     @NotNull
@@ -45,6 +46,7 @@ public class Categoria implements Serializable
         return nom;
     }
 
+    @JsonIgnore
     public Collection<Producte> getProductes()
     {
         return productes;
