@@ -4,6 +4,7 @@ import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
 import org.udg.pds.cheapy.util.ToJSON;
@@ -28,6 +29,9 @@ public class ProducteRESTService extends RESTService
 
     @EJB
     UserService usuariService;
+
+    @EJB
+    CategoriaService categoriaService;
 
     @Inject
     ToJSON toJSON;
@@ -55,12 +59,10 @@ public class ProducteRESTService extends RESTService
     {
         Long userId = getLoggedUser(req);
         User venedor = usuariService.getUser(userId);
-        Categoria categoria = null; // Falta crear el servei per les Categories
+        Categoria categoria = categoriaService.get(producte.idCategoria.id);
 
         if (producte.descripcio == null)
-        {
             producte.descripcio = "";
-        }
 
         return buildResponse(producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.preuNegociable, producte.intercanviAcceptat));
     }
