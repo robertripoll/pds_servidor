@@ -50,6 +50,16 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Private.class, u);
     }
 
+    @Path("/favorits")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureProductesFavorits(@Context HttpServletRequest req){
+
+        Long loggedUserId = getLoggedUser(req);
+
+        return buildResponseWithView(Views.Public.class, userService.getFavorits(loggedUserId));
+    }
+
     @Path("{id}")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
