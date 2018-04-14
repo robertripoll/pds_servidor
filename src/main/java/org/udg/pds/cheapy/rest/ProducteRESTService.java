@@ -69,17 +69,10 @@ public class ProducteRESTService extends RESTService {
                                 @Context HttpServletRequest req,
                                 @PathParam("id") Long id)
   {
-      if (producte.descripcio == null)
-          producte.descripcio = "";
-
       Categoria c = null; // Falta crear el servei Categoria
       Long userId = getLoggedUser(req);
-      User venedor = usuariService.getUser(userId);
 
-      Producte p = new Producte(c, venedor, producte.nom, producte.preu, producte.descripcio, producte.preuNegociable, producte.intercanviAcceptat);
-      p.setId(id);
-
-      producteService.actualitzar(p);
+      producteService.actualitzar(id, producte);
 
       return Response.ok().build();
   }
@@ -106,21 +99,19 @@ public class ProducteRESTService extends RESTService {
 
   static class R_Producte {
       @NotNull public String nom;
-      @NotNull public double preu;
+      @NotNull public Double preu;
       public String descripcio;
-      @NotNull public boolean preuNegociable;
-      @NotNull public boolean intercanviAcceptat;
+      @NotNull public Boolean preuNegociable;
+      @NotNull public Boolean intercanviAcceptat;
       @NotNull public ID idCategoria;
-      @NotNull public ID idVenedor;
   }
 
-    static class R_Producte_Update {
+    public static class R_Producte_Update {
         public String nom;
-        public double preu;
+        public Double preu;
         public String descripcio;
-        public boolean preuNegociable;
-        public boolean intercanviAcceptat;
+        public Boolean preuNegociable;
+        public Boolean intercanviAcceptat;
         public ID idCategoria;
-        public ID idVenedor;
     }
 }

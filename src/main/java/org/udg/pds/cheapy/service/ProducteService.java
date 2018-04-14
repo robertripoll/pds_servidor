@@ -3,6 +3,7 @@ package org.udg.pds.cheapy.service;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.rest.ProducteRESTService;
 import org.udg.pds.cheapy.rest.RESTService;
 
 import javax.ejb.EJBException;
@@ -23,7 +24,7 @@ public class ProducteService
     {
         try
         {
-            return em.createQuery("SELECT producte FROM Producte producte WHERE producte.transaccio IS NULL").getResultList();
+            return em.createQuery("SELECT producte FROM productes producte WHERE producte.transaccio IS NULL").getResultList();
         }
 
         catch (Exception ex)
@@ -83,12 +84,35 @@ public class ProducteService
         }
     }
 
-    public Producte actualitzar(Producte nouProducte)
+    public Producte actualitzar(Long id, ProducteRESTService.R_Producte_Update nouProducte)
     {
         try
         {
-            em.merge(nouProducte);
-            return nouProducte;
+            Producte p = em.find(Producte.class, id);
+
+            if (nouProducte.nom != null)
+                p.setNom(nouProducte.nom);
+
+            if (nouProducte.intercanviAcceptat != null)
+                p.setIntercanviAcceptat(nouProducte.intercanviAcceptat);
+
+            if (nouProducte.preuNegociable != null)
+                p.setPreuNegociable(nouProducte.preuNegociable);
+
+            if (nouProducte.preu != null)
+                p.setPreu(nouProducte.preu);
+
+            if (nouProducte.descripcio != null)
+                p.setDescripcio(nouProducte.descripcio);
+
+            if (nouProducte.idCategoria != null) {
+                Categoria novaCategoria = em.find(Categoria.class, nouProducte.idCategoria);
+                p.setCategoria(novaCategoria);
+            }
+
+            em.persist(p);
+
+            return p;
         }
 
         catch (Exception ex)
