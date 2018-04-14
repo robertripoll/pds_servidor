@@ -75,6 +75,8 @@ public class UserService
         User u = getUser(id);
         u.addFavorit(p);
 
+        em.merge(u);
+
         return u.getFavorits();
     }
 

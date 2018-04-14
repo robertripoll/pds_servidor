@@ -132,7 +132,7 @@ public class UserRESTService extends RESTService
         Producte p = producteService.get(productId); // obtenim el producte
         Long id = getLoggedUser(req);
 
-        return buildResponse(userService.afegirProducteAFavorit(id,p));
+        return buildResponseWithView(Views.Public.class, userService.afegirProducteAFavorit(id,p));
 
     }
 
