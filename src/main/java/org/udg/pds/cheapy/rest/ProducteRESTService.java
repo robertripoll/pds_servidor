@@ -64,7 +64,7 @@ public class ProducteRESTService extends RESTService
         if (producte.descripcio == null)
             producte.descripcio = "";
 
-        return buildResponse(producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.preuNegociable, producte.intercanviAcceptat));
+        return buildResponseWithView(Views.Public.class, producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.preuNegociable, producte.intercanviAcceptat));
     }
 
     @PUT
