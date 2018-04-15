@@ -12,9 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,31 +35,41 @@ public class ProducteService
 
             CriteriaQuery<Object> selectQuery = query.select(producte);
 
-            query.where(builder.and(producte.get("venedor").in(1L, 14L, 15L),
-                        producte.get("categoria").in(11L),
-                        builder.equal(producte.get("preuNegociable"), true),
-                        builder.between(producte.get("preu"), 140.00, 160.00),
-                        builder.like(producte.get("nom"), "%rio%")));
+            List<Predicate> predicats = new ArrayList<>();
+            predicats.add(producte.get("venedor").in(1L, 14L, 15L));
+            predicats.add(producte.get("categoria").in(11L));
+            predicats.add(builder.equal(producte.get("preuNegociable"), true));
+            predicats.add(builder.between(producte.get("preu"), 140.00, 160.00));
+            predicats.add(builder.like(producte.get("nom"), "%rio%"));
 
-            /*query.where(producte.get("venedor").in(1L, 14L, 15L));
-            query.where(producte.get("categoria").in(12L, 13L));
-            query.where(builder.equal(producte.get("preuNegociable"), false));
-            query.where(builder.equal(producte.get("intercanviAcceptat"), true));*/
+            query.where(builder.and(predicats.toArray(new Predicate[predicats.size()])));
 
-            /*if (sort != null)
+            if (sort != null)
             {
                 for (String criteria : sort)
                 {
                     String[] splitted = criteria.split(",");
 
                     if (splitted[1].equals("asc"))
-                        selectQuery.orderBy(criteriaBuilder.asc(from.get(splitted[0])));
+                        selectQuery.orderBy(builder.asc(producte.get(splitted[0])));
 
                     else if (splitted[1].equals("desc"))
-                        selectQuery.orderBy(criteriaBuilder.asc(from.get(splitted[0])));
+                        selectQuery.orderBy(builder.asc(producte.get(splitted[0])));
                 }
             }
 
+            TypedQuery<Object> typedQuery = em.createQuery(selectQuery);
+            typedQuery.setFirstResult(offset);
+            typedQuery.setMaxResults(limit);
+
+            return typedQuery.getResultList();
+
+            /*query.where(producte.get("venedor").in(1L, 14L, 15L));
+            query.where(producte.get("categoria").in(12L, 13L));
+            query.where(builder.equal(producte.get("preuNegociable"), false));
+            query.where(builder.equal(producte.get("intercanviAcceptat"), true));*/
+
+            /*
             for (String filter : filters.keySet())
             {
                 if (filter.equals("categoria"))
@@ -79,9 +87,6 @@ public class ProducteService
                 if (filter.equals("nom"))
                     queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
             }*/
-
-            TypedQuery<Object> ascTypedQuery = em.createQuery(selectQuery);
-            return ascTypedQuery.getResultList();
 
             /*Query query = em.createQuery("SELECT producte FROM productes producte WHERE producte.transaccio IS NULL");
             query.setMaxResults(limit);
