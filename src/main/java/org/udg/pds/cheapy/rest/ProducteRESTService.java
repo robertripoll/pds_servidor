@@ -48,7 +48,7 @@ public class ProducteRESTService extends RESTService
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("1")@QueryParam("offset") int offset)
+    public Response getAll(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
         Map<String, String[]> parameters = req.getParameterMap();
         String[] sort = null;

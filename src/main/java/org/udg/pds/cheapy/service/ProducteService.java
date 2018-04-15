@@ -14,10 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Stateless
 @LocalBean
@@ -99,9 +96,6 @@ public class ProducteService
             }
 
             else { // Es vol ">=" o "<=" o "> && <"
-                String[] operators = (String[])filters.keySet().toArray();
-                Double[] values = (Double[])filters.values().toArray();
-
                 predicate = operatorsToPredicate(builder, producte, filters);
             }
         }
@@ -157,9 +151,8 @@ public class ProducteService
 
             List<Predicate> predicates = filtersToPredicates(builder, producte, filters);
 
-            predicates.add(builder.between(producte.get("preu"), 140.00, 160.00));
-
-            query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
+            if (!predicates.isEmpty())
+                query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
             if (sort != null)
             {
