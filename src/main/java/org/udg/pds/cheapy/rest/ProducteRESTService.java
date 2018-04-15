@@ -56,8 +56,8 @@ public class ProducteRESTService extends RESTService
         if (parameters.containsKey("sort"))
             sort = parameters.get("sort");
 
-        return Response.ok().build();
-        //return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort));
+        //return Response.ok().build();
+        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort));
     }
 
     @POST

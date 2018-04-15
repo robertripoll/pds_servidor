@@ -49,7 +49,7 @@ public class Producte implements Serializable
 
     @NotNull
     @JsonView(Views.Private.class)
-    private Integer numVisites;
+    private Integer numVisites = 0;
 
     @NotNull
     @JsonView(Views.Public.class)

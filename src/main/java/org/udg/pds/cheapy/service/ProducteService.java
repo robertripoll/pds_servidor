@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,14 +30,25 @@ public class ProducteService
     {
         try
         {
-            CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+            CriteriaBuilder builder = em.getCriteriaBuilder();
 
-            CriteriaQuery<Object> queryObj = criteriaBuilder.createQuery();
-            Root<Producte> from = queryObj.from(Producte.class);
+            CriteriaQuery<Object> query = builder.createQuery();
+            Root<Producte> producte = query.from(Producte.class);
 
-            CriteriaQuery<Object> selectQuery = queryObj.select(from);
+            CriteriaQuery<Object> selectQuery = query.select(producte);
 
-            if (sort != null)
+            query.where(builder.and(producte.get("venedor").in(1L, 14L, 15L),
+                        producte.get("categoria").in(11L),
+                        builder.equal(producte.get("preuNegociable"), true),
+                        builder.between(producte.get("preu"), 140.00, 160.00),
+                        builder.like(producte.get("nom"), "%rio%")));
+
+            /*query.where(producte.get("venedor").in(1L, 14L, 15L));
+            query.where(producte.get("categoria").in(12L, 13L));
+            query.where(builder.equal(producte.get("preuNegociable"), false));
+            query.where(builder.equal(producte.get("intercanviAcceptat"), true));*/
+
+            /*if (sort != null)
             {
                 for (String criteria : sort)
                 {
@@ -66,7 +78,7 @@ public class ProducteService
 
                 if (filter.equals("nom"))
                     queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
-            }
+            }*/
 
             TypedQuery<Object> ascTypedQuery = em.createQuery(selectQuery);
             return ascTypedQuery.getResultList();
