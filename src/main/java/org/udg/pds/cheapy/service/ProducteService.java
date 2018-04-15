@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
@@ -14,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,124 @@ public class ProducteService
 {
     @PersistenceContext
     protected EntityManager em;
+
+    private Long[] toLongArray(String[] stringArray)
+    {
+        Long[] result = new Long[stringArray.length];
+
+        for (int i = 0; i < stringArray.length; i++)
+            result[i] = Long.parseLong(stringArray[i]);
+
+        return result;
+    }
+
+    private Predicate operatorToPredicate(CriteriaBuilder builder, Root<Producte> producte, String operator, Double value)
+    {
+        Predicate predicate = null;
+
+        if (operator == "lt")
+            predicate = builder.lessThan(producte.get("preu"), value);
+
+        else if (operator == "gt")
+            predicate = builder.greaterThan(producte.get("preu"), value);
+
+        else if (operator == "eq")
+            predicate = builder.equal(producte.get("preu"), value);
+
+        return predicate;
+    }
+
+    private Predicate operatorsToPredicate(CriteriaBuilder builder, Root<Producte> producte, Map<String, Double> filters)
+    {
+        Predicate predicate = null;
+
+        if (filters.containsKey("eq")) // Hi ha un operador que es "="
+        {
+            Predicate equal = operatorToPredicate(builder, producte, "eq", filters.get("eq"));
+            Predicate relational = null;
+
+            if (filters.containsKey("lt"))
+                relational = operatorToPredicate(builder, producte, "lt", filters.get("lt"));
+
+            else if (filters.containsKey("gt"))
+                relational = operatorToPredicate(builder, producte, "gt", filters.get("gt"));
+
+            predicate = builder.and(equal, relational);
+        }
+
+        else { // No hi ha cap operador "="
+            Double firstValue = filters.get("lt");
+            Double secondValue = filters.get("gt");
+
+            predicate = builder.between(producte.get("preu"), firstValue, secondValue);
+        }
+
+        return predicate;
+    }
+
+    private Predicate toPricePredicate(CriteriaBuilder builder, Root<Producte> producte, String filter)
+    {
+        Predicate predicate = null;
+
+        try
+        {
+            Map<String, Double> filters = new HashMap<>();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            filters = objectMapper.readValue(filter, HashMap.class);
+
+            if (filters.size() == 1) { // Nomes es vol ">" o "<"
+                String operator = filters.keySet().iterator().next();
+                Double value = filters.get(operator);
+
+                predicate = operatorToPredicate(builder, producte, operator, value);
+            }
+
+            else { // Es vol ">=" o "<=" o "> && <"
+                String[] operators = (String[])filters.keySet().toArray();
+                Double[] values = (Double[])filters.values().toArray();
+
+                predicate = operatorsToPredicate(builder, producte, filters);
+            }
+        }
+
+        catch (Exception ex) // El filtre no es cap cadena en format JSON
+        {
+            predicate = operatorToPredicate(builder, producte, "eq", Double.valueOf(filter));
+        }
+
+        return predicate;
+    }
+
+    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Map<String, String[]> filters)
+    {
+        List<Predicate> predicates = new ArrayList<>();
+
+        for (String filter : filters.keySet())
+        {
+            String[] filterQuery = filters.get(filter);
+
+            if (filter.equals("categoria"))
+                predicates.add(producte.get("categoria").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+
+            else if (filter.equals("venedor"))
+                predicates.add(producte.get("venedor").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+
+            else if (filter.equals("preuNegociable"))
+                predicates.add(builder.equal(producte.get("preuNegociable"), Boolean.valueOf(filterQuery[0])));
+
+            else if (filter.equals("intercanviAcceptat"))
+                predicates.add(builder.equal(producte.get("intercanviAcceptat"), Boolean.valueOf(filterQuery[0])));
+
+            else if (filter.equals("nom"))
+                predicates.add(builder.like(producte.get("nom"), "%" + filterQuery[0] + "%"));
+
+            else if (filter.equals("preu"))
+                predicates.add(toPricePredicate(builder, producte, filterQuery[0]));
+        }
+
+        return predicates;
+    }
 
     public List<Object> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort)
     {
@@ -35,14 +155,11 @@ public class ProducteService
 
             CriteriaQuery<Object> selectQuery = query.select(producte);
 
-            List<Predicate> predicats = new ArrayList<>();
-            predicats.add(producte.get("venedor").in(1L, 14L, 15L));
-            predicats.add(producte.get("categoria").in(11L));
-            predicats.add(builder.equal(producte.get("preuNegociable"), true));
-            predicats.add(builder.between(producte.get("preu"), 140.00, 160.00));
-            predicats.add(builder.like(producte.get("nom"), "%rio%"));
+            List<Predicate> predicates = filtersToPredicates(builder, producte, filters);
 
-            query.where(builder.and(predicats.toArray(new Predicate[predicats.size()])));
+            predicates.add(builder.between(producte.get("preu"), 140.00, 160.00));
+
+            query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
             if (sort != null)
             {
@@ -54,7 +171,7 @@ public class ProducteService
                         selectQuery.orderBy(builder.asc(producte.get(splitted[0])));
 
                     else if (splitted[1].equals("desc"))
-                        selectQuery.orderBy(builder.asc(producte.get(splitted[0])));
+                        selectQuery.orderBy(builder.desc(producte.get(splitted[0])));
                 }
             }
 
@@ -63,36 +180,6 @@ public class ProducteService
             typedQuery.setMaxResults(limit);
 
             return typedQuery.getResultList();
-
-            /*query.where(producte.get("venedor").in(1L, 14L, 15L));
-            query.where(producte.get("categoria").in(12L, 13L));
-            query.where(builder.equal(producte.get("preuNegociable"), false));
-            query.where(builder.equal(producte.get("intercanviAcceptat"), true));*/
-
-            /*
-            for (String filter : filters.keySet())
-            {
-                if (filter.equals("categoria"))
-                    queryObj.where(from.get("categoria").in((Object[])filters.get(filter)));
-
-                if (filter.equals("venedor"))
-                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
-
-                if (filter.equals("preuNegociable"))
-                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
-
-                if (filter.equals("intercanviAcceptat"))
-                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
-
-                if (filter.equals("nom"))
-                    queryObj.where(from.get("venedor_id").in((Object[])filters.get(filter)));
-            }*/
-
-            /*Query query = em.createQuery("SELECT producte FROM productes producte WHERE producte.transaccio IS NULL");
-            query.setMaxResults(limit);
-            query.setFirstResult(offset);
-
-            return query.getResultList();*/
         }
 
         catch (Exception ex)
