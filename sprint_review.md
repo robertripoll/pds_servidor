@@ -36,7 +36,7 @@
 ## Alex Segura Soler
 * [Refactor Android: obtenir llista productes ANDROID](http://94.130.183.121:8080/browse/PDS3-72) 13
 * [Obtenir informació Producte per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-19) 21
-* [Mostrar informació Producte per Pantalla per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-20) 21
+* [Mostrar informació Producte per Pantalla per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-20) 34
 
 ## Robert Ripoll López
 * [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-85) 21
