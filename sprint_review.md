@@ -28,10 +28,10 @@
 
 # Sprint 2
 ## Luis Alejandro Leon Corcuera
-* [Mostrar Formulari de l'Usuari per Registrar-se ANDROID](http://94.130.183.121:8080/browse/PDS3-55) X 
-* [Obtenir informació del Producte ANDROID](http://94.130.183.121:8080/browse/PDS3-41) X
-* [Mostrar informació del Producte ANDROID](http://94.130.183.121:8080/browse/PDS3-42) X
-* [Acció del frontend de fer Logout ANDROID](http://94.130.183.121:8080/browse/PDS3-79) X
+* [Mostrar Formulari de l'Usuari per Registrar-se ANDROID](http://94.130.183.121:8080/browse/PDS3-55) 21 
+* [Obtenir informació del Producte ANDROID](http://94.130.183.121:8080/browse/PDS3-41) 13
+* [Mostrar informació del Producte ANDROID](http://94.130.183.121:8080/browse/PDS3-42) 34
+* [Acció del frontend de fer Logout ANDROID](http://94.130.183.121:8080/browse/PDS3-79) 21
 
 ## Alex Segura Soler
 * [Refactor Android: obtenir llista productes ANDROID](http://94.130.183.121:8080/browse/PDS3-72) X
