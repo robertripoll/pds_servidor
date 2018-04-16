@@ -34,9 +34,9 @@
 * [Acció del frontend de fer Logout ANDROID](http://94.130.183.121:8080/browse/PDS3-79) 21
 
 ## Alex Segura Soler
-* [Refactor Android: obtenir llista productes ANDROID](http://94.130.183.121:8080/browse/PDS3-72) X
-* [Obtenir informació Producte per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-19) X
-* [Mostrar informació Producte per Pantalla per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-20) X
+* [Refactor Android: obtenir llista productes ANDROID](http://94.130.183.121:8080/browse/PDS3-72) 13
+* [Obtenir informació Producte per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-19) 21
+* [Mostrar informació Producte per Pantalla per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-20) 21
 
 ## Robert Ripoll López
 * [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-85) 21
