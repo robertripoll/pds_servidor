@@ -26,3 +26,34 @@
 * [Unificar pantalla Llista Productes amb menú navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-69) 21
 * [Crea Menú de navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-22) 55
 
+# Sprint 2
+## Luis Alejandro Leon Corcuera
+* [Mostrar Formulari de l'Usuari per Registrar-se ANDROID](http://94.130.183.121:8080/browse/PDS3-55) X 
+* [Obtenir informació del Producte ANDROID](http://94.130.183.121:8080/browse/PDS3-41) X
+* [Mostrar informació del Producte ANDROID](http://94.130.183.121:8080/browse/PDS3-42) X
+* [Acció del frontend de fer Logout ANDROID](http://94.130.183.121:8080/browse/PDS3-79) X
+
+## Alex Segura Soler
+* [Refactor Android: obtenir llista productes ANDROID](http://94.130.183.121:8080/browse/PDS3-72) X
+* [Obtenir informació Producte per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-19) X
+* [Mostrar informació Producte per Pantalla per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-20) X
+
+## Robert Ripoll López
+* [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-85) X
+* [Filtratge, ordenació i paginació SERVER](http://94.130.183.121:8080/browse/PDS3-86) X
+* [Esborrar producte de favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-83) X
+* [Backend: Crear un Producte SERVER](http://94.130.183.121:8080/browse/PDS3-84) X
+
+## Daniel Re Lartigue
+* [Post nou Usuari SERVER](http://94.130.183.121:8080/browse/PDS3-56) X
+* [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-21) X
+* [Afegir producte a favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-82) X
+
+## Sergi Boadas Vilagran
+* [Capacitat per editar informació del Perfil Propi ANDROID](http://94.130.183.121:8080/browse/PDS3-31) X
+* [Unificar pantalla Perfil amb Navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-70) X
+
+## Joaquim Pascual Solà
+* [Modificar JSON's de Apiary ANDROID](http://94.130.183.121:8080/browse/PDS3-73) X
+* [Unificar pantalla Login / Registre amb menú navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-78) X
+
