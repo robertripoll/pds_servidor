@@ -39,10 +39,10 @@
 * [Mostrar informació Producte per Pantalla per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-20) X
 
 ## Robert Ripoll López
-* [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-85) X
-* [Filtratge, ordenació i paginació SERVER](http://94.130.183.121:8080/browse/PDS3-86) X
-* [Esborrar producte de favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-83) X
-* [Backend: Crear un Producte SERVER](http://94.130.183.121:8080/browse/PDS3-84) X
+* [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-85) 21
+* [Filtratge, ordenació i paginació SERVER](http://94.130.183.121:8080/browse/PDS3-86) 55
+* [Esborrar producte de favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-83) 13
+* [Backend: Crear un Producte SERVER](http://94.130.183.121:8080/browse/PDS3-84) 21
 
 ## Daniel Re Lartigue
 * [Post nou Usuari SERVER](http://94.130.183.121:8080/browse/PDS3-56) X
