@@ -45,9 +45,9 @@
 * [Backend: Crear un Producte SERVER](http://94.130.183.121:8080/browse/PDS3-84) 21
 
 ## Daniel Re Lartigue
-* [Post nou Usuari SERVER](http://94.130.183.121:8080/browse/PDS3-56) X
-* [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-21) X
-* [Afegir producte a favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-82) X
+* [Post nou Usuari SERVER](http://94.130.183.121:8080/browse/PDS3-56) 21
+* [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-21) 21
+* [Afegir producte a favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-82) 34
 
 ## Sergi Boadas Vilagran
 * [Capacitat per editar informació del Perfil Propi ANDROID](http://94.130.183.121:8080/browse/PDS3-31) 55
