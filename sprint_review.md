@@ -39,7 +39,6 @@
 * [Mostrar informació Producte per Pantalla per Editar ANDROID](http://94.130.183.121:8080/browse/PDS3-20) 34
 
 ## Robert Ripoll López
-* [Editar informació del Producte SERVER](http://94.130.183.121:8080/browse/PDS3-85) 21
 * [Filtratge, ordenació i paginació SERVER](http://94.130.183.121:8080/browse/PDS3-86) 55
 * [Esborrar producte de favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-83) 13
 * [Backend: Crear un Producte SERVER](http://94.130.183.121:8080/browse/PDS3-84) 21
