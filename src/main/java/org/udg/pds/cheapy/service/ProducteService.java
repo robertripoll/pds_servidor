@@ -37,14 +37,20 @@ public class ProducteService
     {
         Predicate predicate = null;
 
-        if (operator == "lt")
-            predicate = builder.lessThan(producte.get("preu"), value);
+        switch (operator)
+        {
+            case "lt":
+                predicate = builder.lessThan(producte.get("preu"), value);
+                break;
 
-        else if (operator == "gt")
-            predicate = builder.greaterThan(producte.get("preu"), value);
+            case "gt":
+                predicate = builder.greaterThan(producte.get("preu"), value);
+                break;
 
-        else if (operator == "eq")
-            predicate = builder.equal(producte.get("preu"), value);
+            case "eq":
+                predicate = builder.equal(producte.get("preu"), value);
+                break;
+        }
 
         return predicate;
     }
@@ -83,7 +89,7 @@ public class ProducteService
 
         try
         {
-            Map<String, Double> filters = new HashMap<>();
+            Map<String, Double> filters;
 
             ObjectMapper objectMapper = new ObjectMapper();
             filters = objectMapper.readValue(filter, HashMap.class);
@@ -116,23 +122,32 @@ public class ProducteService
         {
             String[] filterQuery = filters.get(filter);
 
-            if (filter.equals("categoria"))
-                predicates.add(producte.get("categoria").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+            switch (filter)
+            {
+                case "categoria":
+                    predicates.add(producte.get("categoria").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+                    break;
 
-            else if (filter.equals("venedor"))
-                predicates.add(producte.get("venedor").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+                case "venedor":
+                    predicates.add(producte.get("venedor").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+                    break;
 
-            else if (filter.equals("preuNegociable"))
-                predicates.add(builder.equal(producte.get("preuNegociable"), Boolean.valueOf(filterQuery[0])));
+                case "preuNegociable":
+                    predicates.add(builder.equal(producte.get("preuNegociable"), Boolean.valueOf(filterQuery[0])));
+                    break;
 
-            else if (filter.equals("intercanviAcceptat"))
-                predicates.add(builder.equal(producte.get("intercanviAcceptat"), Boolean.valueOf(filterQuery[0])));
+                case "intercanviAcceptat":
+                    predicates.add(builder.equal(producte.get("intercanviAcceptat"), Boolean.valueOf(filterQuery[0])));
+                    break;
 
-            else if (filter.equals("nom"))
-                predicates.add(builder.like(producte.get("nom"), "%" + filterQuery[0] + "%"));
+                case "nom":
+                    predicates.add(builder.like(producte.get("nom"), "%" + filterQuery[0] + "%"));
+                    break;
 
-            else if (filter.equals("preu"))
-                predicates.add(toPricePredicate(builder, producte, filterQuery[0]));
+                case "preu":
+                    predicates.add(toPricePredicate(builder, producte, filterQuery[0]));
+                    break;
+            }
         }
 
         return predicates;
