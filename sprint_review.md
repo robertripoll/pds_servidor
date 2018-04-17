@@ -50,8 +50,8 @@
 * [Afegir producte a favorits d'un usuari SERVER](http://94.130.183.121:8080/browse/PDS3-82) X
 
 ## Sergi Boadas Vilagran
-* [Capacitat per editar informació del Perfil Propi ANDROID](http://94.130.183.121:8080/browse/PDS3-31) X
-* [Unificar pantalla Perfil amb Navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-70) X
+* [Capacitat per editar informació del Perfil Propi ANDROID](http://94.130.183.121:8080/browse/PDS3-31) 55
+* [Unificar pantalla Perfil amb Navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-70) 13
 
 ## Joaquim Pascual Solà
 * [Modificar JSON's de Apiary ANDROID](http://94.130.183.121:8080/browse/PDS3-73) X
