@@ -54,6 +54,7 @@
 * [Unificar pantalla Perfil amb Navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-70) 13
 
 ## Joaquim Pascual Solà
-* [Modificar JSON's de Apiary ANDROID](http://94.130.183.121:8080/browse/PDS3-73) X
-* [Unificar pantalla Login / Registre amb menú navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-78) X
+* [Modificar JSON's de Apiary ANDROID](http://94.130.183.121:8080/browse/PDS3-73) 8
+* [Unificar pantalla Login / Registre amb menú navegació ANDROID](http://94.130.183.121:8080/browse/PDS3-78) 13
+* [Crear Anunci d'un Producte ANDROID](http://94.130.183.121:8080/browse/PDS3-13) 55
 
