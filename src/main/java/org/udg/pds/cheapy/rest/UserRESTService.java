@@ -10,7 +10,10 @@ import org.udg.pds.cheapy.util.ToJSON;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -18,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.PrintWriter;
 
 // This class is used to process all the authentication related URLs
 @Path("/usuaris")
@@ -48,6 +52,21 @@ public class UserRESTService extends RESTService
         User u = userService.matchPassword(user.correu, user.contrasenya);
         req.getSession().setAttribute("simpleapp_auth_id", u.getId());
         return buildResponseWithView(Views.Private.class, u);
+    }
+
+    @Path("/desautenticar")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response desAuth(@Context HttpServletRequest req, @Context HttpServletResponse response){
+
+        Long loggedUserId = getLoggedUser(req);
+
+        HttpSession session = req.getSession(false);
+        session.removeAttribute("simpleapp_auth_id");
+        session.getMaxInactiveInterval();
+
+        return Response.ok().build();
     }
 
     @Path("/favorits")
