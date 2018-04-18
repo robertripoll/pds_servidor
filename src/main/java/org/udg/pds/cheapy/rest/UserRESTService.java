@@ -184,7 +184,7 @@ public class UserRESTService extends RESTService
         public java.util.Date dataNaix;
     }
 
-    static class ID
+    /*static class ID
     {
         public Long id;
 
@@ -192,7 +192,6 @@ public class UserRESTService extends RESTService
         {
             this.id = id;
         }
-    }
-
+    }*/
 }
 

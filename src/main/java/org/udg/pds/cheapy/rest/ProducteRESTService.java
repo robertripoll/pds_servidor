@@ -72,7 +72,11 @@ public class ProducteRESTService extends RESTService
         if (producte.descripcio == null)
             producte.descripcio = "";
 
-        return buildResponseWithView(Views.Public.class, producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.descripcio, producte.preuNegociable, producte.intercanviAcceptat));
+        Producte p = producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.descripcio, producte.preuNegociable, producte.intercanviAcceptat);
+
+        categoriaService.afegirProducte(categoria, p);
+
+        return buildResponseWithView(Views.Public.class, p);
     }
 
     @PUT
@@ -89,7 +93,17 @@ public class ProducteRESTService extends RESTService
 
         if (p.getVenedor().getId().equals(userId))
         {
+            if (nouProducte.idCategoria != null)
+            {
+                Categoria antiga = p.getCategoria();
+                categoriaService.treureProducte(antiga, p);
+
+                Categoria nova = categoriaService.get(nouProducte.idCategoria.id);
+                categoriaService.afegirProducte(nova, p);
+            }
+
             producteService.actualitzar(p, nouProducte);
+
             return Response.ok().build();
         }
 
@@ -108,12 +122,17 @@ public class ProducteRESTService extends RESTService
         Producte p = producteService.get(id);
 
         if (p.getVenedor().getId().equals(userId))
+        {
+            Categoria categoria = categoriaService.get(p.getCategoria().getId());
+            categoriaService.treureProducte(categoria, p);
+
             return buildResponse(producteService.esborrar(id));
+        }
 
         return accessDenied();
     }
 
-    static class ID
+    /*static class ID
     {
         public Long id;
 
@@ -121,7 +140,7 @@ public class ProducteRESTService extends RESTService
         {
             this.id = id;
         }
-    }
+    }*/
 
     static class R_Producte
     {

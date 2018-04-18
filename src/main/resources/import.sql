@@ -1,3 +1,11 @@
+-- Funcio de càlcul de distància
+
+CREATE OR REPLACE FUNCTION DISTANCIA(lat1 number, lon1 number, lat2 number, lon2 number) return number is
+BEGIN
+return (sqrt(power(lat1-lat2,2)+ power(lon1*cos(lat1/180*acos(-1.0))-lon2*cos(lat2/180*acos(-1.0)),2))*111.3199);
+END;
+/
+
 -- DADES DE MOSTRA
 
 -- Usuaris

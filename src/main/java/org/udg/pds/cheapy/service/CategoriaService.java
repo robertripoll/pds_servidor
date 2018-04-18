@@ -6,6 +6,7 @@ import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.rest.ProducteRESTService;
 import org.udg.pds.cheapy.rest.RESTService;
 
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -42,6 +43,34 @@ public class CategoriaService
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
+            throw new EJBException(ex);
+        }
+    }
+
+    public Categoria afegirProducte(Categoria categoria, Producte p)
+    {
+        try
+        {
+            categoria.getProductes().add(p);
+            return em.merge(categoria);
+        }
+
+        catch (Exception ex)
+        {
+            throw new EJBException(ex);
+        }
+    }
+
+    public Categoria treureProducte(Categoria categoria, Producte p)
+    {
+        try
+        {
+            categoria.getProductes().remove(p);
+            return em.merge(categoria);
+        }
+
+        catch (Exception ex)
+        {
             throw new EJBException(ex);
         }
     }
