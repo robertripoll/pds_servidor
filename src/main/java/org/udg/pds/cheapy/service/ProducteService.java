@@ -3,6 +3,7 @@ package org.udg.pds.cheapy.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Producte;
+import org.udg.pds.cheapy.model.Ubicacio;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.rest.ProducteRESTService;
 import org.udg.pds.cheapy.rest.RESTService;
@@ -114,7 +115,24 @@ public class ProducteService
         return predicate;
     }
 
-    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Map<String, String[]> filters)
+    private Predicate distancePredicate(CriteriaBuilder builder, Root<Producte> producte, String value, User loggedUser)
+    {
+        Predicate predicate = null;
+
+        Double maxDistance = Double.parseDouble(value);
+
+        Double loggedLat = loggedUser.getUbicacio().getCoordLat();
+        Double loggedLng = loggedUser.getUbicacio().getCoordLng();
+
+        Double sellerLat = 0.0;
+        Double sellerLng = 0.0;
+
+        builder.lessThanOrEqualTo(builder.function("DISTANCE", Double.class, builder.parameter(Double.class, sellerLat), sellerLng, loggedLat, loggedLng), maxDistance);
+
+        return predicate;
+    }
+
+    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Map<String, String[]> filters, User loggedUser)
     {
         List<Predicate> predicates = new ArrayList<>();
 
@@ -147,13 +165,17 @@ public class ProducteService
                 case "preu":
                     predicates.add(toPricePredicate(builder, producte, filterQuery[0]));
                     break;
+
+                case "distancia":
+                    predicates.add(distancePredicate(builder, producte, filterQuery[0], loggedUser));
+                    break;
             }
         }
 
         return predicates;
     }
 
-    public List<Object> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort)
+    public List<Object> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort, User loggedUser)
     {
         try
         {
@@ -164,7 +186,7 @@ public class ProducteService
 
             CriteriaQuery<Object> selectQuery = query.select(producte);
 
-            List<Predicate> predicates = filtersToPredicates(builder, producte, filters);
+            List<Predicate> predicates = filtersToPredicates(builder, producte, filters, loggedUser);
 
             if (!predicates.isEmpty())
                 query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
