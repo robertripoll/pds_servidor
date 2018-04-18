@@ -92,7 +92,7 @@ public class User implements Serializable
 
     //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuari_ub")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuari")
     @JsonView(Views.Private.class)
     private Ubicacio ubicacio;
 

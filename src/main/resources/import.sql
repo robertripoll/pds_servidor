@@ -1,10 +1,27 @@
 -- Funcio de càlcul de distància
 
-CREATE OR REPLACE FUNCTION DISTANCIA(lat1 number, lon1 number, lat2 number, lon2 number) return number is
-BEGIN
-return (sqrt(power(lat1-lat2,2)+ power(lon1*cos(lat1/180*acos(-1.0))-lon2*cos(lat2/180*acos(-1.0)),2))*111.3199);
-END;
-/
+DELIMITER $$
+CREATE FUNCTION `getDistance`(`lat1` VARCHAR(200), `lng1` VARCHAR(200), `lat2` VARCHAR(200), `lng2` VARCHAR(200))
+  RETURNS VARCHAR(10) CHARSET utf8
+  BEGIN
+    DECLARE distance VARCHAR(10);
+
+    SET distance = (SELECT (6371 * ACOS(
+        COS(RADIANS(lat2))
+        * COS(RADIANS(lat1))
+        * COS(RADIANS(lng1) - RADIANS(lng2))
+        + SIN(RADIANS(lat2))
+          * SIN(RADIANS(lat1))
+    )) AS distance);
+
+    IF (distance IS NULL)
+    THEN
+      RETURN '';
+    ELSE
+      RETURN distance;
+    END IF;
+  END $$
+DELIMITER ;
 
 -- DADES DE MOSTRA
 
