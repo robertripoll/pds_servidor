@@ -20,9 +20,9 @@ CREATE FUNCTION distancia
 -- DADES DE MOSTRA
 
 -- Usuaris
-INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon) VALUES ('Benito', 'Camela', 'seatleon84@zmail.com', 'tetejohnny', STR_TO_DATE('11/04/2018', '%d/%m/%Y'), 'masculí', '34612345678');
-INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon) VALUES ('Pablo Emilio', 'Escobar Gabiria', 'escobar@colombia.com', 'narcos33', STR_TO_DATE('03/05/1975', '%d/%m/%Y'), 'masculí', '54612345678');
-INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon) VALUES ('Donald', 'Trump', 'admin@whitehouse.gov', 'bigwall50', STR_TO_DATE('16/08/1954', '%d/%m/%Y'), 'masculí', '180000000');
+INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon) VALUES ('Benito', 'Camela', 'seatleon84@zmail.com', 'tetejohnny', STR_TO_DATE('11/04/2018', '%d/%m/%Y'), 'home', '34612345678');
+INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon) VALUES ('Pablo Emilio', 'Escobar Gabiria', 'escobar@colombia.com', 'narcos33', STR_TO_DATE('03/05/1975', '%d/%m/%Y'), 'home', '54612345678');
+INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon) VALUES ('Donald', 'Trump', 'admin@whitehouse.gov', 'bigwall50', STR_TO_DATE('16/08/1954', '%d/%m/%Y'), 'home', '180000000');
 
 -- Categories
 INSERT INTO categories (nom) VALUES ('Motor i Accessoris');

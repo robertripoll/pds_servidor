@@ -86,7 +86,6 @@ public class UserRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
-
         Long loggedUserId = getLoggedUser(req);
 
         if (!loggedUserId.equals(userId))
