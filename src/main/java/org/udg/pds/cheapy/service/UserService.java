@@ -144,4 +144,32 @@ public class UserService
         u.getProdVenda().size();
         return u;
     }
+
+    public User afegirProducte(User usuari, Producte p)
+    {
+        try
+        {
+            usuari.getProdVenda().add(p);
+            return em.merge(usuari);
+        }
+
+        catch (Exception ex)
+        {
+            throw new EJBException(ex);
+        }
+    }
+
+    public User treureProducte(User usuari, Producte p)
+    {
+        try
+        {
+            usuari.getProdVenda().remove(p);
+            return em.merge(usuari);
+        }
+
+        catch (Exception ex)
+        {
+            throw new EJBException(ex);
+        }
+    }
 }
