@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name = "usuaris")
@@ -92,7 +93,7 @@ public class User implements Serializable
 
     //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonView(Views.Private.class)
     private Ubicacio ubicacio;
 

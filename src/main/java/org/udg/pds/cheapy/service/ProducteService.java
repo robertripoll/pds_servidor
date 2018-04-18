@@ -71,9 +71,8 @@ public class ProducteService
                 relational = operatorToPredicate(builder, producte, "gt", filters.get("gt"));
 
             predicate = builder.and(equal, relational);
-        }
-
-        else { // No hi ha cap operador "="
+        } else
+        { // No hi ha cap operador "="
             Double firstValue = filters.get("lt");
             Double secondValue = filters.get("gt");
 
@@ -94,14 +93,14 @@ public class ProducteService
             ObjectMapper objectMapper = new ObjectMapper();
             filters = objectMapper.readValue(filter, HashMap.class);
 
-            if (filters.size() == 1) { // Nomes es vol ">" o "<"
+            if (filters.size() == 1)
+            { // Nomes es vol ">" o "<"
                 String operator = filters.keySet().iterator().next();
                 Double value = filters.get(operator);
 
                 predicate = operatorToPredicate(builder, producte, operator, value);
-            }
-
-            else { // Es vol ">=" o "<=" o "> && <"
+            } else
+            { // Es vol ">=" o "<=" o "> && <"
                 predicate = operatorsToPredicate(builder, producte, filters);
             }
         }
@@ -204,7 +203,8 @@ public class ProducteService
         try
         {
             return em.find(Producte.class, id);
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
@@ -219,7 +219,8 @@ public class ProducteService
             Producte producte = new Producte(categoria, venedor, nom, preu, descripcio, preuNegociable, intercanviAcceptat);
             em.persist(producte);
             return producte;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
             // We catch the normal exception and then transform it in a EJBException
