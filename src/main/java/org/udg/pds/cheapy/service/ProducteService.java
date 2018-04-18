@@ -187,6 +187,7 @@ public class ProducteService
             CriteriaQuery<Object> selectQuery = query.select(producte);
 
             List<Predicate> predicates = filtersToPredicates(builder, producte, filters, loggedUser);
+            predicates.add(builder.isNull(producte.get("transaccio")));
 
             if (!predicates.isEmpty())
                 query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
