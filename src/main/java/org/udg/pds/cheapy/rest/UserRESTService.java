@@ -10,7 +10,11 @@ import org.udg.pds.cheapy.util.ToJSON;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.swing.text.View;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -18,6 +22,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.PrintWriter;
 
 // This class is used to process all the authentication related URLs
 @Path("/usuaris")
@@ -50,6 +55,21 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Private.class, u);
     }
 
+    @Path("/desautenticar")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response desAuth(@Context HttpServletRequest req, @Context HttpServletResponse response){
+
+        Long loggedUserId = getLoggedUser(req);
+
+        HttpSession session = req.getSession(false);
+        session.removeAttribute("simpleapp_auth_id");
+        session.getMaxInactiveInterval();
+
+        return Response.ok().build();
+    }
+
     @Path("/favorits")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -74,6 +94,16 @@ public class UserRESTService extends RESTService
         return buildResponse(userService.remove(userId));
     }
 
+    @Path("/converses")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureConverses(@Context HttpServletRequest req){
+
+        Long loggedUserId = getLoggedUser(req);
+
+        return buildResponseWithView(Views.Public.class, userService.getConversacions(loggedUserId));
+    }
+
     @Path("/registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -83,6 +113,22 @@ public class UserRESTService extends RESTService
         checkNotLoggedIn(req);
 
         return buildResponseWithView(Views.Private.class, userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix));
+    }
+
+    @Path("/{id}/compres")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureCompresUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId){
+
+        return buildResponseWithView(Views.Public.class, userService.getCompres(userId));
+    }
+
+    @Path("/{id}/vendes")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureVendesUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId){
+
+        return buildResponseWithView(Views.Public.class, userService.getVendes(userId));
     }
 
     @Path("{id}")
