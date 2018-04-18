@@ -1,27 +1,21 @@
 -- Funcio de càlcul de distància
 
-DELIMITER $$
-CREATE FUNCTION `getDistance`(`lat1` VARCHAR(200), `lng1` VARCHAR(200), `lat2` VARCHAR(200), `lng2` VARCHAR(200))
-  RETURNS VARCHAR(10) CHARSET utf8
-  BEGIN
-    DECLARE distance VARCHAR(10);
-
-    SET distance = (SELECT (6371 * ACOS(
-        COS(RADIANS(lat2))
-        * COS(RADIANS(lat1))
-        * COS(RADIANS(lng1) - RADIANS(lng2))
-        + SIN(RADIANS(lat2))
-          * SIN(RADIANS(lat1))
-    )) AS distance);
-
-    IF (distance IS NULL)
-    THEN
-      RETURN '';
-    ELSE
-      RETURN distance;
-    END IF;
-  END $$
-DELIMITER ;
+DROP FUNCTION IF EXISTS distancia;
+CREATE FUNCTION distancia
+  (
+    lat1 DOUBLE,
+    lng1 DOUBLE,
+    lat2 DOUBLE,
+    lng2 DOUBLE
+  )
+  RETURNS DOUBLE
+  RETURN (SELECT (6371 * ACOS(
+      COS(RADIANS(lat2))
+      * COS(RADIANS(lat1))
+      * COS(RADIANS(lng1) - RADIANS(lng2))
+      + SIN(RADIANS(lat2))
+        * SIN(RADIANS(lat1))
+  )) AS distance);
 
 -- DADES DE MOSTRA
 
