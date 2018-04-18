@@ -39,7 +39,7 @@ public class UserService
             throw new EJBException("Password does not match");
     }
 
-    public User register(String nom, String cognoms, String correu, String contrasenya, String sexe, String telefon, Date dataNaix, Ubicacio ubicacio)
+    public User register(String nom, String cognoms, String correu, String contrasenya, User.Sexe sexe, String telefon, Date dataNaix, Ubicacio ubicacio)
     {
         Query q = em.createQuery("select u from usuaris u where u.correu=:correu");
         q.setParameter("correu", correu);

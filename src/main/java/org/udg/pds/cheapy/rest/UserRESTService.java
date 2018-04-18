@@ -226,7 +226,7 @@ public class UserRESTService extends RESTService
         @NotNull
         public String cognom;
         @NotNull
-        public String sexe;
+        public User.Sexe sexe;
         @NotNull
         public String telefon;
         @NotNull
