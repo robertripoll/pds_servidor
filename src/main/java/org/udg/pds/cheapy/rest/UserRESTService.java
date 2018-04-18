@@ -14,6 +14,7 @@ import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.View;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -93,6 +94,16 @@ public class UserRESTService extends RESTService
         return buildResponse(userService.remove(userId));
     }
 
+    @Path("/converses")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureConverses(@Context HttpServletRequest req){
+
+        Long loggedUserId = getLoggedUser(req);
+
+        return buildResponseWithView(Views.Public.class, userService.getConversacions(loggedUserId));
+    }
+
     @Path("/registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -102,6 +113,22 @@ public class UserRESTService extends RESTService
         checkNotLoggedIn(req);
 
         return buildResponseWithView(Views.Private.class, userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix));
+    }
+
+    @Path("/{id}/compres")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureCompresUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId){
+
+        return buildResponseWithView(Views.Public.class, userService.getCompres(userId));
+    }
+
+    @Path("/{id}/vendes")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureVendesUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId){
+
+        return buildResponseWithView(Views.Public.class, userService.getVendes(userId));
     }
 
     @Path("{id}")

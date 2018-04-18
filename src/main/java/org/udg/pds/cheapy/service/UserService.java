@@ -1,8 +1,6 @@
 package org.udg.pds.cheapy.service;
 
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Valoracio;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.rest.RESTService;
 
 import javax.ejb.EJBException;
@@ -76,6 +74,26 @@ public class UserService
         return u.getFavorits();
     }
 
+    public Collection<Conversacio> getConversacions(long id){
+
+        User u = getUser(id);
+
+        return u.getConverses();
+    }
+
+    public Collection<Transaccio> getCompres(long id){
+
+        User u = getUser(id);
+
+        return u.getCompres();
+    }
+
+    public Collection<Transaccio> getVendes(long id){
+
+        User u = getUser(id);
+
+        return u.getVendes();
+    }
 
     public Collection<Producte> afegirProducteAFavorit(long id, Producte p){
 
