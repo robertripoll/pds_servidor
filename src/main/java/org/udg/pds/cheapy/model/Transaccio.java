@@ -16,8 +16,60 @@ public class Transaccio implements Serializable
     protected Long id;
 
     @ManyToOne
-    private User usuari_comprador;
+    private User comprador;
 
-    @ManyToOne
-    private User usuari_venedor;
+    @ManyToOne(optional = false)
+    private User venedor;
+
+    @OneToOne
+    private Valoracio valoracioComprador;
+
+    @OneToOne
+    private Valoracio valoracioVenedor;
+
+    public Transaccio()
+    {
+
+    }
+
+    public Transaccio(User venedor)
+    {
+        this.venedor = venedor;
+    }
+
+    public Transaccio(User venedor, User comprador)
+    {
+        this.venedor    = venedor;
+        this.comprador  = comprador;
+    }
+
+    public User getVenedor()
+    {
+        return venedor;
+    }
+
+    public User getComprador()
+    {
+        return comprador;
+    }
+
+    public Valoracio getValoracioComprador()
+    {
+        return valoracioComprador;
+    }
+
+    public Valoracio getValoracioVenedor()
+    {
+        return valoracioVenedor;
+    }
+
+    public void setValoracioComprador(Valoracio v)
+    {
+        valoracioComprador = v;
+    }
+
+    public void setValoracioVenedor(Valoracio v)
+    {
+        valoracioVenedor = v;
+    }
 }

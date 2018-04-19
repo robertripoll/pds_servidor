@@ -133,14 +133,14 @@ public class User implements Serializable
     private Collection<Conversacio> converses;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_val")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
     private Collection<Valoracio> valoracions;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_comprador")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> compres;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_venedor")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> vendes;
 

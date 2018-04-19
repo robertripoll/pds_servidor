@@ -59,20 +59,23 @@ public class Valoracio implements Serializable
     @ManyToOne
     private User valorador;
 
+    @ManyToOne
+    private User valorat;
+
     public Valoracio()
     {
 
     }
 
-    public Valoracio(User valorador, Estrelles estrelles)
+    public Valoracio(User valorador, User valorat, Estrelles estrelles)
     {
         this.valorador = valorador;
         this.estrelles = estrelles;
     }
 
-    public Valoracio(User valorador, Estrelles estrelles, String comentaris)
+    public Valoracio(User valorador, User valorat, Estrelles estrelles, String comentaris)
     {
-        this(valorador, estrelles);
+        this(valorador, valorat, estrelles);
 
         this.comentaris = comentaris;
     }
@@ -90,5 +93,10 @@ public class Valoracio implements Serializable
     public User getValorador()
     {
         return valorador;
+    }
+
+    public User getValorat()
+    {
+        return valorat;
     }
 }
