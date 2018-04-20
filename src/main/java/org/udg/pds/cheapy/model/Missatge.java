@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-public class Missatge implements Serializable
+public class Missatge implements Serializable, Cloneable
 {
     public enum Estat {
         PENDENT_ENVIAMENT("pendent"), ENVIAT("enviat"), LLEGIT("llegit");
@@ -79,10 +79,18 @@ public class Missatge implements Serializable
 
     public Missatge(User emisor, User receptor, String missatge)
     {
-        this.emisor = emisor;
-        this.receptor = receptor;
-        this.missatge = missatge;
-        this.estat = Estat.PENDENT_ENVIAMENT;
+        this.emisor     = emisor;
+        this.receptor   = receptor;
+        this.missatge   = missatge;
+        this.estat      = Estat.PENDENT_ENVIAMENT;
+    }
+
+    private Missatge(User emisor, User receptor, String missatge, Estat estat)
+    {
+        this.emisor     = emisor;
+        this.receptor   = receptor;
+        this.missatge   = missatge;
+        this.estat      = estat;
     }
 
     public User getEmisor()
@@ -113,5 +121,10 @@ public class Missatge implements Serializable
     public void setEstat(Estat nouEstat)
     {
         estat = nouEstat;
+    }
+
+    public Missatge clone()
+    {
+        return new Missatge(this.emisor, this.receptor, this.missatge, this.estat);
     }
 }
