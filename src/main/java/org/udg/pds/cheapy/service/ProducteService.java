@@ -3,6 +3,7 @@ package org.udg.pds.cheapy.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Producte;
+import org.udg.pds.cheapy.model.Transaccio;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.rest.ProducteRESTService;
 import org.udg.pds.cheapy.rest.RESTService;
@@ -267,5 +268,11 @@ public class ProducteService
         Producte p = em.find(Producte.class, idProducte);
         em.remove(p);
         return new RESTService.ID(idProducte);
+    }
+
+    public Producte vendre(Producte p, Transaccio t)
+    {
+        p.setTransaccio(t);
+        return em.merge(p);
     }
 }
