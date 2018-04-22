@@ -49,6 +49,7 @@ public class Categoria implements Serializable
     @JsonIgnore
     public Collection<Producte> getProductes()
     {
+        productes.size();
         return productes;
     }
 }

@@ -249,7 +249,7 @@ public class ProducteService
 
             if (nouProducte.idCategoria != null)
             {
-                Categoria novaCategoria = em.find(Categoria.class, nouProducte.idCategoria);
+                Categoria novaCategoria = em.find(Categoria.class, nouProducte.idCategoria.id);
                 p.setCategoria(novaCategoria);
             }
 

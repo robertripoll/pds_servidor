@@ -124,11 +124,7 @@ public class User implements Serializable
     @JsonView(Views.Private.class)
     private Ubicacio ubicacio;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
-    private Collection<Missatge> missatges;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_conv")
     @JsonView(Views.Complete.class)
     private Collection<Conversacio> converses;
 
@@ -245,22 +241,6 @@ public class User implements Serializable
     }
 
     //-------------------- OPERACIONS AMB LES COLECCIONS --------------------//
-
-    public Collection<Missatge> getMissatges()
-    {
-        missatges.size();
-        return missatges;
-    }
-
-    public void setMissatges(List<Missatge> miss)
-    {
-        this.missatges = miss;
-    }
-
-    public void addMissatge(Missatge missatge)
-    {
-        missatges.add(missatge);
-    }
 
     public Collection<Conversacio> getConverses()
     {
