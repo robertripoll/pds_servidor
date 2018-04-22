@@ -1,6 +1,8 @@
 package org.udg.pds.cheapy.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,11 +15,41 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name = "usuaris")
 public class User implements Serializable
 {
+    public enum Sexe {
+        HOME("home"), DONA("dona"), ALTRES("altres");
+
+        private String value;
+
+        private Sexe(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        public String getValue() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static Sexe create(String val)
+        {
+            Sexe[] sexes = Sexe.values();
+
+            for (Sexe sexe : sexes)
+            {
+                if (sexe.getValue().equalsIgnoreCase(val))
+                    return sexe;
+            }
+
+            return ALTRES;
+        }
+    }
+
     /**
      * Default value included to remove warning. Remove or modify at will. *
      */
@@ -27,27 +59,21 @@ public class User implements Serializable
     {
     }
 
-    public User(String sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya, Ubicacio ubicacio)
+    public User(Sexe sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya)
     {
-        this.sexe = sexe;
         this.nom = nom;
         this.cognoms = cognoms;
-        this.telefon = telefon;
-        this.dataNaix = dataNaix;
-        this.correu = correu;
-        this.contrasenya = contrasenya;
-        this.ubicacio = ubicacio;
-    }
-
-    public User(String nom, String cognom, String correu, String contrasenya, String sexe, String telefon, java.util.Date dataNaix)
-    {
-        this.nom = nom;
-        this.cognoms = cognom;
         this.correu = correu;
         this.contrasenya = contrasenya;
         this.sexe = sexe;
         this.telefon = telefon;
         this.dataNaix = dataNaix;
+    }
+
+    public User(Sexe sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya, Ubicacio ubicacio)
+    {
+        this(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya);
+        this.ubicacio = ubicacio;
     }
 
     //-------------------- ATRIBUTS DE LA CLASSE --------------------//
@@ -74,9 +100,11 @@ public class User implements Serializable
     @JsonView(Views.Private.class)
     private String cognoms;
 
+    @Basic
+    @Enumerated(EnumType.STRING)
     @NotNull
     @JsonView(Views.Public.class)
-    private String sexe;
+    private Sexe sexe;
 
     @NotNull
     @JsonView(Views.Private.class)
@@ -96,23 +124,19 @@ public class User implements Serializable
     @JsonView(Views.Private.class)
     private Ubicacio ubicacio;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
-    private Collection<Missatge> missatges;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_conv")
     @JsonView(Views.Complete.class)
     private Collection<Conversacio> converses;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_val")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
     private Collection<Valoracio> valoracions;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_comprador")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> compres;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari_venedor")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
     @JsonView(Views.Complete.class)
     private Collection<Transaccio> vendes;
 
@@ -176,12 +200,12 @@ public class User implements Serializable
         this.cognoms = cognoms;
     }
 
-    public String getSexe()
+    public Sexe getSexe()
     {
         return sexe;
     }
 
-    public void setSexe(String sexe)
+    public void setSexe(Sexe sexe)
     {
         this.sexe = sexe;
     }
@@ -217,22 +241,6 @@ public class User implements Serializable
     }
 
     //-------------------- OPERACIONS AMB LES COLECCIONS --------------------//
-
-    public Collection<Missatge> getMissatges()
-    {
-        missatges.size();
-        return missatges;
-    }
-
-    public void setMissatges(List<Missatge> miss)
-    {
-        this.missatges = miss;
-    }
-
-    public void addMissatge(Missatge missatge)
-    {
-        missatges.add(missatge);
-    }
 
     public Collection<Conversacio> getConverses()
     {

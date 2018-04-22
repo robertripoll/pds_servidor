@@ -76,8 +76,6 @@ public class ProducteRESTService extends RESTService
 
         Producte p = producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.descripcio, producte.preuNegociable, producte.intercanviAcceptat);
 
-        categoriaService.afegirProducte(categoria, p);
-
         return buildResponseWithView(Views.Public.class, p);
     }
 
@@ -95,17 +93,7 @@ public class ProducteRESTService extends RESTService
 
         if (p.getVenedor().getId().equals(userId))
         {
-            if (nouProducte.idCategoria != null)
-            {
-                Categoria antiga = p.getCategoria();
-                categoriaService.treureProducte(antiga, p);
-
-                Categoria nova = categoriaService.get(nouProducte.idCategoria.id);
-                categoriaService.afegirProducte(nova, p);
-            }
-
             producteService.actualitzar(p, nouProducte);
-
             return Response.ok().build();
         }
 
@@ -125,9 +113,6 @@ public class ProducteRESTService extends RESTService
 
         if (p.getVenedor().getId().equals(userId))
         {
-            Categoria categoria = categoriaService.get(p.getCategoria().getId());
-            categoriaService.treureProducte(categoria, p);
-
             return buildResponse(producteService.esborrar(id));
         }
 

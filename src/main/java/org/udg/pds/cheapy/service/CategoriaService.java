@@ -46,32 +46,4 @@ public class CategoriaService
             throw new EJBException(ex);
         }
     }
-
-    public Categoria afegirProducte(Categoria categoria, Producte p)
-    {
-        try
-        {
-            categoria.getProductes().add(p);
-            return em.merge(categoria);
-        }
-
-        catch (Exception ex)
-        {
-            throw new EJBException(ex);
-        }
-    }
-
-    public Categoria treureProducte(Categoria categoria, Producte p)
-    {
-        try
-        {
-            categoria.getProductes().remove(p);
-            return em.merge(categoria);
-        }
-
-        catch (Exception ex)
-        {
-            throw new EJBException(ex);
-        }
-    }
 }

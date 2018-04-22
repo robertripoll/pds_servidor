@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Collection;
+import java.util.Date;
 
 @Stateless
 @LocalBean
@@ -38,9 +39,8 @@ public class UserService
             throw new EJBException("Password does not match");
     }
 
-    public User register(String nom, String cognom, String correu, String contrasenya, String sexe, String telefon, java.util.Date dataNaix)
+    public User register(String nom, String cognoms, String correu, String contrasenya, User.Sexe sexe, String telefon, Date dataNaix, Ubicacio ubicacio)
     {
-
         Query q = em.createQuery("select u from usuaris u where u.correu=:correu");
         q.setParameter("correu", correu);
         if (q.getResultList().size() > 0)
@@ -55,7 +55,9 @@ public class UserService
             throw new EJBException("Telefon already exist");
         }
 
-        User nu = new User(nom, cognom, correu, contrasenya, sexe, telefon, dataNaix);
+        em.persist(ubicacio);
+
+        User nu = new User(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya, ubicacio);
         em.persist(nu);
         return nu;
     }
@@ -139,7 +141,6 @@ public class UserService
         u.getConverses().size();
         u.getVendes().size();
         u.getFavorits().size();
-        u.getMissatges().size();
         u.getValoracions().size();
         u.getProdVenda().size();
         return u;

@@ -1,6 +1,7 @@
 package org.udg.pds.cheapy.rest;
 
 import org.udg.pds.cheapy.model.Producte;
+import org.udg.pds.cheapy.model.Ubicacio;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.model.Views;
 import org.udg.pds.cheapy.service.ProducteService;
@@ -85,7 +86,6 @@ public class UserRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
-
         Long loggedUserId = getLoggedUser(req);
 
         if (!loggedUserId.equals(userId))
@@ -109,10 +109,13 @@ public class UserRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(RegisterUser ru, @Context HttpServletRequest req)
     {
-
         checkNotLoggedIn(req);
 
-        return buildResponseWithView(Views.Private.class, userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix));
+        Ubicacio ubicacio = new Ubicacio(ru.coordLat, ru.coordLng, ru.ciutat, ru.pais);
+
+        User usuari = userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix, ubicacio);
+
+        return buildResponseWithView(Views.Private.class, usuari);
     }
 
     @Path("/{id}/compres")
@@ -136,7 +139,6 @@ public class UserRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response veurePerfil(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
-
         Long loggedUserId = getLoggedUser(req);
 
         if (!loggedUserId.equals(userId))
@@ -223,11 +225,19 @@ public class UserRESTService extends RESTService
         @NotNull
         public String cognom;
         @NotNull
-        public String sexe;
+        public User.Sexe sexe;
         @NotNull
         public String telefon;
         @NotNull
         public java.util.Date dataNaix;
+        @NotNull
+        public String pais;
+        @NotNull
+        public String ciutat;
+        @NotNull
+        public Double coordLat;
+        @NotNull
+        public double coordLng;
     }
 
     /*static class ID
