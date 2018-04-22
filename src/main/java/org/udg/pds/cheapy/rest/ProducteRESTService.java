@@ -53,11 +53,13 @@ public class ProducteRESTService extends RESTService
         Map<String, String[]> parameters = req.getParameterMap();
         String[] sort = null;
 
+        User loggedUser = usuariService.getUser(getLoggedUser(req));
+
         if (parameters.containsKey("sort"))
             sort = parameters.get("sort");
 
         //return Response.ok().build();
-        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort));
+        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort, loggedUser));
     }
 
     @POST

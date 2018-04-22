@@ -115,24 +115,24 @@ public class ProducteService
         return predicate;
     }
 
-    private Predicate distancePredicate(CriteriaBuilder builder, Root<Producte> producte, String value, User loggedUser)
+    private Predicate distancePredicate(CriteriaBuilder builder, Root<Producte> producte, String value)
     {
         Predicate predicate = null;
 
         Double maxDistance = Double.parseDouble(value);
 
-        Double loggedLat = loggedUser.getUbicacio().getCoordLat();
-        Double loggedLng = loggedUser.getUbicacio().getCoordLng();
+        ParameterExpression sellerLat = builder.parameter(Double.class);
+        ParameterExpression sellerLng = builder.parameter(Double.class);
 
-        Double sellerLat = 0.0;
-        Double sellerLng = 0.0;
+        ParameterExpression loggedLat = builder.parameter(Double.class);
+        ParameterExpression loggedLng = builder.parameter(Double.class);
 
-        builder.lessThanOrEqualTo(builder.function("DISTANCE", Double.class, builder.parameter(Double.class, sellerLat), sellerLng, loggedLat, loggedLng), maxDistance);
+        predicate = builder.lessThanOrEqualTo(builder.function("DISTANCE", Double.class, sellerLat, sellerLng, loggedLat, loggedLng), maxDistance);
 
         return predicate;
     }
 
-    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Map<String, String[]> filters, User loggedUser)
+    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Map<String, String[]> filters)
     {
         List<Predicate> predicates = new ArrayList<>();
 
@@ -167,7 +167,7 @@ public class ProducteService
                     break;
 
                 case "distancia":
-                    predicates.add(distancePredicate(builder, producte, filterQuery[0], loggedUser));
+                    predicates.add(distancePredicate(builder, producte, filterQuery[0]));
                     break;
             }
         }
@@ -186,8 +186,11 @@ public class ProducteService
 
             CriteriaQuery<Object> selectQuery = query.select(producte);
 
-            List<Predicate> predicates = filtersToPredicates(builder, producte, filters, loggedUser);
+            List<Predicate> predicates = filtersToPredicates(builder, producte, filters);
             predicates.add(builder.isNull(producte.get("transaccio")));
+
+            if (loggedUser == null) // No s'admet filtratge per distancia si no s'està registrat
+                filters.remove("distancia");
 
             if (!predicates.isEmpty())
                 query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
@@ -209,6 +212,14 @@ public class ProducteService
             TypedQuery<Object> typedQuery = em.createQuery(selectQuery);
             typedQuery.setFirstResult(offset);
             typedQuery.setMaxResults(limit);
+
+            if (filters.containsKey("distancia")) {
+                typedQuery.setParameter("sellerLat", producte.get("ubicacio").get("coordLat"));
+                typedQuery.setParameter("sellerLng", producte.get("ubicacio").get("coordLng"));
+
+                typedQuery.setParameter("loggedLat", loggedUser.getUbicacio().getCoordLat());
+                typedQuery.setParameter("loggedLng", loggedUser.getUbicacio().getCoordLng());
+            }
 
             return typedQuery.getResultList();
         }

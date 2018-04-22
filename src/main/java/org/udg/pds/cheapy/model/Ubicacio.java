@@ -32,17 +32,13 @@ public class Ubicacio implements Serializable
     @JsonView(Views.Public.class)
     private String pais;
 
-    @OneToOne
-    private User usuari;
-
     public Ubicacio()
     {
 
     }
 
-    public Ubicacio(User usuari, Double coordLat, Double coordLng, String ciutat, String pais)
+    public Ubicacio(Double coordLat, Double coordLng, String ciutat, String pais)
     {
-        this.usuari     = usuari;
         this.coordLat   = coordLat;
         this.coordLng   = coordLng;
         this.ciutat     = ciutat;
