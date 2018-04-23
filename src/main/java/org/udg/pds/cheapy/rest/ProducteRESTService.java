@@ -137,7 +137,15 @@ public class ProducteRESTService extends RESTService
         else
         {
             User comprador = usuariService.getUser(transaccio.comprador.id);
-            t = new Transaccio(venedor, comprador);
+            Valoracio valVenedor;
+
+            if (transaccio.valoracioVenedor.comentaris != null)
+                valVenedor = new Valoracio(venedor, comprador, transaccio.valoracioVenedor.estrelles, transaccio.valoracioVenedor.comentaris);
+
+            else
+                valVenedor = new Valoracio(venedor, comprador, transaccio.valoracioVenedor.estrelles);
+
+            t = new Transaccio(venedor, comprador, valVenedor);
         }
 
         return buildResponseWithView(Views.Private.class, producteService.vendre(p, t));
@@ -173,9 +181,17 @@ public class ProducteRESTService extends RESTService
     },
      */
 
+    static class R_Valoracio
+    {
+        @NotNull
+        public Valoracio.Estrelles estrelles;
+        public String comentaris;
+    }
+
     static class R_Transaccio
     {
         public ID comprador;
+        public R_Valoracio valoracioVenedor;
     }
 
     static class R_Producte
