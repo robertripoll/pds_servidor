@@ -121,11 +121,11 @@ public class ProducteService
 
         Double maxDistance = Double.parseDouble(value);
 
-        ParameterExpression sellerLat = builder.parameter(Double.class);
-        ParameterExpression sellerLng = builder.parameter(Double.class);
+        ParameterExpression sellerLat = builder.parameter(Double.class, "sellerLat");
+        ParameterExpression sellerLng = builder.parameter(Double.class, "sellerLng");
 
-        ParameterExpression loggedLat = builder.parameter(Double.class);
-        ParameterExpression loggedLng = builder.parameter(Double.class);
+        ParameterExpression loggedLat = builder.parameter(Double.class, "loggedLat");
+        ParameterExpression loggedLng = builder.parameter(Double.class, "loggedLng");
 
         predicate = builder.lessThanOrEqualTo(builder.function("DISTANCE", Double.class, sellerLat, sellerLng, loggedLat, loggedLng), maxDistance);
 
@@ -194,13 +194,6 @@ public class ProducteService
             if (loggedUser == null) // No s'admet filtratge per distancia si no s'està registrat
                 filters.remove("distancia");
 
-            else { // Join de Productes amb Usuaris i d'Usuaris amb Ubicacions
-                Join<Producte, User> venedors = producte.join("venedor", JoinType.INNER);
-                query.select(venedors).where(builder.equal(producte.get("venedor"), venedor.get("id")));
-                Join<User, Ubicacio> ubicacions = venedor.join("ubicacio", JoinType.INNER);
-                query.select(ubicacions).where(builder.equal(venedor.get("ubicacio"), ubicacio.get("id")));
-            }
-
             if (!predicates.isEmpty())
                 query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
@@ -223,6 +216,11 @@ public class ProducteService
             typedQuery.setMaxResults(limit);
 
             if (filters.containsKey("distancia")) {
+                Join<Producte, User> venedors = producte.join("venedor", JoinType.INNER);
+                query.select(venedors).where(builder.equal(producte.get("venedor"), venedor.get("id")));
+                Join<User, Ubicacio> ubicacions = venedor.join("ubicacio", JoinType.INNER);
+                query.select(ubicacions).where(builder.equal(venedor.get("ubicacio"), ubicacio.get("id")));
+
                 typedQuery.setParameter("sellerLat", ubicacio.get("coordLat"));
                 typedQuery.setParameter("sellerLng", ubicacio.get("coordLng"));
 
