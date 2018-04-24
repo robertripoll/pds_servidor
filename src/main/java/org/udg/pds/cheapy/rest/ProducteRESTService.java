@@ -129,26 +129,7 @@ public class ProducteRESTService extends RESTService
         if (!p.getVenedor().getId().equals(userId))
             return accessDenied();
 
-        Transaccio t;
-
-        if (transaccio.comprador == null)
-            t = new Transaccio(venedor);
-
-        else
-        {
-            User comprador = usuariService.getUser(transaccio.comprador.id);
-            Valoracio valVenedor;
-
-            if (transaccio.valoracioVenedor.comentaris != null)
-                valVenedor = new Valoracio(venedor, comprador, transaccio.valoracioVenedor.estrelles, transaccio.valoracioVenedor.comentaris);
-
-            else
-                valVenedor = new Valoracio(venedor, comprador, transaccio.valoracioVenedor.estrelles);
-
-            t = new Transaccio(venedor, comprador, valVenedor);
-        }
-
-        return buildResponseWithView(Views.Private.class, producteService.vendre(p, t));
+        return buildResponseWithView(Views.Private.class, producteService.vendre(p, venedor, transaccio));
     }
 
     /*static class ID
@@ -181,14 +162,14 @@ public class ProducteRESTService extends RESTService
     },
      */
 
-    static class R_Valoracio
+    public static class R_Valoracio
     {
         @NotNull
         public Valoracio.Estrelles estrelles;
         public String comentaris;
     }
 
-    static class R_Transaccio
+    public static class R_Transaccio
     {
         public ID comprador;
         public R_Valoracio valoracioVenedor;

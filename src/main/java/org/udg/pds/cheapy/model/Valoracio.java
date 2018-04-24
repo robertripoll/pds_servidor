@@ -1,6 +1,7 @@
 package org.udg.pds.cheapy.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -57,9 +58,11 @@ public class Valoracio implements Serializable
     private String comentaris;
 
     @ManyToOne
+    @JsonView(Views.Complete.class)
     private User valorador;
 
     @ManyToOne
+    @JsonView(Views.Complete.class)
     private User valorat;
 
     public Valoracio()
