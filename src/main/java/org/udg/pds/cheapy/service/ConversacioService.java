@@ -40,7 +40,7 @@ public class ConversacioService
     {
         try
         {
-            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatge m INNER JOIN conversacio_missatge cm ON cm.id = :idConversa", Missatge.class);
+            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM Missatge m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
             typedQuery.setFirstResult(offset);
             typedQuery.setMaxResults(limit);
             typedQuery.setParameter("idConversa", idConversa);

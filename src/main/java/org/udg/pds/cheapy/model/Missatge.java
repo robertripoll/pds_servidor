@@ -52,6 +52,9 @@ public class Missatge implements Serializable, Cloneable
     protected Long id;
 
     @ManyToOne
+    private Conversacio conversacio;
+
+    @ManyToOne
     private User emisor;
 
     @ManyToOne
@@ -77,20 +80,27 @@ public class Missatge implements Serializable, Cloneable
 
     }
 
-    public Missatge(User emisor, User receptor, String missatge)
+    public Missatge(Conversacio c, User emisor, User receptor, String missatge)
     {
-        this.emisor     = emisor;
-        this.receptor   = receptor;
-        this.missatge   = missatge;
-        this.estat      = Estat.PENDENT_ENVIAMENT;
+        this.conversacio    = c;
+        this.emisor         = emisor;
+        this.receptor       = receptor;
+        this.missatge       = missatge;
+        this.estat          = Estat.PENDENT_ENVIAMENT;
     }
 
-    private Missatge(User emisor, User receptor, String missatge, Estat estat)
+    private Missatge(Conversacio c, User emisor, User receptor, String missatge, Estat estat)
     {
-        this.emisor     = emisor;
-        this.receptor   = receptor;
-        this.missatge   = missatge;
-        this.estat      = estat;
+        this.conversacio    = c;
+        this.emisor         = emisor;
+        this.receptor       = receptor;
+        this.missatge       = missatge;
+        this.estat          = estat;
+    }
+
+    public Conversacio getConversacio()
+    {
+        return conversacio;
     }
 
     public User getEmisor()
@@ -123,8 +133,8 @@ public class Missatge implements Serializable, Cloneable
         estat = nouEstat;
     }
 
-    public Missatge clone()
+    public Missatge clone(Conversacio c)
     {
-        return new Missatge(this.emisor, this.receptor, this.missatge, this.estat);
+        return new Missatge(c, this.emisor, this.receptor, this.missatge, this.estat);
     }
 }
