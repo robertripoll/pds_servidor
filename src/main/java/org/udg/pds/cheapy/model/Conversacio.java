@@ -19,6 +19,9 @@ public class Conversacio implements Serializable
     @ManyToOne
     private User usuari;
 
+    @ManyToOne
+    private User propietari;
+
     @OneToMany
     private Collection<Missatge> missatges;
 
@@ -27,14 +30,20 @@ public class Conversacio implements Serializable
 
     }
 
-    public Conversacio(User usuari)
+    public Conversacio(User propietari, User usuari)
     {
-        this.usuari = usuari;
+        this.propietari = propietari;
+        this.usuari     = usuari;
     }
 
     public User getUsuari()
     {
         return usuari;
+    }
+
+    public User getPropietari()
+    {
+        return propietari;
     }
 
     public Collection<Missatge> getMissatges()

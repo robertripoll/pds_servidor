@@ -76,13 +76,6 @@ public class UserService
         return u.getFavorits();
     }
 
-    public Collection<Conversacio> getConversacions(long id){
-
-        User u = getUser(id);
-
-        return u.getConverses();
-    }
-
     public Collection<Transaccio> getCompres(long id){
 
         User u = getUser(id);

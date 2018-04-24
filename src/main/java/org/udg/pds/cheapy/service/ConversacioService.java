@@ -1,6 +1,8 @@
 package org.udg.pds.cheapy.service;
 
+import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Missatge;
+import org.udg.pds.cheapy.model.User;
 
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
@@ -13,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -21,6 +24,17 @@ public class ConversacioService
 {
     @PersistenceContext
     protected EntityManager em;
+
+    public Collection<Conversacio> getConversacions(long id){
+
+        User u = em.find(User.class, id);
+        return u.getConverses();
+    }
+
+    public Conversacio get(long id)
+    {
+        return em.find(Conversacio.class, id);
+    }
 
     public List<Missatge> getMissatges(Long idConversa, int limit, int offset)
     {

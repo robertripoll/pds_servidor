@@ -124,7 +124,7 @@ public class User implements Serializable
     @JsonView(Views.Private.class)
     private Ubicacio ubicacio;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "propietari")
     @JsonView(Views.Complete.class)
     private Collection<Conversacio> converses;
 
