@@ -22,7 +22,7 @@ public class Conversacio implements Serializable
     @ManyToOne
     private User propietari;
 
-    @OneToMany
+    @OneToMany(mappedBy = "conversacio")
     private Collection<Missatge> missatges;
 
     public Conversacio()
