@@ -3,6 +3,7 @@ package org.udg.pds.cheapy.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Producte;
+import org.udg.pds.cheapy.model.Ubicacio;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.rest.ProducteRESTService;
 import org.udg.pds.cheapy.rest.RESTService;
@@ -114,7 +115,7 @@ public class ProducteService
         return predicate;
     }
 
-    private Predicate distancePredicate(CriteriaBuilder builder, Root<Producte> producte, String value)
+    private Predicate distancePredicate(CriteriaBuilder builder, String value)
     {
         Predicate predicate = null;
 
@@ -131,7 +132,7 @@ public class ProducteService
         return predicate;
     }
 
-    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Map<String, String[]> filters)
+    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Root<User> venedor, Root<Ubicacio> ubicacio, Map<String, String[]> filters)
     {
         List<Predicate> predicates = new ArrayList<>();
 
@@ -166,7 +167,7 @@ public class ProducteService
                     break;
 
                 case "distancia":
-                    predicates.add(distancePredicate(builder, producte, filterQuery[0]));
+                    predicates.add(distancePredicate(builder, filterQuery[0]));
                     break;
             }
         }
@@ -182,14 +183,23 @@ public class ProducteService
 
             CriteriaQuery<Object> query = builder.createQuery();
             Root<Producte> producte = query.from(Producte.class);
+            Root<User> venedor = query.from(User.class);
+            Root<Ubicacio> ubicacio = query.from(Ubicacio.class);
 
             CriteriaQuery<Object> selectQuery = query.select(producte);
 
-            List<Predicate> predicates = filtersToPredicates(builder, producte, filters);
+            List<Predicate> predicates = filtersToPredicates(builder, producte, venedor, ubicacio, filters);
             predicates.add(builder.isNull(producte.get("transaccio")));
 
             if (loggedUser == null) // No s'admet filtratge per distancia si no s'està registrat
                 filters.remove("distancia");
+
+            else { // Join de Productes amb Usuaris i d'Usuaris amb Ubicacions
+                Join<Producte, User> venedors = producte.join("venedor", JoinType.INNER);
+                query.select(venedors).where(builder.equal(producte.get("venedor"), venedor.get("id")));
+                Join<User, Ubicacio> ubicacions = venedor.join("ubicacio", JoinType.INNER);
+                query.select(ubicacions).where(builder.equal(venedor.get("ubicacio"), ubicacio.get("id")));
+            }
 
             if (!predicates.isEmpty())
                 query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
@@ -213,8 +223,8 @@ public class ProducteService
             typedQuery.setMaxResults(limit);
 
             if (filters.containsKey("distancia")) {
-                typedQuery.setParameter("sellerLat", producte.get("ubicacio").get("coordLat"));
-                typedQuery.setParameter("sellerLng", producte.get("ubicacio").get("coordLng"));
+                typedQuery.setParameter("sellerLat", ubicacio.get("coordLat"));
+                typedQuery.setParameter("sellerLng", ubicacio.get("coordLng"));
 
                 typedQuery.setParameter("loggedLat", loggedUser.getUbicacio().getCoordLat());
                 typedQuery.setParameter("loggedLng", loggedUser.getUbicacio().getCoordLng());
