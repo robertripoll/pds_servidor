@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
+import org.udg.pds.cheapy.rest.serializer.JsonDateTimeDeserializer;
+import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -51,6 +53,10 @@ public class Missatge implements Serializable, Cloneable
     @JsonView(Views.Private.class)
     protected Long id;
 
+    @JsonView(Views.Private.class)
+    @ManyToOne
+    private Conversacio conversacio;
+
     @ManyToOne
     private User emisor;
 
@@ -67,9 +73,9 @@ public class Missatge implements Serializable, Cloneable
     private String missatge;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @JsonView(Views.Private.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
-    @JsonDeserialize(using = JsonDateDeserializer.class)
+    @JsonView(Views.Public.class)
+    @JsonSerialize(using = JsonDateTimeSerializer.class)
+    @JsonDeserialize(using = JsonDateTimeDeserializer.class)
     private java.sql.Timestamp dataEnviament;
 
     public Missatge()
@@ -77,20 +83,27 @@ public class Missatge implements Serializable, Cloneable
 
     }
 
-    public Missatge(User emisor, User receptor, String missatge)
+    public Missatge(Conversacio c, User emisor, User receptor, String missatge)
     {
-        this.emisor     = emisor;
-        this.receptor   = receptor;
-        this.missatge   = missatge;
-        this.estat      = Estat.PENDENT_ENVIAMENT;
+        this.conversacio    = c;
+        this.emisor         = emisor;
+        this.receptor       = receptor;
+        this.missatge       = missatge;
+        this.estat          = Estat.PENDENT_ENVIAMENT;
     }
 
-    private Missatge(User emisor, User receptor, String missatge, Estat estat)
+    private Missatge(Conversacio c, User emisor, User receptor, String missatge, Estat estat)
     {
-        this.emisor     = emisor;
-        this.receptor   = receptor;
-        this.missatge   = missatge;
-        this.estat      = estat;
+        this.conversacio    = c;
+        this.emisor         = emisor;
+        this.receptor       = receptor;
+        this.missatge       = missatge;
+        this.estat          = estat;
+    }
+
+    public Conversacio getConversacio()
+    {
+        return conversacio;
     }
 
     public User getEmisor()
@@ -123,8 +136,8 @@ public class Missatge implements Serializable, Cloneable
         estat = nouEstat;
     }
 
-    public Missatge clone()
+    public Missatge clone(Conversacio c)
     {
-        return new Missatge(this.emisor, this.receptor, this.missatge, this.estat);
+        return new Missatge(c, this.emisor, this.receptor, this.missatge, this.estat);
     }
 }
