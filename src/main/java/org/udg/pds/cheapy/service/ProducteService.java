@@ -293,4 +293,22 @@ public class ProducteService
         p.setTransaccio(transaccio);
         return em.merge(p);
     }
+
+    public Transaccio valorarTransaccio(Producte p, User comprador, ProducteRESTService.R_Valoracio v)
+    {
+        Valoracio valoracio;
+
+        if (v.comentaris == null)
+            valoracio = new Valoracio(comprador, p.getVenedor(), v.estrelles);
+
+        else
+            valoracio = new Valoracio(comprador, p.getVenedor(), v.estrelles, v.comentaris);
+
+        em.persist(valoracio);
+
+        Transaccio transaccio = p.getTransaccio();
+        transaccio.setValoracioComprador(valoracio);
+
+        return em.merge(transaccio);
+    }
 }
