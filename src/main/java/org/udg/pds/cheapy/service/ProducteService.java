@@ -1,9 +1,7 @@
 package org.udg.pds.cheapy.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.udg.pds.cheapy.model.Categoria;
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.rest.ProducteRESTService;
 import org.udg.pds.cheapy.rest.RESTService;
 
@@ -267,5 +265,32 @@ public class ProducteService
         Producte p = em.find(Producte.class, idProducte);
         em.remove(p);
         return new RESTService.ID(idProducte);
+    }
+
+    public Producte vendre(Producte p, User venedor, ProducteRESTService.R_Transaccio t)
+    {
+        Transaccio transaccio;
+
+        if (t.comprador == null)
+            transaccio = new Transaccio(venedor);
+
+        else
+        {
+            User comprador = em.find(User.class, t.comprador.id);
+            Valoracio valVenedor;
+
+            if (t.valoracioVenedor.comentaris != null)
+                valVenedor = new Valoracio(venedor, comprador, t.valoracioVenedor.estrelles, t.valoracioVenedor.comentaris);
+
+            else
+                valVenedor = new Valoracio(venedor, comprador, t.valoracioVenedor.estrelles);
+
+            em.persist(valVenedor);
+            transaccio = new Transaccio(venedor, comprador, valVenedor);
+        }
+
+        em.persist(transaccio);
+        p.setTransaccio(transaccio);
+        return em.merge(p);
     }
 }
