@@ -59,9 +59,9 @@ public class Global
         categoriaService.create(c);
 
         // Creació de Productes de mostra
-        producteService.crear(categoriaService.get(1L), null, "Frens Brembo", 87.90, null, true, true);
-        producteService.crear(categoriaService.get(11L), null, "Sicario", 150.0, null, true, false);
-        producteService.crear(categoriaService.get(11L), null, "Deportaciones", 1650.0, null, false, false);
+        producteService.crear(categoriaService.get(1L), userService.getUser(1L), "Frens Brembo", 87.90, null, true, true);
+        producteService.crear(categoriaService.get(11L), userService.getUser(2L), "Sicario", 150.0, null, true, false);
+        producteService.crear(categoriaService.get(11L), userService.getUser(3L), "Deportaciones", 1650.0, null, false, false);
 
         // Prova amb tots els tipus de llançar missatges al logger
         logger.fatal("Error fatal");
