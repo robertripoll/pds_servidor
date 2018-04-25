@@ -42,3 +42,13 @@ INSERT INTO categories (nom) VALUES ('Altres');
 INSERT INTO productes (dataPublicacio, intercanviAcceptat, nom, numVisites, preu, preuNegociable, reservat, categoria_id, venedor_id) VALUES (STR_TO_DATE('11/04/2018', '%d/%m/%Y'), TRUE, 'Frens Brembo', 0, 87.90, TRUE, FALSE, 1, 1);
 INSERT INTO productes (dataPublicacio, intercanviAcceptat, nom, numVisites, preu, preuNegociable, reservat, categoria_id, venedor_id) VALUES (STR_TO_DATE('15/04/2018', '%d/%m/%Y'), FALSE, 'Sicario', 0, 150.00, TRUE, FALSE, 11, 2);
 INSERT INTO productes (dataPublicacio, intercanviAcceptat, nom, numVisites, preu, preuNegociable, reservat, categoria_id, venedor_id) VALUES (STR_TO_DATE('15/04/2018', '%d/%m/%Y'), FALSE, 'Deportaciones', 0, 1650.00, FALSE, FALSE, 11, 3);
+
+-- Converses
+INSERT INTO conversacio (propietari_id, usuari_id) VALUES (1, 2);
+INSERT INTO conversacio (propietari_id, usuari_id) VALUES (2, 1);
+
+-- Missatges
+INSERT INTO missatge (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Tinc ganes de muñeca hinchable", 1, 1, 2);
+INSERT INTO missatge (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Tinc ganes de muñeca hinchable", 2, 1, 2);
+INSERT INTO missatge (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Gas al matalas", 1, 1, 1);
+INSERT INTO missatge (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Gas al matalas", 2, 1, 2);

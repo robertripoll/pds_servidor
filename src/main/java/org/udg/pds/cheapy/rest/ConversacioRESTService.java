@@ -56,7 +56,7 @@ public class ConversacioRESTService extends RESTService
         if (!c.getPropietari().getId().equals(loggedUserId))
             return accessDenied();
 
-        return buildResponseWithView(Views.Private.class, service.getMissatges(id, limit, offset));
+        return buildResponseWithView(Views.Public.class, service.getMissatges(id, limit, offset));
     }
 }
 

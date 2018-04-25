@@ -51,6 +51,7 @@ public class Missatge implements Serializable, Cloneable
     @JsonView(Views.Private.class)
     protected Long id;
 
+    @JsonView(Views.Private.class)
     @ManyToOne
     private Conversacio conversacio;
 
@@ -70,7 +71,7 @@ public class Missatge implements Serializable, Cloneable
     private String missatge;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Public.class)
     @JsonSerialize(using = JsonDateSerializer.class)
     @JsonDeserialize(using = JsonDateDeserializer.class)
     private java.sql.Timestamp dataEnviament;

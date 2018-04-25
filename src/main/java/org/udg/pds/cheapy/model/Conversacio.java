@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
@@ -46,6 +47,7 @@ public class Conversacio implements Serializable
         return propietari;
     }
 
+    @JsonIgnore
     public Collection<Missatge> getMissatges()
     {
         return missatges;
