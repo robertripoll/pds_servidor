@@ -25,18 +25,18 @@ INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon)
 INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon) VALUES ('Donald', 'Trump', 'admin@whitehouse.gov', 'bigwall50', STR_TO_DATE('16/08/1954', '%d/%m/%Y'), 'HOME', '180000000');
 
 -- Categories
-INSERT INTO categories (nom) VALUES ('Motor i Accessoris');
-INSERT INTO categories (nom) VALUES ('Electrònica');
-INSERT INTO categories (nom) VALUES ('Esport i Oci');
-INSERT INTO categories (nom) VALUES ('Mobles, Decoració i Jardí');
-INSERT INTO categories (nom) VALUES ('Consoles i Videojocs');
-INSERT INTO categories (nom) VALUES ('Llibres, Pel·lícules i Música');
-INSERT INTO categories (nom) VALUES ('Moda i Accessoris');
-INSERT INTO categories (nom) VALUES ('Infantil');
-INSERT INTO categories (nom) VALUES ('Immobiliària');
-INSERT INTO categories (nom) VALUES ('Electrodomèstics');
-INSERT INTO categories (nom) VALUES ('Serveis');
-INSERT INTO categories (nom) VALUES ('Altres');
+-- INSERT INTO categories (nom) VALUES ('Motor i Accessoris');
+-- INSERT INTO categories (nom) VALUES ('Electrònica');
+-- INSERT INTO categories (nom) VALUES ('Esport i Oci');
+-- INSERT INTO categories (nom) VALUES ('Mobles, Decoració i Jardí');
+-- INSERT INTO categories (nom) VALUES ('Consoles i Videojocs');
+-- INSERT INTO categories (nom) VALUES ('Llibres, Pel·lícules i Música');
+-- INSERT INTO categories (nom) VALUES ('Moda i Accessoris');
+-- INSERT INTO categories (nom) VALUES ('Infantil');
+-- INSERT INTO categories (nom) VALUES ('Immobiliària');
+-- INSERT INTO categories (nom) VALUES ('Electrodomèstics');
+-- INSERT INTO categories (nom) VALUES ('Serveis');
+-- INSERT INTO categories (nom) VALUES ('Altres');
 
 -- Productes
 INSERT INTO productes (dataPublicacio, intercanviAcceptat, nom, numVisites, preu, preuNegociable, reservat, categoria_id, venedor_id) VALUES (STR_TO_DATE('11/04/2018', '%d/%m/%Y'), TRUE, 'Frens Brembo', 0, 87.90, TRUE, FALSE, 1, 1);

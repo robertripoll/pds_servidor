@@ -46,4 +46,9 @@ public class CategoriaService
             throw new EJBException(ex);
         }
     }
+
+    public void create(Categoria c)
+    {
+        em.persist(c);
+    }
 }
