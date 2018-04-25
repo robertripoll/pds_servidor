@@ -68,9 +68,4 @@ public class Transaccio implements Serializable
     {
         valoracioComprador = v;
     }
-
-    public void setValoracioVenedor(Valoracio v)
-    {
-        valoracioVenedor = v;
-    }
 }

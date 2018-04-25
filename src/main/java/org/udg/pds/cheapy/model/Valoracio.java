@@ -72,8 +72,9 @@ public class Valoracio implements Serializable
 
     public Valoracio(User valorador, User valorat, Estrelles estrelles)
     {
-        this.valorador = valorador;
-        this.estrelles = estrelles;
+        this.valorador  = valorador;
+        this.valorat    = valorat;
+        this.estrelles  = estrelles;
     }
 
     public Valoracio(User valorador, User valorat, Estrelles estrelles, String comentaris)

@@ -132,6 +132,24 @@ public class ProducteRESTService extends RESTService
         return buildResponseWithView(Views.Private.class, producteService.vendre(p, venedor, transaccio));
     }
 
+    @POST
+    @Path("{id}/transaccio/valoracio")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response rateTransaction(@Context HttpServletRequest req,
+                                @PathParam("id") Long id,
+                                @Valid R_Valoracio valoracio)
+    {
+        Long userId = getLoggedUser(req);
+        User comprador = usuariService.getUser(userId);
+
+        Producte p = producteService.get(id);
+
+        if (p.getVenedor().getId().equals(userId) || p.getTransaccio() == null)
+            return accessDenied();
+
+        return buildResponseWithView(Views.Private.class, producteService.valorarTransaccio(p, comprador, valoracio));
+    }
+
     /*static class ID
     {
         public Long id;
