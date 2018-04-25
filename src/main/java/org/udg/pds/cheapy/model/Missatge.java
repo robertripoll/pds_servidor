@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
+import org.udg.pds.cheapy.rest.serializer.JsonDateTimeDeserializer;
+import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -72,8 +74,8 @@ public class Missatge implements Serializable, Cloneable
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonView(Views.Public.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
-    @JsonDeserialize(using = JsonDateDeserializer.class)
+    @JsonSerialize(using = JsonDateTimeSerializer.class)
+    @JsonDeserialize(using = JsonDateTimeDeserializer.class)
     private java.sql.Timestamp dataEnviament;
 
     public Missatge()
