@@ -24,147 +24,122 @@ public class ProducteService
     @PersistenceContext
     protected EntityManager em;
 
-    private Long[] toLongArray(String[] stringArray)
+    private String longArrayToString(String[] array)
     {
-        Long[] result = new Long[stringArray.length];
+        String result = "";
 
-        for (int i = 0; i < stringArray.length; i++)
-            result[i] = Long.parseLong(stringArray[i]);
+        int i = 0;
+
+        while (i < (array.length - 1))
+        {
+            result += array[i] + ", ";
+            i++;
+        }
+
+        result += array[i];
 
         return result;
     }
 
-    private Predicate operatorToPredicate(CriteriaBuilder builder, Root<Producte> producte, String operator, Double value)
+    private String operatorToPredicate(String operator, Double value)
     {
-        Predicate predicate = null;
+        String predicate = "";
 
         switch (operator)
         {
             case "lt":
-                predicate = builder.lessThan(producte.get("preu"), value);
+                predicate += "< " + value;
                 break;
 
             case "gt":
-                predicate = builder.greaterThan(producte.get("preu"), value);
-                break;
+                predicate += "> " + value;
 
             case "eq":
-                predicate = builder.equal(producte.get("preu"), value);
-                break;
+                predicate += "= " + value;
         }
 
         return predicate;
     }
 
-    private Predicate operatorsToPredicate(CriteriaBuilder builder, Root<Producte> producte, Map<String, Double> filters)
+    private List<String> operatorsToPredicates(Map<String, Double> filters)
     {
-        Predicate predicate = null;
+        List<String> predicates = new ArrayList<>();
 
-        if (filters.containsKey("eq")) // Hi ha un operador que es "="
-        {
-            Predicate equal = operatorToPredicate(builder, producte, "eq", filters.get("eq"));
-            Predicate relational = null;
+        for (String filter : filters.keySet())
+            predicates.add(operatorToPredicate(filter, filters.get(filter)));
 
-            if (filters.containsKey("lt"))
-                relational = operatorToPredicate(builder, producte, "lt", filters.get("lt"));
-
-            else if (filters.containsKey("gt"))
-                relational = operatorToPredicate(builder, producte, "gt", filters.get("gt"));
-
-            predicate = builder.and(equal, relational);
-        }
-
-        else { // No hi ha cap operador "="
-            Double firstValue = filters.get("lt");
-            Double secondValue = filters.get("gt");
-
-            predicate = builder.between(producte.get("preu"), firstValue, secondValue);
-        }
-
-        return predicate;
+        return predicates;
     }
 
-    private Predicate toPricePredicate(CriteriaBuilder builder, Root<Producte> producte, String filter)
+    private List<String> priceFilterToPredicates(String filter)
     {
-        Predicate predicate = null;
+        List<String> predicates = new ArrayList<>();
 
         try
         {
             Map<String, Double> filters;
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            filters = objectMapper.readValue(filter, HashMap.class);
+            ObjectMapper parser = new ObjectMapper();
+            filters = parser.readValue(filter, HashMap.class);
 
-            if (filters.size() == 1) { // Nomes es vol ">" o "<"
-                String operator = filters.keySet().iterator().next();
-                Double value = filters.get(operator);
-
-                predicate = operatorToPredicate(builder, producte, operator, value);
-            }
-
-            else { // Es vol ">=" o "<=" o "> && <"
-                predicate = operatorsToPredicate(builder, producte, filters);
-            }
+            predicates.addAll(operatorsToPredicates(filters));
         }
 
         catch (Exception ex) // El filtre no es cap cadena en format JSON
         {
-            predicate = operatorToPredicate(builder, producte, "eq", Double.valueOf(filter));
+            predicates.add("producte.preu " + operatorToPredicate("eq", Double.valueOf(filter)));
         }
 
+        return predicates;
+    }
+
+    private String distanceFilterToPredicate(User loggedUser, String value)
+    {
+        String predicate = "DISTANCIA(ubicac.coordLat, ubicac.coordLng, "; // Quan es canvii el nom de la taula d'Ubicacions a "ubicacions", es podra dir ubicacio.xxx
+
+        Ubicacio u = loggedUser.getUbicacio();
+        predicate += u.getCoordLat() + ", " + u.getCoordLng() + ")";
+
+        predicate += " <= " + Double.valueOf(value); // += value
+
         return predicate;
     }
 
-    private Predicate distancePredicate(CriteriaBuilder builder, Root<Ubicacio> ubicacio, String value)
+    private List<String> filtersToPredicates(Map<String, String[]> filters, User loggedUser)
     {
-        Predicate predicate = null;
-
-        Double maxDistance = Double.parseDouble(value);
-
-        ParameterExpression loggedLat = builder.parameter(Double.class, "loggedLat");
-        ParameterExpression loggedLng = builder.parameter(Double.class, "loggedLng");
-
-        predicate = builder.lessThanOrEqualTo(builder.function("DISTANCIA", Double.class, ubicacio.get("coordLat"), ubicacio.get("coordLng"), loggedLat, loggedLng), maxDistance);
-
-        return predicate;
-    }
-
-    private List<Predicate> filtersToPredicates(CriteriaBuilder builder, Root<Producte> producte, Root<Ubicacio> ubicacio, Map<String, String[]> filters)
-    {
-        List<Predicate> predicates = new ArrayList<>();
+        List<String> predicates = new ArrayList<>();
 
         for (String filter : filters.keySet())
         {
             String[] filterQuery = filters.get(filter);
 
-            switch (filter)
-            {
+            switch (filter) {
                 case "categoria":
-                    predicates.add(producte.get("categoria").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+                    predicates.add("producte.categoria_id IN (" + longArrayToString(filterQuery) + ")");
                     break;
 
                 case "venedor":
-                    predicates.add(producte.get("venedor").in(toLongArray(filterQuery))); //in(1L, 14L, 15L));
+                    predicates.add("producte.venedor_id IN (" + longArrayToString(filterQuery) + ")");
                     break;
 
                 case "preuNegociable":
-                    predicates.add(builder.equal(producte.get("preuNegociable"), Boolean.valueOf(filterQuery[0])));
+                    predicates.add("producte.preuNegociable = " + filterQuery[0]); // Boolean.valueOf(filterQuery[0])
                     break;
 
                 case "intercanviAcceptat":
-                    predicates.add(builder.equal(producte.get("intercanviAcceptat"), Boolean.valueOf(filterQuery[0])));
+                    predicates.add("producte.intercanviAcceptat = " + filterQuery[0]); // Boolean.valueOf(filterQuery[0])
                     break;
 
                 case "nom":
-                    predicates.add(builder.like(producte.get("nom"), "%" + filterQuery[0] + "%"));
+                    predicates.add("producte.nom LIKE '" + filterQuery[0] + "'");
                     break;
 
                 case "preu":
-                    predicates.add(toPricePredicate(builder, producte, filterQuery[0]));
+                    predicates.addAll(priceFilterToPredicates(filterQuery[0]));
                     break;
 
                 case "distancia":
-                    predicates.add(distancePredicate(builder, ubicacio, filterQuery[0]));
+                    predicates.add(distanceFilterToPredicate(loggedUser, filterQuery[0]));
                     break;
             }
         }
@@ -172,55 +147,58 @@ public class ProducteService
         return predicates;
     }
 
-    public List<Object> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort, User loggedUser)
+    private String filtersToQuery(Map<String, String[]> filters, String[] sort, User loggedUser)
+    {
+        String query = "SELECT producte FROM productes producte";
+
+        if (!filters.isEmpty())
+        {
+            if (filters.containsKey("distancia")) {
+                query += "INNER JOIN usuaris usuari ON usuari.id = producte.venedor_id ";
+                query += "INNER JOIN ubicacio ubicac ON ubicac.id = usuari.ubicacio_id ";
+            }
+
+            query += " WHERE ";
+
+            List<String> predicates = filtersToPredicates(filters, loggedUser);
+
+            int i = 0;
+
+            while (i < (predicates.size() - 1)) {
+                query += predicates.get(i) + " AND ";
+                i++;
+            }
+
+            query += predicates.get(i);
+        }
+
+        if (sort != null) { // ALERTA: Es pot entrar qualsevol criteri (diferent a ASC i DESC), que pot fer fallar la consulta
+            query += " ORDER BY ";
+
+            int i = 0;
+
+            while (i < (sort.length - 1)) {
+                String[] splitted = sort[i].split(",");
+                query += splitted[0] + " " + splitted[1] + ",";
+                i++;
+            }
+
+            String[] splitted = sort[i].split(",");
+            query += splitted[0] + " " + splitted[1];
+        }
+
+        return query;
+    }
+
+    public List<Producte> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort, User loggedUser)
     {
         try
         {
-            CriteriaBuilder builder = em.getCriteriaBuilder();
+            String query = filtersToQuery(filters, sort, loggedUser);
 
-            CriteriaQuery<Object> query = builder.createQuery();
-            Root<Producte> producte = query.from(Producte.class);
-            Root<User> venedor = query.from(User.class);
-            Root<Ubicacio> ubicacio = query.from(Ubicacio.class);
-
-            CriteriaQuery<Object> selectQuery = query.select(producte);
-
-            List<Predicate> predicates = filtersToPredicates(builder, producte, ubicacio, filters);
-            predicates.add(builder.isNull(producte.get("transaccio")));
-
-            if (loggedUser == null) // No s'admet filtratge per distancia si no s'està registrat
-                filters.remove("distancia");
-
-            if (!predicates.isEmpty())
-                query.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
-
-            if (sort != null)
-            {
-                for (String criteria : sort)
-                {
-                    String[] splitted = criteria.split(",");
-
-                    if (splitted[1].equals("asc"))
-                        selectQuery.orderBy(builder.asc(producte.get(splitted[0])));
-
-                    else if (splitted[1].equals("desc"))
-                        selectQuery.orderBy(builder.desc(producte.get(splitted[0])));
-                }
-            }
-
-            TypedQuery<Object> typedQuery = em.createQuery(selectQuery);
+            TypedQuery<Producte> typedQuery = em.createQuery(query, Producte.class);
             typedQuery.setFirstResult(offset);
             typedQuery.setMaxResults(limit);
-
-            if (filters.containsKey("distancia")) {
-                Join<Producte, User> venedors = producte.join("venedor", JoinType.INNER);
-                query.select(venedors).where(builder.equal(producte.get("venedor"), venedor.get("id")));
-                Join<User, Ubicacio> ubicacions = venedor.join("ubicacio", JoinType.INNER);
-                query.select(ubicacions).where(builder.equal(venedor.get("ubicacio"), ubicacio.get("id")));
-
-                typedQuery.setParameter("loggedLat", loggedUser.getUbicacio().getCoordLat());
-                typedQuery.setParameter("loggedLng", loggedUser.getUbicacio().getCoordLng());
-            }
 
             return typedQuery.getResultList();
         }
