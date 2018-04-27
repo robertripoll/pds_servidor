@@ -59,13 +59,6 @@ public class Producte implements Serializable
     @JsonView(Views.Public.class)
     private User venedor; // Nomes hauria de retornar el nom de l'Usuari
 
-    @ManyToOne(optional = false)
-    @JoinTable(name="ubicacio",
-            joinColumns = @JoinColumn(name="venedor_id"),
-            inverseJoinColumns = @JoinColumn(name="id")
-    )
-    private Ubicacio ubicacio;
-
     @OneToOne
     @JsonView(Views.Private.class)
     private Transaccio transaccio; // Nomes interessa a venedor i comprador
@@ -150,11 +143,6 @@ public class Producte implements Serializable
     public User getVenedor()
     {
         return venedor;
-    }
-
-    public Ubicacio getUbicacio()
-    {
-        return ubicacio;
     }
 
     public Transaccio getTransaccio()

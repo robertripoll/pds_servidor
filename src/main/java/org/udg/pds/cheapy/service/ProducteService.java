@@ -26,19 +26,19 @@ public class ProducteService
 
     private String longArrayToString(String[] array)
     {
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         int i = 0;
 
         while (i < (array.length - 1))
         {
-            result += array[i] + ", ";
+            result.append(array[i]).append(", ");
             i++;
         }
 
-        result += array[i];
+        result.append(array[i]);
 
-        return result;
+        return result.toString();
     }
 
     private String operatorToPredicate(String operator, Double value)
@@ -95,13 +95,13 @@ public class ProducteService
         return predicates;
     }
 
-    private String distanceFilterToPredicate(Ubicacio ubicacio, String value)
+    private String distanceFilterToPredicate(Ubicacio u, String value)
     {
-        String predicate = "DISTANCIA(ubicac.coordLat, ubicac.coordLng, "; // Quan es canvii el nom de la taula d'Ubicacions a "ubicacions", es podra dir ubicacio.xxx
+        String predicate = "DISTANCIA(ubicacio.coordLat, ubicacio.coordLng, "; // Quan es canvii el nom de la taula d'Ubicacions a "ubicacions", es podra dir ubicacio.xxx
 
-        predicate += ubicacio.getCoordLat() + ", " + ubicacio.getCoordLng() + ")";
+        predicate += u.getCoordLat() + ", " + u.getCoordLng() + ")";
 
-        predicate += " <= " + Double.valueOf(value); // += value
+        predicate += " <= " + Double.valueOf(value);
 
         return predicate;
     }
@@ -124,11 +124,11 @@ public class ProducteService
                     break;
 
                 case "preuNegociable":
-                    predicates.add("producte.preuNegociable = " + filterQuery[0]); // Boolean.valueOf(filterQuery[0])
+                    predicates.add("producte.preuNegociable = " + Boolean.valueOf(filterQuery[0]));
                     break;
 
                 case "intercanviAcceptat":
-                    predicates.add("producte.intercanviAcceptat = " + filterQuery[0]); // Boolean.valueOf(filterQuery[0])
+                    predicates.add("producte.intercanviAcceptat = " + Boolean.valueOf(filterQuery[0]));
                     break;
 
                 case "nom":
@@ -136,7 +136,6 @@ public class ProducteService
                     break;
 
                 case "preu":
-                    //predicates.addAll(priceFilterToPredicates(filterQuery[0]));
                     for (String predicate : priceFilterToPredicates(filterQuery[0]))
                         predicates.add("producte.preu " + predicate);
                     break;
@@ -152,45 +151,51 @@ public class ProducteService
 
     private String filtersToQuery(Map<String, String[]> filters, String[] sort, Ubicacio ubicacio)
     {
-        String query = "SELECT producte FROM productes producte";
+        StringBuilder query = new StringBuilder("SELECT producte FROM productes producte");
 
         if (!filters.isEmpty())
         {
             if (filters.containsKey("distancia")) {
-                query += " INNER JOIN producte.venedor venedor ";
-                query += "INNER JOIN venedor.ubicacio ubicac";
+                query.append(" INNER JOIN producte.venedor venedor ");
+                query.append("INNER JOIN venedor.ubicacio ubicacio");
             }
 
-            query += " WHERE ";
+            query.append(" WHERE ");
 
             List<String> predicates = filtersToPredicates(filters, ubicacio);
 
             int i = 0;
 
             while (i < (predicates.size() - 1)) {
-                query += predicates.get(i) + " AND ";
+                query.append(predicates.get(i)).append(" AND ");
                 i++;
             }
 
-            query += predicates.get(i);
+            query.append(predicates.get(i));
         }
 
-        if (sort != null) { // ALERTA: Es pot entrar qualsevol criteri (diferent a ASC i DESC), que pot fer fallar la consulta
-            query += " ORDER BY ";
+        if (sort != null) {
+            query.append(" ORDER BY ");
 
             int i = 0;
 
             while (i < (sort.length - 1)) {
                 String[] splitted = sort[i].split(",");
-                query += splitted[0] + " " + splitted[1] + ",";
+
+                if (splitted[1].toUpperCase().equals("ASC") || splitted[1].toUpperCase().equals("DESC"))
+                    query.append(splitted[0]).append(" ").append(splitted[1]).append(",");
+
+                else
+                    break; // Com que el criteri d'ordenacio (ASC o DESC) no s'ha especificat correctament, sortim del bucle i no apliquem aquest criteri d'ordenacio
+
                 i++;
             }
 
             String[] splitted = sort[i].split(",");
-            query += splitted[0] + " " + splitted[1];
+            query.append(splitted[0]).append(" ").append(splitted[1]);
         }
 
-        return query;
+        return query.toString();
     }
 
     public List<Producte> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort, Ubicacio ubicacio)
