@@ -183,7 +183,7 @@ public class ProducteService
                 String[] splitted = sort[i].split(",");
 
                 if (splitted[1].toUpperCase().equals("ASC") || splitted[1].toUpperCase().equals("DESC"))
-                    query.append(splitted[0]).append(" ").append(splitted[1]).append(",");
+                    query.append("producte.").append(splitted[0]).append(" ").append(splitted[1]).append(",");
 
                 else
                     break; // Com que el criteri d'ordenacio (ASC o DESC) no s'ha especificat correctament, sortim del bucle i no apliquem aquest criteri d'ordenacio
@@ -192,7 +192,9 @@ public class ProducteService
             }
 
             String[] splitted = sort[i].split(",");
-            query.append(splitted[0]).append(" ").append(splitted[1]);
+
+            if (splitted[1].toUpperCase().equals("ASC") || splitted[1].toUpperCase().equals("DESC"))
+                query.append("producte.").append(splitted[0]).append(" ").append(splitted[1]);
         }
 
         return query.toString();
@@ -204,6 +206,7 @@ public class ProducteService
         {
             filters.remove("limit");
             filters.remove("offset");
+            filters.remove("sort");
             String query = filtersToQuery(filters, sort, ubicacio);
 
             TypedQuery<Producte> typedQuery = em.createQuery(query, Producte.class);
