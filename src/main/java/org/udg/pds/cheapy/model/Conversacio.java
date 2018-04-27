@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
@@ -19,7 +20,10 @@ public class Conversacio implements Serializable
     @ManyToOne
     private User usuari;
 
-    @OneToMany
+    @ManyToOne
+    private User propietari;
+
+    @OneToMany(mappedBy = "conversacio")
     private Collection<Missatge> missatges;
 
     public Conversacio()
@@ -27,9 +31,10 @@ public class Conversacio implements Serializable
 
     }
 
-    public Conversacio(User usuari)
+    public Conversacio(User propietari, User usuari)
     {
-        this.usuari = usuari;
+        this.propietari = propietari;
+        this.usuari     = usuari;
     }
 
     public User getUsuari()
@@ -37,6 +42,12 @@ public class Conversacio implements Serializable
         return usuari;
     }
 
+    public User getPropietari()
+    {
+        return propietari;
+    }
+
+    @JsonIgnore
     public Collection<Missatge> getMissatges()
     {
         return missatges;

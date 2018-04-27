@@ -94,16 +94,6 @@ public class UserRESTService extends RESTService
         return buildResponse(userService.remove(userId));
     }
 
-    @Path("/converses")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response veureConverses(@Context HttpServletRequest req){
-
-        Long loggedUserId = getLoggedUser(req);
-
-        return buildResponseWithView(Views.Public.class, userService.getConversacions(loggedUserId));
-    }
-
     @Path("/registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)

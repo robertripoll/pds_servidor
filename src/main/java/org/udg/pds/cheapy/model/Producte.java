@@ -195,6 +195,11 @@ public class Producte implements Serializable
         this.categoria = novaCategoria;
     }
 
+    public void setTransaccio(Transaccio t)
+    {
+        this.transaccio = t;
+    }
+
     @Override
     public boolean equals(Object o)
     {

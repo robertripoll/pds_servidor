@@ -1,9 +1,6 @@
 package org.udg.pds.cheapy.rest;
 
-import org.udg.pds.cheapy.model.Categoria;
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
@@ -53,11 +50,32 @@ public class ProducteRESTService extends RESTService
         Map<String, String[]> parameters = req.getParameterMap();
         String[] sort = null;
 
+        Long loggedID = getLoggedUserWithoutException(req);
+        Ubicacio ubicacio = null;
+
+        if (loggedID == null)
+        {
+            if (parameters.containsKey("distancia"))
+            {
+                if (parameters.containsKey("userCoordLat") && parameters.containsKey("userCoordLng")) {
+                    Double userLat = Double.valueOf(parameters.get("userCoordLat")[0]);
+                    Double userLng = Double.valueOf(parameters.get("userCoordLng")[0]);
+                    ubicacio = new Ubicacio(userLat, userLng, null, null);
+                }
+
+                else
+                    return clientError("Missing guest location (userCoordLat and userCoordLng).");
+            }
+        }
+
+        else
+            ubicacio = usuariService.getUser(getLoggedUserWithoutException(req)).getUbicacio();
+
         if (parameters.containsKey("sort"))
             sort = parameters.get("sort");
 
         //return Response.ok().build();
-        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort));
+        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort, ubicacio));
     }
 
     @POST
@@ -117,6 +135,42 @@ public class ProducteRESTService extends RESTService
         return accessDenied();
     }
 
+    @POST
+    @Path("{id}/transaccio")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response sellProduct(@Context HttpServletRequest req,
+                                @PathParam("id") Long id,
+                                @Valid R_Transaccio transaccio)
+    {
+        Long userId = getLoggedUser(req);
+        User venedor = usuariService.getUser(userId);
+
+        Producte p = producteService.get(id);
+
+        if (!p.getVenedor().getId().equals(userId))
+            return accessDenied();
+
+        return buildResponseWithView(Views.Private.class, producteService.vendre(p, venedor, transaccio));
+    }
+
+    @POST
+    @Path("{id}/transaccio/valoracio")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response rateTransaction(@Context HttpServletRequest req,
+                                @PathParam("id") Long id,
+                                @Valid R_Valoracio valoracio)
+    {
+        Long userId = getLoggedUser(req);
+        User comprador = usuariService.getUser(userId);
+
+        Producte p = producteService.get(id);
+
+        if (p.getVenedor().getId().equals(userId) || p.getTransaccio() == null)
+            return accessDenied();
+
+        return buildResponseWithView(Views.Private.class, producteService.valorarTransaccio(p, comprador, valoracio));
+    }
+
     /*static class ID
     {
         public Long id;
@@ -126,6 +180,39 @@ public class ProducteRESTService extends RESTService
             this.id = id;
         }
     }*/
+
+    /*
+    "transaccio": { // Si no hi hagués transacció (no venut) no hi hauria el que hi ha a continuació
+        "id": 2445,
+        "data": "2017-10-05T12:14:00",
+        "comprador": {
+            "id": 234,
+            "nom": "Donald Trump"
+        },
+        "valoracio": {
+            "comprador": { // Valoració feta pel comprador
+            "estrelles": 4,
+            "comentaris": "Nice and sweet."
+        },
+        "venedor": { // Valoració feta pel venedor
+            "estrelles": 3,
+            "comentaris": "Ha fet tard..."
+        }
+    },
+     */
+
+    public static class R_Valoracio
+    {
+        @NotNull
+        public Valoracio.Estrelles estrelles;
+        public String comentaris;
+    }
+
+    public static class R_Transaccio
+    {
+        public ID comprador;
+        public R_Valoracio valoracioVenedor;
+    }
 
     static class R_Producte
     {

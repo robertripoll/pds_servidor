@@ -37,10 +37,11 @@ public class Transaccio implements Serializable
         this.venedor = venedor;
     }
 
-    public Transaccio(User venedor, User comprador)
+    public Transaccio(User venedor, User comprador, Valoracio valoracioVenedor)
     {
-        this.venedor    = venedor;
-        this.comprador  = comprador;
+        this.venedor            = venedor;
+        this.comprador          = comprador;
+        this.valoracioVenedor   = valoracioVenedor;
     }
 
     public User getVenedor()
@@ -66,10 +67,5 @@ public class Transaccio implements Serializable
     public void setValoracioComprador(Valoracio v)
     {
         valoracioComprador = v;
-    }
-
-    public void setValoracioVenedor(Valoracio v)
-    {
-        valoracioVenedor = v;
     }
 }
