@@ -115,11 +115,11 @@ public class ProducteService
 
             switch (filter) {
                 case "categoria":
-                    predicates.add("producte.categoria_id IN (" + longArrayToString(filterQuery) + ")");
+                    predicates.add("producte.categoria.id IN (" + longArrayToString(filterQuery) + ")");
                     break;
 
                 case "venedor":
-                    predicates.add("producte.venedor_id IN (" + longArrayToString(filterQuery) + ")");
+                    predicates.add("venedor.id IN (" + longArrayToString(filterQuery) + ")");
                     break;
 
                 case "preuNegociable":
@@ -196,6 +196,8 @@ public class ProducteService
     {
         try
         {
+            filters.remove("limit");
+            filters.remove("offset");
             String query = filtersToQuery(filters, sort, loggedUser);
 
             TypedQuery<Producte> typedQuery = em.createQuery(query, Producte.class);
