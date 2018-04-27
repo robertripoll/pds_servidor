@@ -135,7 +135,9 @@ public class ProducteService
                     break;
 
                 case "preu":
-                    predicates.addAll(priceFilterToPredicates(filterQuery[0]));
+                    //predicates.addAll(priceFilterToPredicates(filterQuery[0]));
+                    for (String predicate : priceFilterToPredicates(filterQuery[0]))
+                        predicates.add("producte.preu " + predicate);
                     break;
 
                 case "distancia":
@@ -154,8 +156,8 @@ public class ProducteService
         if (!filters.isEmpty())
         {
             if (filters.containsKey("distancia")) {
-                query += "INNER JOIN usuaris usuari ON usuari.id = producte.venedor_id ";
-                query += "INNER JOIN ubicacio ubicac ON ubicac.id = usuari.ubicacio_id ";
+                query += " INNER JOIN producte.venedor venedor ";
+                query += "INNER JOIN venedor.ubicacio ubicac";
             }
 
             query += " WHERE ";
