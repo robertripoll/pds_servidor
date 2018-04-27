@@ -1,9 +1,6 @@
 package org.udg.pds.cheapy.rest;
 
-import org.udg.pds.cheapy.model.Categoria;
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
@@ -53,13 +50,32 @@ public class ProducteRESTService extends RESTService
         Map<String, String[]> parameters = req.getParameterMap();
         String[] sort = null;
 
-        User loggedUser = usuariService.getUser(getLoggedUser(req));
+        Long loggedID = getLoggedUserWithoutException(req);
+        Ubicacio ubicacio = null;
+
+        if (loggedID == null)
+        {
+            if (parameters.containsKey("distancia"))
+            {
+                if (parameters.containsKey("userCoordLat") && parameters.containsKey("userCoordLng")) {
+                    Double userLat = Double.valueOf(parameters.get("userCoordLat")[0]);
+                    Double userLng = Double.valueOf(parameters.get("userCoordLng")[0]);
+                    ubicacio = new Ubicacio(userLat, userLng, null, null);
+                }
+
+                else
+                    return clientError("Missing guest location (userCoordLat and userCoordLng).");
+            }
+        }
+
+        else
+            ubicacio = usuariService.getUser(getLoggedUserWithoutException(req)).getUbicacio();
 
         if (parameters.containsKey("sort"))
             sort = parameters.get("sort");
 
         //return Response.ok().build();
-        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort, loggedUser));
+        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort, ubicacio));
     }
 
     @POST

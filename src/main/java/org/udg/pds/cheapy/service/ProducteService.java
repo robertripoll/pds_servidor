@@ -93,19 +93,18 @@ public class ProducteService
         return predicates;
     }
 
-    private String distanceFilterToPredicate(User loggedUser, String value)
+    private String distanceFilterToPredicate(Ubicacio ubicacio, String value)
     {
         String predicate = "DISTANCIA(ubicac.coordLat, ubicac.coordLng, "; // Quan es canvii el nom de la taula d'Ubicacions a "ubicacions", es podra dir ubicacio.xxx
 
-        Ubicacio u = loggedUser.getUbicacio();
-        predicate += u.getCoordLat() + ", " + u.getCoordLng() + ")";
+        predicate += ubicacio.getCoordLat() + ", " + ubicacio.getCoordLng() + ")";
 
         predicate += " <= " + Double.valueOf(value); // += value
 
         return predicate;
     }
 
-    private List<String> filtersToPredicates(Map<String, String[]> filters, User loggedUser)
+    private List<String> filtersToPredicates(Map<String, String[]> filters, Ubicacio ubicacio)
     {
         List<String> predicates = new ArrayList<>();
 
@@ -141,7 +140,7 @@ public class ProducteService
                     break;
 
                 case "distancia":
-                    predicates.add(distanceFilterToPredicate(loggedUser, filterQuery[0]));
+                    predicates.add(distanceFilterToPredicate(ubicacio, filterQuery[0]));
                     break;
             }
         }
@@ -149,7 +148,7 @@ public class ProducteService
         return predicates;
     }
 
-    private String filtersToQuery(Map<String, String[]> filters, String[] sort, User loggedUser)
+    private String filtersToQuery(Map<String, String[]> filters, String[] sort, Ubicacio ubicacio)
     {
         String query = "SELECT producte FROM productes producte";
 
@@ -162,7 +161,7 @@ public class ProducteService
 
             query += " WHERE ";
 
-            List<String> predicates = filtersToPredicates(filters, loggedUser);
+            List<String> predicates = filtersToPredicates(filters, ubicacio);
 
             int i = 0;
 
@@ -192,13 +191,13 @@ public class ProducteService
         return query;
     }
 
-    public List<Producte> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort, User loggedUser)
+    public List<Producte> getProductesEnVenda(int limit, int offset, Map<String, String[]> filters, String[] sort, Ubicacio ubicacio)
     {
         try
         {
             filters.remove("limit");
             filters.remove("offset");
-            String query = filtersToQuery(filters, sort, loggedUser);
+            String query = filtersToQuery(filters, sort, ubicacio);
 
             TypedQuery<Producte> typedQuery = em.createQuery(query, Producte.class);
             typedQuery.setFirstResult(offset);
