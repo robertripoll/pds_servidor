@@ -38,6 +38,17 @@ public class RESTService
         return userId;
     }
 
+    protected Long getLoggedUserWithoutException(@Context HttpServletRequest req)
+    {
+        try {
+            return getLoggedUser(req);
+        }
+
+        catch (Exception ex) {
+            return null;
+        }
+    }
+
     protected void checkNotLoggedIn(@Context HttpServletRequest req)
     {
         // Access to the HTTP session
@@ -75,6 +86,11 @@ public class RESTService
         {
             throw new WebApplicationException("Error serializing response with view");
         }
+    }
+
+    protected Response clientError(String errorMessage)
+    {
+        return Response.status(400).entity(toJSON.buildError("Error 400", errorMessage)).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     protected Response accessDenied()
