@@ -53,9 +53,11 @@ public class ProducteService
 
             case "gt":
                 predicate += "> " + value;
+                break;
 
             case "eq":
                 predicate += "= " + value;
+                break;
         }
 
         return predicate;
