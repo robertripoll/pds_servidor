@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Ubicacio;
 import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UbicacioService;
