@@ -59,6 +59,18 @@ public class User implements Serializable
     {
     }
 
+    public User(String nom, String cognoms, String correu, String contrasenya, java.util.Date dataNaix, Sexe sexe, String telefon, Ubicacio ubicacio){
+
+        this.nom = nom;
+        this.cognoms = cognoms;
+        this.correu = correu;
+        this.contrasenya = contrasenya;
+        this.dataNaix = dataNaix;
+        this.sexe = sexe;
+        this.telefon = telefon;
+        this.ubicacio = ubicacio;
+    }
+
     public User(Sexe sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya)
     {
         this.nom = nom;

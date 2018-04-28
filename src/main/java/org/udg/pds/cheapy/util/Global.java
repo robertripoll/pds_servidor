@@ -8,10 +8,15 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.udg.pds.cheapy.model.Categoria;
+import org.udg.pds.cheapy.model.Ubicacio;
+import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
+import org.udg.pds.cheapy.service.UbicacioService;
 import org.udg.pds.cheapy.service.UserService;
+
+import java.util.Date;
 
 @Singleton
 @Startup
@@ -29,9 +34,25 @@ public class Global
     @EJB
     CategoriaService categoriaService;
 
+    @EJB
+    UbicacioService ubicacioService;
+
     @PostConstruct
     void init()
     {
+        // Creació de Ubicacions de mostra
+        Ubicacio u = new Ubicacio("Girona", "Catalunya", 41.9794005, 2.82142640);
+        ubicacioService.create(u);
+        u = new Ubicacio("Bogotà", "Colòmbia", 4.71098859, -74.072092);
+        ubicacioService.create(u);
+        u = new Ubicacio("Washington DC", "Estats Units", 38.9071923, -77.0368707);
+        ubicacioService.create(u);
+
+        // Creació de Usuaris de mostra
+        userService.crear("Benito", "Camela", "seatleon84@zmail.com", "tetejohnny",new Date(2018,4,11), User.Sexe.create("home"), "34612345678", ubicacioService.get(1L));
+        userService.crear("Pablo Emilio", "Escobar Gabiria", "escobar@colombia.com", "narcos33", new Date(1975,5,3), User.Sexe.create("home"), "54612345678", ubicacioService.get(2L));
+        userService.crear("Donald", "Trump", "admin@whitehouse.gov", "bigwall50", new Date(1954,8,16), User.Sexe.create("home"), "180000000", ubicacioService.get(3L));
+
         // Creació de Categories de mostra
         Categoria c = new Categoria("Motor i Accessoris");
         categoriaService.create(c);
