@@ -3,6 +3,7 @@ package org.udg.pds.cheapy.util;
 import org.apache.log4j.Logger;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Ubicacio;
+import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UbicacioService;
@@ -13,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.util.Date;
 
 @Singleton
 @Startup
@@ -43,6 +45,12 @@ public class Global
         ubicacioService.create(u);
         u = new Ubicacio(38.9071923, -77.0368707, "Washington DC", "Estats Units");
         ubicacioService.create(u);
+
+        // Creació de Usuaris de mostra
+
+        userService.crear("Benito", "Camela", "seatleon84@zmail.com", "tetejohnny", new Date(2018,4,11), User.Sexe.create("HOME"), "34612345678", ubicacioService.get(1L));
+        userService.crear("Pablo Emilio", "Escobar Gabiria", "escobar@colombia.com", "narco33", new Date(1975,5,3), User.Sexe.create("HOME"), "54612345678", ubicacioService.get(2L));
+        userService.crear("Donald", "Trump", "admin@whitehouse.gov", "bigwall50", new Date(1954,8,16), User.Sexe.create("HOME"), "180000000", ubicacioService.get(3L));
 
         // Creació de Categories de mostra
         Categoria c = new Categoria("Motor i Accessoris");

@@ -90,6 +90,18 @@ public class UserService
         return u.getVendes();
     }
 
+    public User crear(String nom, String cognom, String correu, String contrasenya, Date dataNaix, User.Sexe sexe, String telefon, Ubicacio ubicacio){
+
+        try{
+            User u = new User(sexe,nom,cognom,telefon,dataNaix,correu,contrasenya,ubicacio);
+            em.persist(u);
+            return u;
+        }
+        catch (Exception ex){
+            throw new EJBException(ex);
+        }
+    }
+
     public Collection<Producte> afegirProducteAFavorit(long id, Producte p){
 
         User u = getUser(id);
