@@ -153,6 +153,23 @@ public class ProducteRESTService extends RESTService
         return buildResponseWithView(Views.Private.class, producteService.vendre(p, venedor, transaccio));
     }
 
+    @DELETE
+    @Path("{id}/transaccio")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response cancelTransaction(@Context HttpServletRequest req, @PathParam("id") Long id){
+
+        Long userId = getLoggedUser(req);
+
+        Producte p = producteService.get(id);
+
+        if(!p.getVenedor().getId().equals(userId)){
+            return accessDenied();
+        }
+
+        return buildResponseWithView(Views.Private.class, producteService.cancelarVenda(id));
+    }
+
+
     @POST
     @Path("{id}/transaccio/valoracio")
     @Consumes(MediaType.APPLICATION_JSON)

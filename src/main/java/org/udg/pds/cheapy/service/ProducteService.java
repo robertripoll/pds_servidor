@@ -11,8 +11,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Stateless
 @LocalBean
@@ -289,6 +291,22 @@ public class ProducteService
     {
         Producte p = em.find(Producte.class, idProducte);
         em.remove(p);
+        return new RESTService.ID(idProducte);
+    }
+
+    public RESTService.ID cancelarVenda(Long idProducte){
+
+        Producte p = em.find(Producte.class, idProducte);
+
+        Transaccio t = p.getTransaccio();
+
+        Valoracio vComprador = t.getValoracioComprador();
+        Valoracio vVenedor = t.getValoracioVenedor();
+
+        em.remove(vComprador);
+        em.remove(vVenedor);
+        em.remove(t); // eliminem la trasacció del producte
+
         return new RESTService.ID(idProducte);
     }
 
