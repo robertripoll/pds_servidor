@@ -22,9 +22,9 @@ CREATE FUNCTION distancia
 -- DADES DE MOSTRA
 
 -- Ubicacions
-INSERT INTO ubicacions (id, ciutat, pais, coordLat, coordLng) VALUES (1, 'Girona', 'Catalunya', 41.9794005, 2.82142640);
-INSERT INTO ubicacions (id, ciutat, pais, coordLat, coordLng) VALUES (2, 'Bogotà', 'Colòmbia', 4.71098859, -74.072092);
-INSERT INTO ubicacions (id, ciutat, pais, coordLat, coordLng) VALUES (3, 'Washington DC', 'Estats Units', 38.9071923, -77.0368707);
+-- INSERT INTO ubicacions (id, ciutat, pais, coordLat, coordLng) VALUES (1, 'Girona', 'Catalunya', 41.9794005, 2.82142640);
+-- INSERT INTO ubicacions (id, ciutat, pais, coordLat, coordLng) VALUES (2, 'Bogotà', 'Colòmbia', 4.71098859, -74.072092);
+-- INSERT INTO ubicacions (id, ciutat, pais, coordLat, coordLng) VALUES (3, 'Washington DC', 'Estats Units', 38.9071923, -77.0368707);
 
 -- Usuaris
 INSERT INTO usuaris (nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon, ubicacio_id) VALUES ('Benito', 'Camela', 'seatleon84@zmail.com', 'tetejohnny', STR_TO_DATE('11/04/2018', '%d/%m/%Y'), 'HOME', '34612345678', 1);
