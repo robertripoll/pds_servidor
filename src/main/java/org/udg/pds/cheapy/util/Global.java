@@ -1,17 +1,18 @@
 package org.udg.pds.cheapy.util;
 
+import org.apache.log4j.Logger;
+import org.udg.pds.cheapy.model.Categoria;
+import org.udg.pds.cheapy.model.Ubicacio;
+import org.udg.pds.cheapy.service.CategoriaService;
+import org.udg.pds.cheapy.service.ProducteService;
+import org.udg.pds.cheapy.service.UbicacioService;
+import org.udg.pds.cheapy.service.UserService;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-import org.udg.pds.cheapy.model.Categoria;
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.service.CategoriaService;
-import org.udg.pds.cheapy.service.ProducteService;
-import org.udg.pds.cheapy.service.UserService;
 
 @Singleton
 @Startup
@@ -29,9 +30,20 @@ public class Global
     @EJB
     CategoriaService categoriaService;
 
+    @EJB
+    UbicacioService ubicacioService;
+
     @PostConstruct
     void init()
     {
+        // Creació de Ubicacions de mostra
+        Ubicacio u = new Ubicacio(41.9794005,2.82142640,"Girona", "Catalunya");
+        ubicacioService.create(u);
+        u = new Ubicacio(4.71098859, -74.072092, "Bogotà", "Colòmbia");
+        ubicacioService.create(u);
+        u = new Ubicacio(38.9071923, -77.0368707, "Washington DC", "Estats Units");
+        ubicacioService.create(u);
+
         // Creació de Categories de mostra
         Categoria c = new Categoria("Motor i Accessoris");
         categoriaService.create(c);
