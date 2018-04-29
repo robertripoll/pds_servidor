@@ -90,6 +90,13 @@ public class UserService
         return u.getVendes();
     }
 
+    public Collection<Conversacio> getConverses(long id){
+
+        User u = getUser(id);
+
+        return u.getConverses();
+    }
+
     public User crear(String nom, String cognom, String correu, String contrasenya, Date dataNaix, User.Sexe sexe, String telefon, Ubicacio ubicacio){
 
         try{
