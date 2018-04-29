@@ -37,13 +37,6 @@ public class Ubicacio implements Serializable
 
     }
 
-    public Ubicacio(String ciutat, String pais, Double coordLat, Double coordLng){
-        this.ciutat = ciutat;
-        this.pais = pais;
-        this.coordLat = coordLat;
-        this.coordLng = coordLng;
-    }
-
     public Ubicacio(Double coordLat, Double coordLng, String ciutat, String pais)
     {
         this.coordLat   = coordLat;

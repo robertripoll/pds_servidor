@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.udg.pds.cheapy.model.Categoria;
+import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
@@ -31,7 +32,6 @@ public class Global
     @PostConstruct
     void init()
     {
-
         // Creació de Categories de mostra
         Categoria c = new Categoria("Motor i Accessoris");
         categoriaService.create(c);

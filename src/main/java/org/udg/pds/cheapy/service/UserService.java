@@ -90,21 +90,6 @@ public class UserService
         return u.getVendes();
     }
 
-    public User crear(String nom, String cognoms, String correu, String contrasenya, java.util.Date dataNaix, User.Sexe sexe, String telefon, Ubicacio ubicacio){
-
-        try{
-            User u = new User(nom, cognoms, correu, contrasenya, dataNaix, sexe, telefon, ubicacio);
-            em.persist(u);
-            return u;
-        }
-        catch (Exception ex)
-        {
-            // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
-            // We catch the normal exception and then transform it in a EJBException
-            throw new EJBException(ex);
-        }
-    }
-
     public Collection<Producte> afegirProducteAFavorit(long id, Producte p){
 
         User u = getUser(id);
