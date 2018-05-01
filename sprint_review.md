@@ -51,3 +51,21 @@
 
 ## Joaquim Pascual Solà
 
+# Sprint 3
+## Luis Alejandro Leon Corcuera
+
+## Alex Segura Soler
+
+## Robert Ripoll López
+* [Creació automàtica de Productes aleatoris](http://94.130.183.121:8080/browse/PDS3-90) XX
+* [Creació automàtica de les Categories](http://94.130.183.121:8080/browse/PDS3-92) XX
+* [Veure missatges d'una conversa específica](http://94.130.183.121:8080/browse/PDS3-99) XX
+* [Crear entitat Ubicació i associar-la amb un Usuari](http://94.130.183.121:8080/browse/PDS3-105) XX
+* [Afegir filtratge de productes per ubicació (proximitat)](http://94.130.183.121:8080/browse/PDS3-106) XX
+* [Marcar un producte com a venut](http://94.130.183.121:8080/browse/PDS3-109) XX
+* [Valorar una transacció](http://94.130.183.121:8080/browse/PDS3-111) XX
+* [Crear entitat Valoració](http://94.130.183.121:8080/browse/PDS3-114) XX
+
+## Daniel Re Latigue
+
+## Sergi Boadas Vilagran
