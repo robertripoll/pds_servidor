@@ -69,3 +69,5 @@
 ## Daniel Re Latigue
 
 ## Sergi Boadas Vilagran
+* [Obtenir Converses](http://94.130.183.121:8080/browse/PDS3-36) 21
+* [Mostrar Historial de Converses per Pantalla](http://94.130.183.121:8080/browse/PDS3-37) 55
