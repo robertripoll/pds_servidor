@@ -68,6 +68,12 @@
 * [Crear entitat Valoració](http://94.130.183.121:8080/browse/PDS3-114) 21
 
 ## Daniel Re Latigue
+* [Fer log out](http://94.130.183.121:8080/browse/PDS3-80) 13
+* [Creació automàtica d'Usuaris aleatoris](http://94.130.183.121:8080/browse/PDS3-91) 13
+* [Veure converses de l'usuari amb sessió iniciada](http://94.130.183.121:8080/browse/PDS3-94) 13
+* [Marcar un producte com a no venut](http://94.130.183.121:8080/browse/PDS3-110) 34
+* [Veure compres d'un Usuari específic](http://94.130.183.121:8080/browse/PDS3-112) 13
+* [Veure vendes d'un Usuari específic](http://94.130.183.121:8080/browse/PDS3-113) 13
 
 ## Sergi Boadas Vilagran
 * [Obtenir Converses](http://94.130.183.121:8080/browse/PDS3-36) 21
