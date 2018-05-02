@@ -53,6 +53,7 @@
 
 # Sprint 3
 ## Luis Alejandro Leon Corcuera
+* [Post crear conversa amb Usuari venedor ANDROID] http://94.130.183.121:8080/browse/PDS3-44 13
 
 ## Alex Segura Soler
 
