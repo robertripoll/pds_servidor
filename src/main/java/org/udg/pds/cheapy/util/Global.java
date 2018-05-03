@@ -50,18 +50,18 @@ public class Global
 
         // Creació de Categories de mostra
         Categoria c1 = categoriaService.create("Motor i Accessoris");
-        Categoria c2 = categoriaService.create("Electrònica");
-        Categoria c3 = categoriaService.create("Esport i Oci");
-        Categoria c4 = categoriaService.create("Mobles, Decoració i Jardí");
-        Categoria c5 =  categoriaService.create("Consoles i Videojocs");
-        Categoria c6 = categoriaService.create("Llibres, Pel·lícules i Música");
-        Categoria c7 = categoriaService.create("Moda i Accessoris");
-        Categoria c8 = categoriaService.create("Infantil");
-        Categoria c9 = categoriaService.create("Immobiliària");
-        Categoria c10 = categoriaService.create("Electrodomèstics");
+        categoriaService.create("Electrònica");
+        categoriaService.create("Esport i Oci");
+        categoriaService.create("Mobles, Decoració i Jardí");
+        categoriaService.create("Consoles i Videojocs");
+        categoriaService.create("Llibres, Pel·lícules i Música");
+        categoriaService.create("Moda i Accessoris");
+        categoriaService.create("Infantil");
+        categoriaService.create("Immobiliària");
+        categoriaService.create("Electrodomèstics");
         Categoria c11 = categoriaService.create("Serveis");
-        Categoria c12 = categoriaService.create("Altres");
-        
+        categoriaService.create("Altres");
+
         // Creació de Productes de mostra
         producteService.crear(c1, u1, "Frens Brembo", 87.90, null, true, true);
         producteService.crear(c11, u2, "Sicario", 150.0, null, true, false);
