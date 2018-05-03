@@ -39,49 +39,33 @@ public class Global
     void init()
     {
         // Creació de Ubicacions de mostra
-        Ubicacio u = new Ubicacio(41.9794005,2.82142640,"Girona", "Catalunya");
-        ubicacioService.create(u);
-        u = new Ubicacio(4.71098859, -74.072092, "Bogotà", "Colòmbia");
-        ubicacioService.create(u);
-        u = new Ubicacio(38.9071923, -77.0368707, "Washington DC", "Estats Units");
-        ubicacioService.create(u);
+        Ubicacio ub1 = ubicacioService.create(41.9794005,2.82142640,"Girona", "Catalunya");
+        Ubicacio ub2 = ubicacioService.create(4.71098859, -74.072092, "Bogotà", "Colòmbia");
+        Ubicacio ub3 = ubicacioService.create(38.9071923, -77.0368707, "Washington DC", "Estats Units");
 
         // Creació de Usuaris de mostra
-
-        userService.crear("Benito", "Camela", "seatleon84@zmail.com", "tetejohnny", new Date(2018,4,11), User.Sexe.create("HOME"), "34612345678", ubicacioService.get(1L));
-        userService.crear("Pablo Emilio", "Escobar Gabiria", "escobar@colombia.com", "narco33", new Date(1975,5,3), User.Sexe.create("HOME"), "54612345678", ubicacioService.get(2L));
-        userService.crear("Donald", "Trump", "admin@whitehouse.gov", "bigwall50", new Date(1954,8,16), User.Sexe.create("HOME"), "180000000", ubicacioService.get(3L));
+        User u1 = userService.crear("Benito", "Camela", "seatleon84@zmail.com", "tetejohnny", new Date(2018,4,11), User.Sexe.create("HOME"), "34612345678", ub1);
+        User u2 = userService.crear("Pablo Emilio", "Escobar Gabiria", "escobar@colombia.com", "narco33", new Date(1975,5,3), User.Sexe.create("HOME"), "54612345678", ub2);
+        User u3 = userService.crear("Donald", "Trump", "admin@whitehouse.gov", "bigwall50", new Date(1954,8,16), User.Sexe.create("HOME"), "180000000", ub3);
 
         // Creació de Categories de mostra
-        Categoria c = new Categoria("Motor i Accessoris");
-        categoriaService.create(c);
-        c = new Categoria("Electrònica");
-        categoriaService.create(c);
-        c = new Categoria("Esport i Oci");
-        categoriaService.create(c);
-        c = new Categoria("Mobles, Decoració i Jardí");
-        categoriaService.create(c);
-        c = new Categoria("Consoles i Videojocs");
-        categoriaService.create(c);
-        c = new Categoria("Llibres, Pel·lícules i Música");
-        categoriaService.create(c);
-        c = new Categoria("Moda i Accessoris");
-        categoriaService.create(c);
-        c = new Categoria("Infantil");
-        categoriaService.create(c);
-        c = new Categoria("Immobiliària");
-        categoriaService.create(c);
-        c = new Categoria("Electrodomèstics");
-        categoriaService.create(c);
-        c = new Categoria("Serveis");
-        categoriaService.create(c);
-        c = new Categoria("Altres");
-        categoriaService.create(c);
-
+        Categoria c1 = categoriaService.create("Motor i Accessoris");
+        Categoria c2 = categoriaService.create("Electrònica");
+        Categoria c3 = categoriaService.create("Esport i Oci");
+        Categoria c4 = categoriaService.create("Mobles, Decoració i Jardí");
+        Categoria c5 =  categoriaService.create("Consoles i Videojocs");
+        Categoria c6 = categoriaService.create("Llibres, Pel·lícules i Música");
+        Categoria c7 = categoriaService.create("Moda i Accessoris");
+        Categoria c8 = categoriaService.create("Infantil");
+        Categoria c9 = categoriaService.create("Immobiliària");
+        Categoria c10 = categoriaService.create("Electrodomèstics");
+        Categoria c11 = categoriaService.create("Serveis");
+        Categoria c12 = categoriaService.create("Altres");
+        
         // Creació de Productes de mostra
-        producteService.crear(categoriaService.get(1L), userService.getUser(1L), "Frens Brembo", 87.90, null, true, true);
-        producteService.crear(categoriaService.get(11L), userService.getUser(2L), "Sicario", 150.0, null, true, false);
-        producteService.crear(categoriaService.get(11L), userService.getUser(3L), "Deportaciones", 1650.0, null, false, false);
+        producteService.crear(c1, u1, "Frens Brembo", 87.90, null, true, true);
+        producteService.crear(c11, u2, "Sicario", 150.0, null, true, false);
+        producteService.crear(c11, u3, "Deportaciones", 1650.0, null, false, false);
 
         // Prova amb tots els tipus de llançar missatges al logger
         logger.fatal("Error fatal");

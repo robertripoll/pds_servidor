@@ -47,8 +47,12 @@ public class CategoriaService
         }
     }
 
-    public void create(Categoria c)
+    public Categoria create(String nom)
     {
+        Categoria c = new Categoria(nom);
+
         em.persist(c);
+
+        return c;
     }
 }

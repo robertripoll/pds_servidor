@@ -42,8 +42,12 @@ public class UbicacioService {
         }
     }
 
-    public void create(Ubicacio u)
+    public Ubicacio create(Double coordLat, Double coordLng, String ciutat, String pais)
     {
+        Ubicacio u = new Ubicacio(coordLat, coordLng, ciutat, pais);
+
         em.persist(u);
+
+        return u;
     }
 }
