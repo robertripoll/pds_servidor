@@ -14,7 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "missatges")
 public class Missatge implements Serializable, Cloneable
 {
     public enum Estat {

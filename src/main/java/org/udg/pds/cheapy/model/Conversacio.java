@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 
-@Entity
+@Entity(name = "conversacions")
 public class Conversacio implements Serializable
 {
     private static final long serialVersionUID = 1L;

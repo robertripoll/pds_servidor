@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "transaccions")
 public class Transaccio implements Serializable
 {
     private static final long serialVersionUID = 1L;

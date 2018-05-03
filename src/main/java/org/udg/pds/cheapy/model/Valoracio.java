@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "valoracions")
 public class Valoracio implements Serializable
 {
     public enum Estrelles {
