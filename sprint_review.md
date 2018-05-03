@@ -56,6 +56,10 @@
 * [Post crear conversa amb Usuari venedor ANDROID](http://94.130.183.121:8080/browse/PDS3-44) 13
 
 ## Alex Segura Soler
+* [Obtenir vendes d'un Usuari](http://94.130.183.121:8080/browse/PDS3-51) 21
+* [Mostrar Vendes d'Usuari per Pantalla](http://94.130.183.121:8080/browse/PDS3-52) 34
+* [Obtenir compres d'un Usuari](http://94.130.183.121:8080/browse/PDS3-87) 21
+* [Mostrar Compres d'Usuari per Pantalla](http://94.130.183.121:8080/browse/PDS3-88) 34
 
 ## Robert Ripoll López
 * [Creació automàtica de Productes aleatoris](http://94.130.183.121:8080/browse/PDS3-90) 8
@@ -66,6 +70,8 @@
 * [Marcar un producte com a venut](http://94.130.183.121:8080/browse/PDS3-109) 34
 * [Valorar una transacció](http://94.130.183.121:8080/browse/PDS3-111) 21
 * [Crear entitat Valoració](http://94.130.183.121:8080/browse/PDS3-114) 21
+* [Crear entitat Missatge](http://94.130.183.121:8080/browse/PDS3-103) 21
+* [Crear entitat Conversació](http://94.130.183.121:8080/browse/PDS3-97) 21
 
 ## Daniel Re Latigue
 * [Fer log out](http://94.130.183.121:8080/browse/PDS3-80) 13
