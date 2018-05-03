@@ -70,6 +70,8 @@
 * [Marcar un producte com a venut](http://94.130.183.121:8080/browse/PDS3-109) 34
 * [Valorar una transacció](http://94.130.183.121:8080/browse/PDS3-111) 21
 * [Crear entitat Valoració](http://94.130.183.121:8080/browse/PDS3-114) 21
+* [Crear entitat Missatge](http://94.130.183.121:8080/browse/PDS3-103) 21
+* [Crear entitat Conversació](http://94.130.183.121:8080/browse/PDS3-97) 21
 
 ## Daniel Re Latigue
 * [Fer log out](http://94.130.183.121:8080/browse/PDS3-80) 13
