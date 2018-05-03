@@ -98,7 +98,7 @@ public class UserRESTService extends RESTService
     {
         checkNotLoggedIn(req);
 
-        Ubicacio ubicacio = new Ubicacio(ru.coordLat, ru.coordLng, ru.ciutat, ru.pais);
+        Ubicacio ubicacio = new Ubicacio(ru.ubicacio.coordLat, ru.ubicacio.coordLng, ru.ubicacio.ciutat, ru.ubicacio.pais);
 
         User usuari = userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix, ubicacio);
 
@@ -215,6 +215,18 @@ public class UserRESTService extends RESTService
         public String contrasenya;
     }
 
+    static class R_Ubicacio
+    {
+        @NotNull
+        public String pais;
+        @NotNull
+        public String ciutat;
+        @NotNull
+        public Double coordLat;
+        @NotNull
+        public double coordLng;
+    }
+
     static class RegisterUser
     {
         @NotNull
@@ -231,14 +243,7 @@ public class UserRESTService extends RESTService
         public String telefon;
         @NotNull
         public java.util.Date dataNaix;
-        @NotNull
-        public String pais;
-        @NotNull
-        public String ciutat;
-        @NotNull
-        public Double coordLat;
-        @NotNull
-        public double coordLng;
+        public R_Ubicacio ubicacio;
     }
 
     /*static class ID
