@@ -107,13 +107,14 @@ public class ProducteRESTService extends RESTService
 
         Producte p = producteService.get(id);
 
-        if (p.getVenedor().getId().equals(userId))
-        {
-            producteService.actualitzar(p, nouProducte);
-            return Response.ok().build();
-        }
+        if (!p.getVenedor().getId().equals(userId))
+            return accessDenied();
 
-        return accessDenied();
+        if (nouProducte.numVisites != null && nouProducte.numVisites - p.getNumVisites() != 1)
+            return clientError("Product's views counter can only be updated by 1 unit per update");
+
+        producteService.actualitzar(p, nouProducte);
+        return Response.ok().build();
     }
 
     @DELETE
@@ -253,6 +254,7 @@ public class ProducteRESTService extends RESTService
         public String descripcio;
         public Boolean preuNegociable;
         public Boolean intercanviAcceptat;
+        public Integer numVisites;
         public ID idCategoria;
     }
 }

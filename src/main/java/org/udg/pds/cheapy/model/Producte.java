@@ -207,4 +207,9 @@ public class Producte implements Serializable
     {
         return ((Producte)o).id.equals(this.id);
     }
+
+    public void setNumVisites(Integer numVisites)
+    {
+        this.numVisites = numVisites;
+    }
 }
