@@ -188,6 +188,22 @@ public class ProducteRESTService extends RESTService
         return buildResponseWithView(Views.Private.class, producteService.valorarTransaccio(p, comprador, valoracio));
     }
 
+    @DELETE
+    @Path("{id}/transaccio/valoracio")
+    public Response deleteRating(@Context HttpServletRequest req, @PathParam("id") Long id)
+    {
+        Long userId = getLoggedUser(req);
+
+        Producte p = producteService.get(id);
+        Transaccio t = p.getTransaccio();
+        Valoracio v = t.getValoracioComprador();
+
+        if (t == null || v == null || !v.getValorador().getId().equals(userId))
+            return accessDenied();
+
+        return buildResponseWithView(Views.Private.class, producteService.esborrarValoracio(p, t, v));
+    }
+
     /*static class ID
     {
         public Long id;

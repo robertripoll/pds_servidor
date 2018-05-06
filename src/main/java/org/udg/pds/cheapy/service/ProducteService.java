@@ -356,4 +356,12 @@ public class ProducteService
 
         return em.merge(transaccio);
     }
+
+    public Producte esborrarValoracio(Producte p, Transaccio t, Valoracio v)
+    {
+        t.setValoracioComprador(null);
+        em.remove(v);
+        em.merge(t);
+        return p;
+    }
 }
