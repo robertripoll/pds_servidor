@@ -85,7 +85,7 @@ public class ProducteRESTService extends RESTService
     {
         Long userId = getLoggedUser(req);
         User venedor = usuariService.getUser(userId);
-        Categoria categoria = categoriaService.get(producte.idCategoria.id);
+        Categoria categoria = categoriaService.get(producte.categoria.id);
 
         if (producte.descripcio == null)
             producte.descripcio = "";
@@ -243,7 +243,7 @@ public class ProducteRESTService extends RESTService
         @NotNull
         public Boolean intercanviAcceptat;
         @NotNull
-        public ID idCategoria;
+        public ID categoria;
     }
 
     public static class R_Producte_Update
