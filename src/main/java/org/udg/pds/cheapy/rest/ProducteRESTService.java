@@ -40,7 +40,14 @@ public class ProducteRESTService extends RESTService
     public Response get(@Context HttpServletRequest req,
                         @PathParam("id") Long id)
     {
-        return buildResponseWithView(Views.Public.class, producteService.get(id));
+        Long userID = getLoggedUserWithoutException(req);
+        Producte p = producteService.get(id);
+
+        if (p.getVenedor().getId().equals(userID))
+            return buildResponseWithView(Views.Private.class, p);
+
+        else
+            return buildResponseWithView(Views.Public.class, p);
     }
 
     @GET
