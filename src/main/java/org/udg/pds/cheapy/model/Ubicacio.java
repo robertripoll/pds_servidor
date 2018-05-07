@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ public class Ubicacio implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Complete.class)
+    @JsonIgnore
     protected Long id;
 
     @NotNull

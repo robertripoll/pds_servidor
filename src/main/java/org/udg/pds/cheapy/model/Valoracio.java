@@ -45,7 +45,7 @@ public class Valoracio implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonIgnore
     protected Long id;
 
     @Basic
@@ -58,11 +58,11 @@ public class Valoracio implements Serializable
     private String comentaris;
 
     @ManyToOne
-    @JsonView(Views.Complete.class)
+    @JsonIgnore
     private User valorador;
 
     @ManyToOne
-    @JsonView(Views.Complete.class)
+    @JsonIgnore
     private User valorat;
 
     public Valoracio()
