@@ -13,7 +13,7 @@ public class Ubicacio implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Complete.class)
     protected Long id;
 
     @NotNull
