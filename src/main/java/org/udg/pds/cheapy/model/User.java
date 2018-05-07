@@ -80,7 +80,7 @@ public class User implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Public.class)
     protected Long id;
 
     @NotNull
