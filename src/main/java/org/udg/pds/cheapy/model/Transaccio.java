@@ -12,19 +12,23 @@ public class Transaccio implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Interactor.class)
     protected Long id;
 
     @ManyToOne
+    @JsonView(Views.Interactor.class)
     private User comprador;
 
     @ManyToOne(optional = false)
+    @JsonView(Views.Interactor.class)
     private User venedor;
 
     @OneToOne
+    @JsonView(Views.Interactor.class)
     private Valoracio valoracioComprador;
 
     @OneToOne
+    @JsonView(Views.Interactor.class)
     private Valoracio valoracioVenedor;
 
     public Transaccio()

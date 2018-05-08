@@ -26,11 +26,11 @@ public class Ubicacio implements Serializable
     private Double coordLng;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     private String ciutat;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     private String pais;
 
     public Ubicacio()

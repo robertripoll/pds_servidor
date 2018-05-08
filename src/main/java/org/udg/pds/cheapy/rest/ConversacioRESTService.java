@@ -20,12 +20,10 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-// This class is used to process all the authentication related URLs
 @Path("/conversacions")
 @RequestScoped
 public class ConversacioRESTService extends RESTService
 {
-    // This is the EJB used to access user data
     @EJB
     ConversacioService service;
 
@@ -34,14 +32,14 @@ public class ConversacioRESTService extends RESTService
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureConverses(@Context HttpServletRequest req){
-
+    public Response veureConverses(@Context HttpServletRequest req)
+    {
         Long loggedUserId = getLoggedUser(req);
 
-        return buildResponseWithView(Views.Public.class, service.getConversacions(loggedUserId));
+        return buildResponseWithView(Views.Basic.class, service.getConversacions(loggedUserId));
     }
 
-    @Path("{id}")
+    @Path("{id}/missatges")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response veureMissatges(@Context HttpServletRequest req,
@@ -56,7 +54,7 @@ public class ConversacioRESTService extends RESTService
         if (!c.getPropietari().getId().equals(loggedUserId))
             return accessDenied();
 
-        return buildResponseWithView(Views.Public.class, service.getMissatges(id, limit, offset));
+        return buildResponseWithView(Views.Basic.class, service.getMissatges(id, limit, offset));
     }
 }
 

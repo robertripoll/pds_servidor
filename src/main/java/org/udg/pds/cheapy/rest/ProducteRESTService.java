@@ -42,12 +42,17 @@ public class ProducteRESTService extends RESTService
     {
         Long userID = getLoggedUserWithoutException(req);
         Producte p = producteService.get(id);
+        User comprador = null;
 
-        if (p.getVenedor().getId().equals(userID))
-            return buildResponseWithView(Views.Private.class, p);
+        if (p.getTransaccio() != null)
+            if (p.getTransaccio().getComprador() != null)
+                comprador = p.getTransaccio().getComprador();
+
+        if (p.getVenedor().getId().equals(userID) || (comprador != null && comprador.getId().equals(userID)))
+            return buildResponseWithView(Views.Interactor.class, p);
 
         else
-            return buildResponseWithView(Views.Public.class, p);
+            return buildResponseWithView(Views.Summary.class, p);
     }
 
     @GET
@@ -81,8 +86,7 @@ public class ProducteRESTService extends RESTService
         if (parameters.containsKey("sort"))
             sort = parameters.get("sort");
 
-        //return Response.ok().build();
-        return buildResponseWithView(Views.Public.class, producteService.getProductesEnVenda(limit, offset, parameters, sort, ubicacio));
+        return buildResponseWithView(Views.Summary.class, producteService.getProductesEnVenda(limit, offset, parameters, sort, ubicacio));
     }
 
     @POST
@@ -99,7 +103,7 @@ public class ProducteRESTService extends RESTService
 
         Producte p = producteService.crear(categoria, venedor, producte.nom, producte.preu, producte.descripcio, producte.preuNegociable, producte.intercanviAcceptat);
 
-        return buildResponseWithView(Views.Public.class, p);
+        return buildResponseWithView(Views.Summary.class, p);
     }
 
     @PUT
@@ -114,18 +118,14 @@ public class ProducteRESTService extends RESTService
 
         Producte p = producteService.get(id);
 
-        if (p.getVenedor().getId().equals(userId))
-        {
-            producteService.actualitzar(p, nouProducte);
-            return Response.ok().build();
-        }
+        if (!p.getVenedor().getId().equals(userId))
+            return accessDenied();
 
-        return accessDenied();
+        return buildResponseWithView(Views.Interactor.class, producteService.actualitzar(p, nouProducte));
     }
 
     @DELETE
     @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteProduct(@Context HttpServletRequest req,
                                   @PathParam("id") Long id)
@@ -134,17 +134,16 @@ public class ProducteRESTService extends RESTService
 
         Producte p = producteService.get(id);
 
-        if (p.getVenedor().getId().equals(userId))
-        {
-            return buildResponse(producteService.esborrar(id));
-        }
+        if (!p.getVenedor().getId().equals(userId))
+            return accessDenied();
 
-        return accessDenied();
+        return buildResponse(producteService.esborrar(id));
     }
 
     @POST
     @Path("{id}/transaccio")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response sellProduct(@Context HttpServletRequest req,
                                 @PathParam("id") Long id,
                                 @Valid R_Transaccio transaccio)
@@ -157,73 +156,45 @@ public class ProducteRESTService extends RESTService
         if (!p.getVenedor().getId().equals(userId))
             return accessDenied();
 
-        return buildResponseWithView(Views.Private.class, producteService.vendre(p, venedor, transaccio));
+        return buildResponseWithView(Views.Interactor.class, producteService.vendre(p, venedor, transaccio));
     }
 
     @DELETE
     @Path("{id}/transaccio")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response cancelTransaction(@Context HttpServletRequest req, @PathParam("id") Long id){
-
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cancelTransaction(@Context HttpServletRequest req, @PathParam("id") Long id)
+    {
         Long userId = getLoggedUser(req);
 
         Producte p = producteService.get(id);
 
-        if(!p.getVenedor().getId().equals(userId)){
+        if (!p.getVenedor().getId().equals(userId))
             return accessDenied();
-        }
 
-        return buildResponseWithView(Views.Private.class, producteService.cancelarVenda(id));
+        return buildResponseWithView(Views.Interactor.class, producteService.cancelarVenda(id));
     }
-
 
     @POST
     @Path("{id}/transaccio/valoracio")
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response rateTransaction(@Context HttpServletRequest req,
                                 @PathParam("id") Long id,
                                 @Valid R_Valoracio valoracio)
     {
         Long userId = getLoggedUser(req);
-        User comprador = usuariService.getUser(userId);
-
         Producte p = producteService.get(id);
+        User comprador = null;
 
-        if (p.getVenedor().getId().equals(userId) || p.getTransaccio() == null)
-            return accessDenied();
+        if (p.getTransaccio() != null)
+            if (p.getTransaccio().getComprador() != null)
+                comprador = p.getTransaccio().getComprador();
 
-        return buildResponseWithView(Views.Private.class, producteService.valorarTransaccio(p, comprador, valoracio));
+        if (comprador != null && comprador.getId().equals(userId)) // Nomes el comprador pot valorar la transaccio
+            return buildResponseWithView(Views.Interactor.class, producteService.valorarTransaccio(p, comprador, valoracio));
+
+        return accessDenied();
     }
-
-    /*static class ID
-    {
-        public Long id;
-
-        public ID(Long id)
-        {
-            this.id = id;
-        }
-    }*/
-
-    /*
-    "transaccio": { // Si no hi hagués transacció (no venut) no hi hauria el que hi ha a continuació
-        "id": 2445,
-        "data": "2017-10-05T12:14:00",
-        "comprador": {
-            "id": 234,
-            "nom": "Donald Trump"
-        },
-        "valoracio": {
-            "comprador": { // Valoració feta pel comprador
-            "estrelles": 4,
-            "comentaris": "Nice and sweet."
-        },
-        "venedor": { // Valoració feta pel venedor
-            "estrelles": 3,
-            "comentaris": "Ha fet tard..."
-        }
-    },
-     */
 
     public static class R_Valoracio
     {
@@ -260,6 +231,6 @@ public class ProducteRESTService extends RESTService
         public String descripcio;
         public Boolean preuNegociable;
         public Boolean intercanviAcceptat;
-        public ID idCategoria;
+        public ID categoria;
     }
 }

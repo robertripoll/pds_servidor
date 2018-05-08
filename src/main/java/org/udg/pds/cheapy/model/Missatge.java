@@ -1,12 +1,11 @@
 package org.udg.pds.cheapy.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
-import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 
@@ -50,30 +49,33 @@ public class Missatge implements Serializable, Cloneable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Basic.class)
     protected Long id;
 
-    @JsonView(Views.Private.class)
+    @JsonIgnore
     @ManyToOne
     private Conversacio conversacio;
 
     @ManyToOne
+    @JsonView(Views.Basic.class)
     private User emisor;
 
     @ManyToOne
+    @JsonView(Views.Basic.class)
     private User receptor;
 
     @Basic
     @Enumerated(EnumType.STRING)
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     private Estat estat;
 
     @NotNull
+    @JsonView(Views.Basic.class)
     private String missatge;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     @JsonSerialize(using = JsonDateTimeSerializer.class)
     @JsonDeserialize(using = JsonDateTimeDeserializer.class)
     private java.sql.Timestamp dataEnviament;

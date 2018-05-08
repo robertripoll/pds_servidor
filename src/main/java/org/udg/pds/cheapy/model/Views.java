@@ -2,15 +2,27 @@ package org.udg.pds.cheapy.model;
 
 public class Views
 {
-    static public class Public
+    public static class Basic
     {
     }
 
-    static public class Private extends Public
+    public static class Summary extends Basic
     {
     }
 
-    static public class Complete extends Private
+    public static class Public extends Summary
+    {
+    }
+
+    public static class Complete extends Public
+    {
+    }
+
+    public static class Interactor extends Public
+    {
+    }
+
+    public static class Private extends Interactor
     {
     }
 }

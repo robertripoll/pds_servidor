@@ -14,16 +14,19 @@ public class Conversacio implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Basic.class)
     protected Long id;
 
     @ManyToOne
+    @JsonView(Views.Basic.class)
     private User usuari;
 
     @ManyToOne
+    @JsonIgnore
     private User propietari;
 
     @OneToMany(mappedBy = "conversacio")
+    @JsonIgnore
     private Collection<Missatge> missatges;
 
     public Conversacio()
