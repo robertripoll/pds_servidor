@@ -84,7 +84,6 @@ public class UserRESTService extends RESTService
         return buildResponse(userService.remove(userId));
     }
 
-    @Path("/registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(RegisterUser ru, @Context HttpServletRequest req)
@@ -120,7 +119,7 @@ public class UserRESTService extends RESTService
     public Response veurePerfil(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
         Long loggedUserId = getLoggedUserWithoutException(req);
-        User u = userService.getUserComplete(loggedUserId);
+        User u = userService.getUserComplete(userId);
 
         if (loggedUserId.equals(userId))
             return buildResponseWithView(Views.Private.class, u);
