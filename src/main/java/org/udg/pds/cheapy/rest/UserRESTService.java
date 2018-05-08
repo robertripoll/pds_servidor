@@ -21,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.awt.*;
 
 @Path("/usuaris")
 @RequestScoped
@@ -71,17 +72,12 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Summary.class, userService.getFavorits(loggedUserId));
     }
 
-    @Path("{id}")
+    @Path("jo")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response deleteUser(@Context HttpServletRequest req)
     {
-        Long loggedUserId = getLoggedUser(req);
-
-        if (!loggedUserId.equals(userId))
-            throw new WebApplicationException("Cannot delete other users!");
-
-        return buildResponse(userService.remove(userId));
+        return buildResponse(userService.remove(getLoggedUser(req)));
     }
 
     @POST
@@ -105,12 +101,30 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Summary.class, userService.getProductesComprats(userId));
     }
 
+    @Path("/jo/compres")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureProductesCompratsPropis(@Context HttpServletRequest req)
+    {
+        Long userID = getLoggedUser(req);
+        return veureProductesComprats(req, userID);
+    }
+
     @Path("/{id}/vendes")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response veureProductesVenuts(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
         return buildResponseWithView(Views.Summary.class, userService.getProductesVenuts(userId));
+    }
+
+    @Path("/jo/vendes")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureProductesVenutsPropis(@Context HttpServletRequest req)
+    {
+        Long userID = getLoggedUser(req);
+        return veureProductesVenuts(req, userID);
     }
 
     @Path("{id}")
@@ -127,12 +141,30 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Public.class, u);
     }
 
+    @Path("/jo")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veurePerfilPropi(@Context HttpServletRequest req)
+    {
+        Long userID = getLoggedUser(req);
+        return veurePerfil(req, userID);
+    }
+
     @Path("{id}/valoracions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
-        return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(userId));
+        return buildResponseWithView(Views.Public.class, userService.getValoracions(userId));
+    }
+
+    @Path("/jo/valoracions")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureValoracionsPropies(@Context HttpServletRequest req)
+    {
+        Long userID = getLoggedUser(req);
+        return veureValoracions(req, userID);
     }
 
     @Path("/favorits/{id}")

@@ -64,9 +64,8 @@ public class UserService
 
     public Collection<Valoracio> getValoracions(long id)
     {
-        User u = getUser(id);
-
-        return u.getValoracions();
+        return em.createQuery("SELECT valoracio FROM valoracions valoracio WHERE valoracio.valorat.id = :usuari").
+                setParameter("usuari", id).getResultList();
     }
 
     public Collection<Producte> getFavorits(long id){
@@ -74,13 +73,6 @@ public class UserService
         User u = getUser(id);
 
         return u.getFavorits();
-    }
-
-    public Collection<Conversacio> getConverses(long id){
-
-        User u = getUser(id);
-
-        return u.getConverses();
     }
 
     public User crear(String nom, String cognom, String correu, String contrasenya, Date dataNaix, User.Sexe sexe, String telefon, Ubicacio ubicacio){
