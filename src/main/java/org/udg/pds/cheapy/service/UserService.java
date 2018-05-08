@@ -76,20 +76,6 @@ public class UserService
         return u.getFavorits();
     }
 
-    public Collection<Transaccio> getCompres(long id){
-
-        User u = getUser(id);
-
-        return u.getCompres();
-    }
-
-    public Collection<Transaccio> getVendes(long id){
-
-        User u = getUser(id);
-
-        return u.getVendes();
-    }
-
     public Collection<Conversacio> getConverses(long id){
 
         User u = getUser(id);
@@ -127,11 +113,16 @@ public class UserService
         return em.merge(u).getFavorits();
     }
 
-    public Collection<Producte> getProductesVenda(long id)
+    public Collection<Producte> getProductesComprats(long id)
     {
-        User u = getUser(id);
+        return em.createQuery("SELECT producte FROM productes producte INNER JOIN producte.transaccio transaccio WHERE transaccio.comprador.id = :comprador").
+                setParameter("comprador", id).getResultList();
+    }
 
-        return u.getProdVenda();
+    public Collection<Producte> getProductesVenuts(long id)
+    {
+        return em.createQuery("SELECT producte FROM productes producte WHERE venedor.id = :venedor AND transaccio IS NOT NULL").
+                setParameter("venedor", id).getResultList();
     }
 
     public User getUser(long id)

@@ -100,17 +100,17 @@ public class UserRESTService extends RESTService
     @Path("/{id}/compres")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureCompresUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureProductesComprats(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
-        return buildResponseWithView(Views.Summary.class, userService.getCompres(userId));
+        return buildResponseWithView(Views.Summary.class, userService.getProductesComprats(userId));
     }
 
     @Path("/{id}/vendes")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureVendesUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureProductesVenuts(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
-        return buildResponseWithView(Views.Summary.class, userService.getVendes(userId));
+        return buildResponseWithView(Views.Summary.class, userService.getProductesVenuts(userId));
     }
 
     @Path("{id}")
@@ -133,26 +133,6 @@ public class UserRESTService extends RESTService
     public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
         return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(userId));
-    }
-
-    @Path("{id}/vendes")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesVenuts(@Context HttpServletRequest req, @PathParam("id") Long userId)
-    {
-        // FALTA FER
-
-        return buildResponseWithView(Views.Summary.class, null);
-    }
-
-    @Path("{id}/compres")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesComprats(@Context HttpServletRequest req, @PathParam("id") Long userId)
-    {
-        // FALTA FER
-
-        return buildResponseWithView(Views.Summary.class, null);
     }
 
     @Path("/favorits/{id}")
