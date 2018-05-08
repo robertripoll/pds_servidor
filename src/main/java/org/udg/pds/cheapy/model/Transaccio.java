@@ -23,11 +23,11 @@ public class Transaccio implements Serializable
     @JsonView(Views.Interactor.class)
     private User venedor;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonView(Views.Interactor.class)
     private Valoracio valoracioComprador;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonView(Views.Interactor.class)
     private Valoracio valoracioVenedor;
 

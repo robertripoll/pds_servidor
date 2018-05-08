@@ -25,7 +25,7 @@ public class Conversacio implements Serializable
     @JsonIgnore
     private User propietari;
 
-    @OneToMany(mappedBy = "conversacio")
+    @OneToMany(mappedBy = "conversacio", cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<Missatge> missatges;
 
