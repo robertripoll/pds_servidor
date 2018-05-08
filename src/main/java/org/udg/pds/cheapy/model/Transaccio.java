@@ -72,4 +72,9 @@ public class Transaccio implements Serializable
     {
         valoracioComprador = v;
     }
+
+    public void setValoracioVenedor(Valoracio v)
+    {
+        this.valoracioVenedor = v;
+    }
 }

@@ -299,11 +299,14 @@ public class ProducteService
         Producte p = em.find(Producte.class, idProducte);
 
         Transaccio t = p.getTransaccio();
+        p.setTransaccio(null);
 
         if(t != null) { // si hi ha transacció llavors obtenim les valoracions i la borrem
             
             Valoracio vComprador = t.getValoracioComprador();
+            t.setValoracioComprador(null);
             Valoracio vVenedor = t.getValoracioVenedor();
+            t.setValoracioVenedor(null);
             if(vComprador != null) em.remove(vComprador);
             if(vVenedor != null) em.remove(vVenedor);
             em.remove(t);
@@ -339,7 +342,7 @@ public class ProducteService
         return em.merge(p);
     }
 
-    public Transaccio valorarTransaccio(Producte p, User comprador, ProducteRESTService.R_Valoracio v)
+    public Producte valorarTransaccio(Producte p, User comprador, ProducteRESTService.R_Valoracio v)
     {
         Valoracio valoracio;
 
@@ -354,6 +357,6 @@ public class ProducteService
         Transaccio transaccio = p.getTransaccio();
         transaccio.setValoracioComprador(valoracio);
 
-        return em.merge(transaccio);
+        return p;
     }
 }
