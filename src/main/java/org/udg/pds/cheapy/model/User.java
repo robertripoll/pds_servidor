@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.annotations.Formula;
 import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 
@@ -101,13 +102,29 @@ public class User implements Serializable
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
     private Collection<Valoracio> valoracions;
 
+    @Formula("SELECT COUNT(*) FROM valoracions WHERE valorat_id = id")
+    @JsonView(Views.Public.class)
+    private Integer nombreValoracions;
+
+    @Formula("SELECT AVG(estrelles) FROM valoracions WHERE valorat_id = id")
+    @JsonView(Views.Public.class)
+    private Integer mitjanaValoracions;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
     @JsonIgnore
     private Collection<Transaccio> compres;
 
+    @Formula("SELECT COUNT(*) FROM transaccions WHERE comprador_id = id")
+    @JsonView(Views.Public.class)
+    private Integer nombreCompres;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
     @JsonIgnore
     private Collection<Transaccio> vendes;
+
+    @Formula("SELECT COUNT(*) FROM transaccions WHERE venedor_id = id")
+    @JsonView(Views.Public.class)
+    private Integer nombreVendes;
 
     @OneToMany
     @JsonIgnore
