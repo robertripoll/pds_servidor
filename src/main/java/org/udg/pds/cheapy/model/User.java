@@ -102,19 +102,19 @@ public class User implements Serializable
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
     private Collection<Valoracio> valoracions;
 
-    @Formula("SELECT COUNT(*) FROM valoracions WHERE valorat_id = id")
+    @Formula("(SELECT COUNT(valoracio.id) FROM valoracions valoracio WHERE valoracio.valorat_id = id)")
     @JsonView(Views.Public.class)
     private Integer nombreValoracions;
 
-    @Formula("SELECT AVG(estrelles) FROM valoracions WHERE valorat_id = id")
+    @Formula("(SELECT AVG(valoracio.estrelles) FROM valoracions valoracio WHERE valoracio.valorat_id = id)")
     @JsonView(Views.Public.class)
-    private Integer mitjanaValoracions;
+    private Double mitjanaValoracions;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
     @JsonIgnore
     private Collection<Transaccio> compres;
 
-    @Formula("SELECT COUNT(*) FROM transaccions WHERE comprador_id = id")
+    @Formula("(SELECT COUNT(transaccio.id) FROM transaccions transaccio WHERE transaccio.comprador_id = id)")
     @JsonView(Views.Public.class)
     private Integer nombreCompres;
 
@@ -122,7 +122,7 @@ public class User implements Serializable
     @JsonIgnore
     private Collection<Transaccio> vendes;
 
-    @Formula("SELECT COUNT(*) FROM transaccions WHERE venedor_id = id")
+    @Formula("(SELECT COUNT(transaccio.id) FROM transaccions transaccio WHERE transaccio.venedor_id = id)")
     @JsonView(Views.Public.class)
     private Integer nombreVendes;
 
