@@ -196,6 +196,52 @@ public class ProducteRESTService extends RESTService
         return accessDenied();
     }
 
+    @DELETE
+    @Path("{id}/transaccio/valoracio")
+    public Response deleteRating(@Context HttpServletRequest req, @PathParam("id") Long id)
+    {
+        Long userId = getLoggedUser(req);
+
+        Producte p = producteService.get(id);
+        Transaccio t = p.getTransaccio();
+        Valoracio v = t.getValoracioComprador();
+
+        if (t == null || v == null || !v.getValorador().getId().equals(userId))
+            return accessDenied();
+
+        return buildResponseWithView(Views.Public.class, producteService.esborrarValoracioComprador(id));
+    }
+
+    /*static class ID
+    {
+        public Long id;
+
+        public ID(Long id)
+        {
+            this.id = id;
+        }
+    }*/
+
+    /*
+    "transaccio": { // Si no hi hagués transacció (no venut) no hi hauria el que hi ha a continuació
+        "id": 2445,
+        "data": "2017-10-05T12:14:00",
+        "comprador": {
+            "id": 234,
+            "nom": "Donald Trump"
+        },
+        "valoracio": {
+            "comprador": { // Valoració feta pel comprador
+            "estrelles": 4,
+            "comentaris": "Nice and sweet."
+        },
+        "venedor": { // Valoració feta pel venedor
+            "estrelles": 3,
+            "comentaris": "Ha fet tard..."
+        }
+    },
+     */
+
     public static class R_Valoracio
     {
         @NotNull

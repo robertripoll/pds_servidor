@@ -359,4 +359,12 @@ public class ProducteService
 
         return p;
     }
+
+    public Producte esborrarValoracioComprador(long prodId)
+    {
+        Producte p = em.find(Producte.class, prodId);
+        em.remove(p.getTransaccio().getValoracioComprador());
+        p.getTransaccio().setValoracioComprador(null);
+        return em.merge(p);
+    }
 }
