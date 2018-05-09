@@ -357,10 +357,11 @@ public class ProducteService
         return em.merge(transaccio);
     }
 
-    public void esborrarValoracio(Producte p, Transaccio t, Valoracio v)
+    public Producte esborrarValoracioComprador(long prodId)
     {
-        t.setValoracioComprador(null);
-        em.merge(t);
-        em.remove(v);
+        Producte p = em.find(Producte.class, prodId);
+        em.remove(p.getTransaccio().getValoracioComprador());
+        p.getTransaccio().setValoracioComprador(null);
+        return em.merge(p);
     }
 }

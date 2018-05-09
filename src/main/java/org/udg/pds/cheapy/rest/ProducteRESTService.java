@@ -201,9 +201,7 @@ public class ProducteRESTService extends RESTService
         if (t == null || v == null || !v.getValorador().getId().equals(userId))
             return accessDenied();
 
-        producteService.esborrarValoracio(p, t, v);
-
-        return Response.ok().build();
+        return buildResponseWithView(Views.Public.class, producteService.esborrarValoracioComprador(id));
     }
 
     /*static class ID
