@@ -301,7 +301,7 @@ public class ProducteService
         Transaccio t = p.getTransaccio();
 
         if(t != null) { // si hi ha transacció llavors obtenim les valoracions i la borrem
-            
+
             Valoracio vComprador = t.getValoracioComprador();
             Valoracio vVenedor = t.getValoracioVenedor();
             if(vComprador != null) em.remove(vComprador);

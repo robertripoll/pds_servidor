@@ -100,9 +100,32 @@ public class UserRESTService extends RESTService
 
         Ubicacio ubicacio = new Ubicacio(ru.ubicacio.coordLat, ru.ubicacio.coordLng, ru.ubicacio.ciutat, ru.ubicacio.pais);
 
-        User usuari = userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix, ubicacio);
+        User usuari = userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaixement, ubicacio);
 
         return buildResponseWithView(Views.Private.class, usuari);
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(@Valid R_User_Update nouUser, @Context HttpServletRequest req, @PathParam("id") Long id){
+
+        Long userId = getLoggedUser(req);
+
+        if(userService.getUser(id).equals(userService.getUser(userId))){
+            try {
+                userService.actualitzar(userService.getUser(id), nouUser);
+                return Response.ok().build();
+            }
+
+            catch (IllegalArgumentException ex) {
+                return clientError("Missing parameters in Ubicacio");
+            }
+
+        }
+
+        return accessDenied();
     }
 
     @Path("/{id}/compres")
@@ -242,8 +265,29 @@ public class UserRESTService extends RESTService
         @NotNull
         public String telefon;
         @NotNull
-        public java.util.Date dataNaix;
+        public java.util.Date dataNaixement;
         public R_Ubicacio ubicacio;
+    }
+
+    public static class R_Ubicacio_Update
+    {
+        public String pais;
+        public String ciutat;
+        public Double coordLat;
+        public Double coordLng;
+    }
+
+    public static class R_User_Update
+    {
+        public String nom;
+        public String cognom;
+        public String correu;
+        public String contrasenya;
+        public User.Sexe sexe;
+        public String telefon;
+        public java.util.Date dataNaixement;
+        public R_Ubicacio_Update ubicacio;
+
     }
 
     /*static class ID
