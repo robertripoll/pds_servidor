@@ -216,36 +216,6 @@ public class ProducteRESTService extends RESTService
         return buildResponseWithView(Views.Interactor.class, producteService.esborrarValoracioComprador(id));
     }
 
-    /*static class ID
-    {
-        public Long id;
-
-        public ID(Long id)
-        {
-            this.id = id;
-        }
-    }*/
-
-    /*
-    "transaccio": { // Si no hi hagués transacció (no venut) no hi hauria el que hi ha a continuació
-        "id": 2445,
-        "data": "2017-10-05T12:14:00",
-        "comprador": {
-            "id": 234,
-            "nom": "Donald Trump"
-        },
-        "valoracio": {
-            "comprador": { // Valoració feta pel comprador
-            "estrelles": 4,
-            "comentaris": "Nice and sweet."
-        },
-        "venedor": { // Valoració feta pel venedor
-            "estrelles": 3,
-            "comentaris": "Ha fet tard..."
-        }
-    },
-     */
-
     public static class R_Valoracio
     {
         @NotNull
