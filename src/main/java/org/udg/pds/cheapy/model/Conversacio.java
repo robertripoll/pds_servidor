@@ -18,11 +18,11 @@ public class Conversacio implements Serializable
     @JsonView(Views.Basic.class)
     protected Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonView(Views.Basic.class)
     private User usuari;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private User propietari;
 
