@@ -11,6 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Created by imartin on 21/02/17.
@@ -105,6 +106,34 @@ public class RESTService
         public ID(Long id)
         {
             this.id = id;
+        }
+    }
+
+    public static class Metadata
+    {
+        public Integer limit;
+        public Integer currentOffset;
+        public Integer nextOffset;
+        public Integer total;
+
+        public Metadata(int limit, int currentOffset, int nextOffset, int total)
+        {
+            this.limit          = limit;
+            this.currentOffset  = currentOffset;
+            this.nextOffset     = nextOffset;
+            this.total          = total;
+        }
+    }
+
+    public static class Data
+    {
+        public Collection<?> items;
+        public Metadata metadata;
+
+        public Data(Collection<?> items, int limit, int currentOffset, int nextOffset, int total)
+        {
+            this.items      = items;
+            this.metadata   = new Metadata(limit, currentOffset, nextOffset, total);
         }
     }
 }
