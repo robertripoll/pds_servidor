@@ -53,14 +53,14 @@ public class Missatge implements Serializable, Cloneable
     protected Long id;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Conversacio conversacio;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonView(Views.Basic.class)
     private User emisor;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonView(Views.Basic.class)
     private User receptor;
 

@@ -34,12 +34,11 @@ public class Conversacio implements Serializable
     @JsonView(Views.Basic.class)
     private Integer nombreMissatges;
 
-    @Formula("(SELECT missatge FROM missatges missatge WHERE missatge.conversacio_id = id ORDER BY missatge.dataEnviament DESC LIMIT 1)")
+    @OneToOne
     @JsonView(Views.Basic.class)
-    @Transient
     private Missatge ultimMissatge;
 
-    @Formula("(SELECT CAST(COUNT(missatge.id) AS BIT) FROM missatges missatge WHERE missatge.conversacio_id = id AND missatge.estat NOT LIKE \"%LLEGIT%\")")
+    @Formula("(SELECT COUNT(missatge.id) FROM missatges missatge WHERE missatge.conversacio_id = id AND missatge.estat NOT LIKE \"%LLEGIT%\")")
     @JsonView(Views.Basic.class)
     private Boolean missatgesPerLlegir;
 
@@ -64,9 +63,20 @@ public class Conversacio implements Serializable
         return propietari;
     }
 
+    public Missatge getUltimMissatge()
+    {
+        return ultimMissatge;
+    }
+
     @JsonIgnore
     public Collection<Missatge> getMissatges()
     {
         return missatges;
+    }
+
+    public void addMissatge(Missatge m)
+    {
+        ultimMissatge = m;
+        missatges.add(m);
     }
 }
