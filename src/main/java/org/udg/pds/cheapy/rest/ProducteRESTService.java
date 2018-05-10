@@ -204,10 +204,13 @@ public class ProducteRESTService extends RESTService
         Long userId = getLoggedUser(req);
 
         Producte p = producteService.get(id);
-        Transaccio t = p.getTransaccio();
-        Valoracio v = t.getValoracioComprador();
+        Valoracio v = null;
 
-        if (t == null || v == null || !v.getValorador().getId().equals(userId))
+        if (p.getTransaccio() != null)
+            if (p.getTransaccio().getValoracioComprador() != null)
+                v = p.getTransaccio().getValoracioComprador();
+
+        if (v == null || !v.getValorador().getId().equals(userId))
             return accessDenied();
 
         return buildResponseWithView(Views.Interactor.class, producteService.esborrarValoracioComprador(id));
