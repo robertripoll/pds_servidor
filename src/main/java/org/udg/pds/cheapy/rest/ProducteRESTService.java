@@ -198,6 +198,7 @@ public class ProducteRESTService extends RESTService
 
     @DELETE
     @Path("{id}/transaccio/valoracio")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteRating(@Context HttpServletRequest req, @PathParam("id") Long id)
     {
         Long userId = getLoggedUser(req);
@@ -209,7 +210,7 @@ public class ProducteRESTService extends RESTService
         if (t == null || v == null || !v.getValorador().getId().equals(userId))
             return accessDenied();
 
-        return buildResponseWithView(Views.Public.class, producteService.esborrarValoracioComprador(id));
+        return buildResponseWithView(Views.Interactor.class, producteService.esborrarValoracioComprador(id));
     }
 
     /*static class ID
