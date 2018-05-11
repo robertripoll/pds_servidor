@@ -367,4 +367,9 @@ public class ProducteService
         p.getTransaccio().setValoracioComprador(null);
         return em.merge(p);
     }
+
+    public long totalDeProductes()
+    {
+        return (long)em.createQuery("SELECT COUNT(producte) FROM productes producte WHERE producte.transaccio IS NULL").getSingleResult();
+    }
 }
