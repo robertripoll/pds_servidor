@@ -163,18 +163,21 @@ public class UserRESTService extends RESTService
     @Path("{id}/valoracions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
-        return buildResponseWithView(Views.Public.class, userService.getValoracions(userId));
+        long total = userService.totalValoracions(userId);
+        Data data = new Data(userService.getValoracions(userId, limit, offset), limit, offset, offset + limit, total);
+
+        return buildResponseWithView(Views.Public.class, data);
     }
 
     @Path("/jo/valoracions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureValoracionsPropies(@Context HttpServletRequest req)
+    public Response veureValoracionsPropies(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
         Long userID = getLoggedUser(req);
-        return veureValoracions(req, userID);
+        return veureValoracions(req, userID, limit, offset);
     }
 
     @Path("jo/favorits/{id}")

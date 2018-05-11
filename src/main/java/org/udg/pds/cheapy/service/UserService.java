@@ -66,10 +66,12 @@ public class UserService
     }
 
     @SuppressWarnings("unchecked")
-    public Collection<Valoracio> getValoracions(long id)
+    public Collection<Valoracio> getValoracions(long id, int limit, int offset)
     {
         return em.createQuery("SELECT valoracio FROM valoracions valoracio WHERE valoracio.valorat.id = :usuari")
                 .setParameter("usuari", id)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 
@@ -174,6 +176,13 @@ public class UserService
     public long totalVendes(Long userId)
     {
         return (long)em.createQuery("SELECT COUNT(transaccio) FROM transaccions transaccio WHERE transaccio.venedor.id = :usuari")
+                .setParameter("usuari", userId)
+                .getSingleResult();
+    }
+
+    public long totalValoracions(Long userId)
+    {
+        return (long)em.createQuery("SELECT COUNT(valoracio) FROM valoracions valoracio WHERE valoracio.valorat.id = :usuari")
                 .setParameter("usuari", userId)
                 .getSingleResult();
     }
