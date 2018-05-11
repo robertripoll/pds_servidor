@@ -64,15 +64,18 @@ public class UserService
 
     public Collection<Valoracio> getValoracions(long id)
     {
-        return em.createQuery("SELECT valoracio FROM valoracions valoracio WHERE valoracio.valorat.id = :usuari").
-                setParameter("usuari", id).getResultList();
+        return em.createQuery("SELECT valoracio FROM valoracions valoracio WHERE valoracio.valorat.id = :usuari")
+                .setParameter("usuari", id)
+                .getResultList();
     }
 
-    public Collection<Producte> getFavorits(long id){
-
-        User u = getUser(id);
-
-        return u.getFavorits();
+    public Collection<Producte> getFavorits(long id, int limit, int offset)
+    {
+        return em.createQuery("SELECT favorit FROM usuaris usuari INNER JOIN usuari.favorits favorit WHERE usuari.id = :usuari")
+                .setParameter("usuari", id)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     public User crear(String nom, String cognom, String correu, String contrasenya, Date dataNaix, User.Sexe sexe, String telefon, Ubicacio ubicacio){
@@ -107,14 +110,14 @@ public class UserService
 
     public Collection<Producte> getProductesComprats(long id)
     {
-        return em.createQuery("SELECT producte FROM productes producte INNER JOIN producte.transaccio transaccio WHERE transaccio.comprador.id = :comprador").
-                setParameter("comprador", id).getResultList();
+        return em.createQuery("SELECT producte FROM productes producte INNER JOIN producte.transaccio transaccio WHERE transaccio.comprador.id = :comprador")
+                .setParameter("comprador", id).getResultList();
     }
 
     public Collection<Producte> getProductesVenuts(long id)
     {
-        return em.createQuery("SELECT producte FROM productes producte WHERE venedor.id = :venedor AND transaccio IS NOT NULL").
-                setParameter("venedor", id).getResultList();
+        return em.createQuery("SELECT producte FROM productes producte WHERE producte.venedor.id = :venedor AND producte.transaccio IS NOT NULL")
+                .setParameter("venedor", id).getResultList();
     }
 
     public User getUser(long id)
@@ -139,5 +142,12 @@ public class UserService
         u.getValoracions().size();
         u.getProdVenda().size();
         return u;
+    }
+
+    public long totalFavorits(long userID)
+    {
+        return (long)em.createQuery("SELECT COUNT(favorit) FROM usuaris usuari INNER JOIN usuari.favorits favorit WHERE usuari.id = :usuari")
+                .setParameter("usuari", userID)
+                .getSingleResult();
     }
 }

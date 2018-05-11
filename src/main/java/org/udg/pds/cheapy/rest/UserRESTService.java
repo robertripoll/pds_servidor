@@ -63,13 +63,17 @@ public class UserRESTService extends RESTService
         return Response.ok().build();
     }
 
-    @Path("/favorits")
+    @Path("jo/favorits")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesFavorits(@Context HttpServletRequest req)
+    public Response veureProductesFavorits(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
         Long loggedUserId = getLoggedUser(req);
-        return buildResponseWithView(Views.Summary.class, userService.getFavorits(loggedUserId));
+
+        long total = userService.totalFavorits(loggedUserId);
+        Data data = new Data(userService.getFavorits(loggedUserId, limit, offset), limit, offset, offset + limit, total);
+
+        return buildResponseWithView(Views.Summary.class, data);
     }
 
     @Path("jo")
@@ -167,7 +171,7 @@ public class UserRESTService extends RESTService
         return veureValoracions(req, userID);
     }
 
-    @Path("/favorits/{id}")
+    @Path("jo/favorits/{id}")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response afegirAFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId)
@@ -178,7 +182,7 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Summary.class, userService.afegirProducteAFavorit(id, p));
     }
 
-    @Path("/favorits/{id}")
+    @Path("jo/favorits/{id}")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public Response suprimirDeFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId)
