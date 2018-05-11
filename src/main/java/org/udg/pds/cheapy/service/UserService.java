@@ -65,6 +65,7 @@ public class UserService
         return nu;
     }
 
+    @SuppressWarnings("unchecked")
     public Collection<Valoracio> getValoracions(long id)
     {
         return em.createQuery("SELECT valoracio FROM valoracions valoracio WHERE valoracio.valorat.id = :usuari")
@@ -72,6 +73,7 @@ public class UserService
                 .getResultList();
     }
 
+    @SuppressWarnings("unchecked")
     public Collection<Producte> getFavorits(long id, int limit, int offset)
     {
         return em.createQuery("SELECT favorit FROM usuaris usuari INNER JOIN usuari.favorits favorit WHERE usuari.id = :usuari")
@@ -111,6 +113,7 @@ public class UserService
         return em.merge(u).getFavorits();
     }
 
+    @SuppressWarnings("unchecked")
     public Collection<Producte> getProductesComprats(long id, int limit, int offset)
     {
         return em.createQuery("SELECT producte FROM productes producte INNER JOIN producte.transaccio transaccio WHERE transaccio.comprador.id = :comprador")
@@ -120,6 +123,7 @@ public class UserService
                 .getResultList();
     }
 
+    @SuppressWarnings("unchecked")
     public Collection<Producte> getProductesVenuts(long id, int limit, int offset)
     {
         return em.createQuery("SELECT producte FROM productes producte WHERE producte.venedor.id = :venedor AND producte.transaccio IS NOT NULL")
