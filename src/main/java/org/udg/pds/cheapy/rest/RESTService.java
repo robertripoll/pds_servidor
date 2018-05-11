@@ -114,9 +114,9 @@ public class RESTService
         public Integer limit;
         public Integer currentOffset;
         public Integer nextOffset;
-        public Integer total;
+        public long total;
 
-        public Metadata(int limit, int currentOffset, int nextOffset, int total)
+        public Metadata(int limit, int currentOffset, int nextOffset, long total)
         {
             this.limit          = limit;
             this.currentOffset  = currentOffset;
@@ -130,7 +130,7 @@ public class RESTService
         public Collection<?> items;
         public Metadata metadata;
 
-        public Data(Collection<?> items, int limit, int currentOffset, int nextOffset, int total)
+        public Data(Collection<?> items, int limit, int currentOffset, int nextOffset, long total)
         {
             this.items      = items;
             this.metadata   = new Metadata(limit, currentOffset, nextOffset, total);

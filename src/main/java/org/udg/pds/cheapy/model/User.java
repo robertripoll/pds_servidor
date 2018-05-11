@@ -126,7 +126,7 @@ public class User implements Serializable
     @JsonView(Views.Public.class)
     private Integer nombreVendes;
 
-    @OneToMany
+    @ManyToMany
     @JsonIgnore
     private Collection<Producte> favorits;
 
