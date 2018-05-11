@@ -78,10 +78,11 @@ public class UserRESTService extends RESTService
 
     @Path("jo")
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@Context HttpServletRequest req)
     {
-        return buildResponse(userService.remove(getLoggedUser(req)));
+        userService.remove(getLoggedUser(req));
+
+        return Response.ok().build();
     }
 
     @POST
@@ -182,24 +183,26 @@ public class UserRESTService extends RESTService
 
     @Path("jo/favorits/{id}")
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     public Response afegirAFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId)
     {
         Producte p = producteService.get(productId); // obtenim el producte
         Long id = getLoggedUser(req);
 
-        return buildResponseWithView(Views.Summary.class, userService.afegirProducteAFavorit(id, p));
+        userService.afegirProducteAFavorit(id, p);
+
+        return Response.ok().build();
     }
 
     @Path("jo/favorits/{id}")
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     public Response suprimirDeFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId)
     {
         Producte p = producteService.get(productId); // obtenim el producte
         Long id = getLoggedUser(req);
 
-        return buildResponseWithView(Views.Summary.class, userService.suprimirProducteDeFavorits(id,p));
+        userService.suprimirProducteDeFavorits(id, p);
+
+        return Response.ok().build();
     }
 
     static class LoginUser

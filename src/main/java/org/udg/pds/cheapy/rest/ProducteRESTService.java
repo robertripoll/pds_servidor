@@ -130,7 +130,6 @@ public class ProducteRESTService extends RESTService
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteProduct(@Context HttpServletRequest req,
                                   @PathParam("id") Long id)
     {
@@ -141,7 +140,7 @@ public class ProducteRESTService extends RESTService
         if (!p.getVenedor().getId().equals(userId))
             return accessDenied();
 
-        return buildResponse(producteService.esborrar(id));
+        return Response.ok().build();
     }
 
     @POST
