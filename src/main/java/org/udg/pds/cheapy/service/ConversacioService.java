@@ -67,10 +67,11 @@ public class ConversacioService
                 .getSingleResult();
     }
 
-    public Conversacio llegirMissatges(Long id)
+    public Conversacio llegirMissatges(Long id, Long userID)
     {
-        em.createQuery("UPDATE missatges missatge SET missatge.estat = \"LLEGIT\" WHERE missatge.conversacio.id = :conversa")
+        em.createQuery("UPDATE missatges missatge SET missatge.estat = \"LLEGIT\" WHERE missatge.conversacio.id = :conversa AND missatge.receptor.id = :receptor")
                 .setParameter("conversa", id)
+                .setParameter("receptor", userID)
                 .executeUpdate();
 
         return get(id);
