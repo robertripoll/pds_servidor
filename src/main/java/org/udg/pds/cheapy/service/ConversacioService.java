@@ -2,20 +2,13 @@ package org.udg.pds.cheapy.service;
 
 import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Missatge;
-import org.udg.pds.cheapy.model.User;
 
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -72,5 +65,14 @@ public class ConversacioService
         return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio.id = :conversacio")
                 .setParameter("conversacio", id)
                 .getSingleResult();
+    }
+
+    public Conversacio llegirMissatges(Long id)
+    {
+        em.createQuery("UPDATE missatges missatge SET missatge.estat = \"LLEGIT\" WHERE missatge.conversacio.id = :conversa")
+                .setParameter("conversa", id)
+                .executeUpdate();
+
+        return get(id);
     }
 }

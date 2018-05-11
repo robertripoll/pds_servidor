@@ -44,6 +44,19 @@ public class ConversacioRESTService extends RESTService
         return buildResponseWithView(Views.Basic.class, data);
     }
 
+    @Path("{id}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response missatgesLlegits(@Context HttpServletRequest req, @PathParam("id") Long id)
+    {
+        Conversacio c = service.get(id);
+
+        if (!c.getPropietari().getId().equals(getLoggedUser(req)))
+            return accessDenied();
+
+        return buildResponseWithView(Views.Basic.class, service.llegirMissatges(id));
+    }
+
     @Path("{id}/missatges")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
