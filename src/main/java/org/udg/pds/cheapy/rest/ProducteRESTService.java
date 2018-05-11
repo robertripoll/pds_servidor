@@ -86,7 +86,7 @@ public class ProducteRESTService extends RESTService
         if (parameters.containsKey("sort"))
             sort = parameters.get("sort");
 
-        long total = producteService.totalDeProductes();
+        long total = producteService.totalDeProductesEnVenda();
 
         Data dades = new Data(producteService.getProductesEnVenda(limit, offset, parameters, sort, ubicacio), limit, offset, offset + limit, total);
 
