@@ -21,7 +21,7 @@ public class Producte implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Public.class)
     protected Long id;
 
     @NotNull
@@ -36,7 +36,7 @@ public class Producte implements Serializable
     private String descripcio;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Public.class)
     @JsonSerialize(using = JsonDateTimeSerializer.class)
     @JsonDeserialize(using = JsonDateTimeDeserializer.class)
     private java.sql.Timestamp dataPublicacio;
@@ -50,7 +50,7 @@ public class Producte implements Serializable
     private Boolean intercanviAcceptat;
 
     @NotNull
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Public.class)
     private Integer numVisites = 0;
 
     @NotNull
@@ -206,5 +206,10 @@ public class Producte implements Serializable
     public boolean equals(Object o)
     {
         return ((Producte)o).id.equals(this.id);
+    }
+
+    public void setNumVisites(Integer numVisites)
+    {
+        this.numVisites = numVisites;
     }
 }
