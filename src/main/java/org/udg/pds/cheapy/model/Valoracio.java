@@ -45,24 +45,24 @@ public class Valoracio implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Interactor.class)
     protected Long id;
 
     @Basic
     @Enumerated(EnumType.ORDINAL)
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     private Estrelles estrelles;
 
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Basic.class)
     private String comentaris;
 
     @ManyToOne
-    @JsonView(Views.Complete.class)
+    @JsonIgnore
     private User valorador;
 
     @ManyToOne
-    @JsonView(Views.Complete.class)
+    @JsonIgnore
     private User valorat;
 
     public Valoracio()

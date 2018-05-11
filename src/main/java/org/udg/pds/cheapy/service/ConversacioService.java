@@ -25,10 +25,14 @@ public class ConversacioService
     @PersistenceContext
     protected EntityManager em;
 
-    public Collection<Conversacio> getConversacions(long id){
-
-        User u = em.find(User.class, id);
-        return u.getConverses();
+    @SuppressWarnings("unchecked")
+    public List<Conversacio> getConversacions(long id, int limit, int offset)
+    {
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari")
+                .setParameter("usuari", id)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     public Conversacio get(long id)
@@ -40,7 +44,7 @@ public class ConversacioService
     {
         try
         {
-            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM Missatge m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
+            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatges m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
             typedQuery.setFirstResult(offset);
             typedQuery.setMaxResults(limit);
             typedQuery.setParameter("idConversa", idConversa);
@@ -54,5 +58,19 @@ public class ConversacioService
             // We catch the normal exception and then transform it in a EJBException
             throw new EJBException(ex);
         }
+    }
+
+    public long totalConverses(Long userId)
+    {
+        return (long)em.createQuery("SELECT COUNT(conversacio) FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari")
+                .setParameter("usuari", userId)
+                .getSingleResult();
+    }
+
+    public long totalMissatges(Long id)
+    {
+        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio.id = :conversacio")
+                .setParameter("conversacio", id)
+                .getSingleResult();
     }
 }

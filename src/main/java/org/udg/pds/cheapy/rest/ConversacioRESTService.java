@@ -20,12 +20,10 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-// This class is used to process all the authentication related URLs
 @Path("/conversacions")
 @RequestScoped
 public class ConversacioRESTService extends RESTService
 {
-    // This is the EJB used to access user data
     @EJB
     ConversacioService service;
 
@@ -34,20 +32,25 @@ public class ConversacioRESTService extends RESTService
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureConverses(@Context HttpServletRequest req){
-
+    public Response veureConverses(@Context HttpServletRequest req,
+                                   @DefaultValue("25") @QueryParam("limit") int limit,
+                                   @DefaultValue("0") @QueryParam("offset") int offset)
+    {
         Long loggedUserId = getLoggedUser(req);
 
-        return buildResponseWithView(Views.Public.class, service.getConversacions(loggedUserId));
+        long total = service.totalConverses(loggedUserId);
+        Data data = new Data(service.getConversacions(loggedUserId, limit, offset), limit, offset, offset + limit, total);
+
+        return buildResponseWithView(Views.Basic.class, data);
     }
 
-    @Path("{id}")
+    @Path("{id}/missatges")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response veureMissatges(@Context HttpServletRequest req,
-                        @PathParam("id") Long id,
-                        @DefaultValue("25") @QueryParam("limit") int limit,
-                        @DefaultValue("0") @QueryParam("offset") int offset)
+                                   @PathParam("id") Long id,
+                                   @DefaultValue("25") @QueryParam("limit") int limit,
+                                   @DefaultValue("0") @QueryParam("offset") int offset)
     {
         Long loggedUserId = getLoggedUser(req);
 
@@ -56,7 +59,10 @@ public class ConversacioRESTService extends RESTService
         if (!c.getPropietari().getId().equals(loggedUserId))
             return accessDenied();
 
-        return buildResponseWithView(Views.Public.class, service.getMissatges(id, limit, offset));
+        long total = service.totalMissatges(id);
+        Data data = new Data(service.getMissatges(id, limit, offset), limit, offset, offset + limit, total);
+
+        return buildResponseWithView(Views.Basic.class, data);
     }
 }
 
