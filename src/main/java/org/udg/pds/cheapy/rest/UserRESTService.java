@@ -21,7 +21,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.*;
 
 @Path("/usuaris")
 @RequestScoped
@@ -80,16 +79,12 @@ public class UserRESTService extends RESTService
     @DELETE
     public Response deleteUser(@Context HttpServletRequest req)
     {
-        Long loggedUserId = getLoggedUser(req);
-
-        if (!loggedUserId.equals(loggedUserId))
-            throw new WebApplicationException("Cannot delete other users!");
-
-        userService.remove(loggedUserId);
+        userService.remove(getLoggedUser(req));
 
         return Response.ok().build();
     }
 
+    @Path("/registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(RegisterUser ru, @Context HttpServletRequest req)

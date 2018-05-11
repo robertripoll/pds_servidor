@@ -30,8 +30,8 @@ public class Conversacio implements Serializable
     @JsonView(Views.Basic.class)
     private Producte producte;
 
-    @OneToMany(mappedBy = "conversacio", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conversacio")
     private Collection<Missatge> missatges;
 
     @Formula("(SELECT COUNT(missatge.id) FROM missatges missatge WHERE missatge.conversacio_id = id)")
