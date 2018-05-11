@@ -42,7 +42,7 @@ public class Conversacio implements Serializable
     @JsonView(Views.Basic.class)
     private Missatge ultimMissatge;
 
-    @Formula("(SELECT COUNT(missatge.id) FROM missatges missatge WHERE missatge.conversacio_id = id AND missatge.estat NOT LIKE \"%LLEGIT%\")")
+    @Formula("(SELECT COUNT(missatge.id) FROM missatges missatge WHERE missatge.conversacio_id = id AND missatge.estat NOT LIKE \"%LLEGIT%\" AND missatge.receptor_id = propietari_id)")
     @JsonView(Views.Basic.class)
     private Boolean missatgesPerLlegir;
 
