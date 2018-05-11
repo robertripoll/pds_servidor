@@ -61,7 +61,7 @@ public class Producte implements Serializable
     @JsonView(Views.Public.class)
     private User venedor; // Nomes hauria de retornar el nom de l'Usuari
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonView(Views.Private.class)
     private Transaccio transaccio; // Nomes interessa a venedor i comprador
 

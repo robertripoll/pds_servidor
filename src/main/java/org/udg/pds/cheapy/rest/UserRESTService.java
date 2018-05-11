@@ -78,17 +78,14 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Public.class, userService.getFavorits(loggedUserId));
     }
 
-    @Path("{id}")
+    @Path("jo")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response deleteUser(@Context HttpServletRequest req)
     {
-        Long loggedUserId = getLoggedUser(req);
+        userService.remove(getLoggedUser(req));
 
-        if (!loggedUserId.equals(userId))
-            throw new WebApplicationException("Cannot delet other users!");
-
-        return buildResponse(userService.remove(userId));
+        return Response.ok().build();
     }
 
     @Path("/registrar")
@@ -245,15 +242,5 @@ public class UserRESTService extends RESTService
         public java.util.Date dataNaix;
         public R_Ubicacio ubicacio;
     }
-
-    /*static class ID
-    {
-        public Long id;
-
-        public ID(Long id)
-        {
-            this.id = id;
-        }
-    }*/
 }
 
