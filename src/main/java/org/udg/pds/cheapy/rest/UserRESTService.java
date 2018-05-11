@@ -100,35 +100,41 @@ public class UserRESTService extends RESTService
     @Path("/{id}/compres")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesComprats(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureProductesComprats(@Context HttpServletRequest req, @PathParam("id") Long userId, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
-        return buildResponseWithView(Views.Summary.class, userService.getProductesComprats(userId));
+        long total = userService.totalCompres(userId);
+        Data data = new Data(userService.getProductesComprats(userId, limit, offset), limit, offset, offset + limit, total);
+
+        return buildResponseWithView(Views.Summary.class, data);
     }
 
     @Path("/jo/compres")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesCompratsPropis(@Context HttpServletRequest req)
+    public Response veureProductesCompratsPropis(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
         Long userID = getLoggedUser(req);
-        return veureProductesComprats(req, userID);
+        return veureProductesComprats(req, userID, limit, offset);
     }
 
     @Path("/{id}/vendes")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesVenuts(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureProductesVenuts(@Context HttpServletRequest req, @PathParam("id") Long userId, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
-        return buildResponseWithView(Views.Summary.class, userService.getProductesVenuts(userId));
+        long total = userService.totalVendes(userId);
+        Data data = new Data(userService.getProductesVenuts(userId, limit, offset), limit, offset, offset + limit, total);
+
+        return buildResponseWithView(Views.Summary.class, data);
     }
 
     @Path("/jo/vendes")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesVenutsPropis(@Context HttpServletRequest req)
+    public Response veureProductesVenutsPropis(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
         Long userID = getLoggedUser(req);
-        return veureProductesVenuts(req, userID);
+        return veureProductesVenuts(req, userID, limit, offset);
     }
 
     @Path("{id}")

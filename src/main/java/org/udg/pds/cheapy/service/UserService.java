@@ -1,6 +1,9 @@
 package org.udg.pds.cheapy.service;
 
-import org.udg.pds.cheapy.model.*;
+import org.udg.pds.cheapy.model.Producte;
+import org.udg.pds.cheapy.model.Ubicacio;
+import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.model.Valoracio;
 import org.udg.pds.cheapy.rest.RESTService;
 
 import javax.ejb.EJBException;
@@ -108,16 +111,22 @@ public class UserService
         return em.merge(u).getFavorits();
     }
 
-    public Collection<Producte> getProductesComprats(long id)
+    public Collection<Producte> getProductesComprats(long id, int limit, int offset)
     {
         return em.createQuery("SELECT producte FROM productes producte INNER JOIN producte.transaccio transaccio WHERE transaccio.comprador.id = :comprador")
-                .setParameter("comprador", id).getResultList();
+                .setParameter("comprador", id)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
-    public Collection<Producte> getProductesVenuts(long id)
+    public Collection<Producte> getProductesVenuts(long id, int limit, int offset)
     {
         return em.createQuery("SELECT producte FROM productes producte WHERE producte.venedor.id = :venedor AND producte.transaccio IS NOT NULL")
-                .setParameter("venedor", id).getResultList();
+                .setParameter("venedor", id)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     public User getUser(long id)
@@ -148,6 +157,20 @@ public class UserService
     {
         return (long)em.createQuery("SELECT COUNT(favorit) FROM usuaris usuari INNER JOIN usuari.favorits favorit WHERE usuari.id = :usuari")
                 .setParameter("usuari", userID)
+                .getSingleResult();
+    }
+
+    public long totalCompres(Long userId)
+    {
+        return (long)em.createQuery("SELECT COUNT(transaccio) FROM transaccions transaccio WHERE transaccio.comprador.id = :usuari")
+                .setParameter("usuari", userId)
+                .getSingleResult();
+    }
+
+    public long totalVendes(Long userId)
+    {
+        return (long)em.createQuery("SELECT COUNT(transaccio) FROM transaccions transaccio WHERE transaccio.venedor.id = :usuari")
+                .setParameter("usuari", userId)
                 .getSingleResult();
     }
 }
