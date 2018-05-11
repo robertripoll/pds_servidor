@@ -80,7 +80,12 @@ public class UserRESTService extends RESTService
     @DELETE
     public Response deleteUser(@Context HttpServletRequest req)
     {
-        userService.remove(getLoggedUser(req));
+        Long loggedUserId = getLoggedUser(req);
+
+        if (!loggedUserId.equals(loggedUserId))
+            throw new WebApplicationException("Cannot delete other users!");
+
+        userService.remove(loggedUserId);
 
         return Response.ok().build();
     }

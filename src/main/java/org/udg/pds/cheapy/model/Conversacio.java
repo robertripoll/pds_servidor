@@ -26,6 +26,10 @@ public class Conversacio implements Serializable
     @JsonIgnore
     private User propietari;
 
+    @ManyToOne(optional = false)
+    @JsonView(Views.Basic.class)
+    private Producte producte;
+
     @OneToMany(mappedBy = "conversacio", cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<Missatge> missatges;
@@ -47,8 +51,9 @@ public class Conversacio implements Serializable
 
     }
 
-    public Conversacio(User propietari, User usuari)
+    public Conversacio(Producte producte, User propietari, User usuari)
     {
+        this.producte   = producte;
         this.propietari = propietari;
         this.usuari     = usuari;
     }
@@ -61,6 +66,11 @@ public class Conversacio implements Serializable
     public User getPropietari()
     {
         return propietari;
+    }
+
+    public Producte getProducte()
+    {
+        return producte;
     }
 
     public Missatge getUltimMissatge()
