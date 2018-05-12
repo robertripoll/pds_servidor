@@ -89,9 +89,26 @@ public class Conversacio implements Serializable
         return missatges;
     }
 
+    public Missatge getMissatge(Long id){
+
+        for(Missatge m: missatges){
+            if(m.getId().equals(id)) return m;
+        }
+
+        return null;
+    }
+
     public void addMissatge(Missatge m)
     {
         ultimMissatge = m;
         missatges.add(m);
+    }
+
+    public void deleteMissatge(Missatge m) { missatges.remove(m);}
+
+    @Override
+    public boolean equals(Object o)
+    {
+        return ((Conversacio)o).id.equals(this.id);
     }
 }

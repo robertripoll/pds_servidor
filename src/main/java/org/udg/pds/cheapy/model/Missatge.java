@@ -103,6 +103,10 @@ public class Missatge implements Serializable, Cloneable
         this.estat          = estat;
     }
 
+    public Long getId(){
+        return id;
+    }
+
     public Conversacio getConversacio()
     {
         return conversacio;
@@ -141,5 +145,11 @@ public class Missatge implements Serializable, Cloneable
     public Missatge clone(Conversacio c)
     {
         return new Missatge(c, this.emisor, this.receptor, this.missatge, this.estat);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        return ((Missatge)o).id.equals(this.id);
     }
 }

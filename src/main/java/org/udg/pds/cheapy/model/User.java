@@ -340,6 +340,15 @@ public class User implements Serializable
         favorits.remove(prod);
     }
 
+    public void removeConversation(Conversacio con) { converses.remove(con);}
+
+    public void removeMessageFromConversation(Long idConv, Long idMiss){
+
+        for(Conversacio c: converses){
+            if(c.getId().equals(idConv)) c.deleteMissatge(c.getMissatge(idMiss));
+        }
+    }
+
     public Collection<Producte> getProdVenda()
     {
         prodVenda.size();

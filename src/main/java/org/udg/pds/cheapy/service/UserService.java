@@ -188,9 +188,23 @@ public class UserService
     public Conversacio esborrarConversaUsuari(Long convId){
 
         Conversacio c = em.find(Conversacio.class, convId);
+        User u = c.getUsuari();
+        u.removeConversation(c);
         em.remove(c);
 
         return em.merge(c);
+    }
+
+    public Missatge esborrarMissatgeConversa(Long idConv, Long idMiss) {
+
+        Conversacio c = em.find(Conversacio.class, idConv);
+        Missatge m = c.getMissatge(idMiss);
+        User u = c.getUsuari();
+        u.removeMessageFromConversation(idConv,idMiss);
+
+        em.remove(m);
+
+        return em.merge(m);
     }
 
     public User actualitzar(User u, UserRESTService.R_User_Update nouUser) throws IllegalArgumentException {
@@ -241,4 +255,5 @@ public class UserService
             throw new EJBException(ex);
         }
     }
+
 }

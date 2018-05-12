@@ -90,11 +90,30 @@ public class UserRESTService extends RESTService
 
         Conversacio c = u.getConversa(idC); // obtenim la conversa en concret de l'usuari
 
-        if(c == null){
+        if(c == null || !c.getUsuari().getId().equals(userId)){ // si no existeix conversació o no és de l'usuari
             return accessDenied();
         }
 
         return buildResponseWithView(Views.Public.class, userService.esborrarConversaUsuari(idC));
+    }
+
+    @DELETE
+    @Path("conversacions/{idConv}/missatges/{idMiss}")
+    public Response deleteMessage(@Context HttpServletRequest req, @PathParam("idConv") Long idConv, @PathParam("idMiss") Long idMiss){
+
+        Long userId = getLoggedUser(req); // obtenim id de l'usuari en linia
+        User u = userService.getUser(userId);
+        Conversacio c = u.getConversa(idConv); // obtenim la conversa
+
+        if(c == null || !c.getUsuari().getId().equals(userId)){
+            return accessDenied();
+        }
+
+        Missatge m = c.getMissatge(idMiss);
+
+        if(m == null) return accessDenied();
+
+        return buildResponseWithView(Views.Public.class, userService.esborrarMissatgeConversa(idConv,idMiss));
     }
 
     @Path("/registrar")
