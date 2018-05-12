@@ -6,16 +6,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.annotations.Formula;
 import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 
 import javax.persistence.*;
-import javax.swing.text.View;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Entity(name = "usuaris")
@@ -50,10 +48,91 @@ public class User implements Serializable
         }
     }
 
-    /**
-     * Default value included to remove warning. Remove or modify at will. *
-     */
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Basic.class)
+    protected Long id;
+
+    @NotNull
+    @JsonIgnore
+    private String contrasenya;
+
+    @NotNull
+    @JsonView(Views.Private.class)
+    @Column(unique = true)
+    private String correu;
+
+    @NotNull
+    @JsonView(Views.Basic.class)
+    private String nom;
+
+    @NotNull
+    @JsonView(Views.Private.class)
+    private String cognoms;
+
+    @Basic
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @JsonView(Views.Basic.class)
+    private Sexe sexe;
+
+    @NotNull
+    @JsonView(Views.Private.class)
+    @Column(unique = true)
+    private String telefon;
+
+    @NotNull
+    @JsonView(Views.Private.class)
+    @Temporal(TemporalType.DATE)
+    @JsonSerialize(using = JsonDateSerializer.class)
+    @JsonDeserialize(as = JsonDateDeserializer.class)
+    private java.util.Date dataNaix;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonView(Views.Summary.class)
+    private Ubicacio ubicacio;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "propietari")
+    @JsonIgnore
+    private Collection<Conversacio> converses;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
+    private Collection<Valoracio> valoracions;
+
+    @Formula("(SELECT COUNT(valoracio.id) FROM valoracions valoracio WHERE valoracio.valorat_id = id)")
+    @JsonView(Views.Public.class)
+    private Integer nombreValoracions;
+
+    @Formula("(SELECT AVG(valoracio.estrelles) FROM valoracions valoracio WHERE valoracio.valorat_id = id)")
+    @JsonView(Views.Public.class)
+    private Double mitjanaValoracions;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
+    @JsonIgnore
+    private Collection<Transaccio> compres;
+
+    @Formula("(SELECT COUNT(transaccio.id) FROM transaccions transaccio WHERE transaccio.comprador_id = id)")
+    @JsonView(Views.Public.class)
+    private Integer nombreCompres;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
+    @JsonIgnore
+    private Collection<Transaccio> vendes;
+
+    @Formula("(SELECT COUNT(transaccio.id) FROM transaccions transaccio WHERE transaccio.venedor_id = id)")
+    @JsonView(Views.Public.class)
+    private Integer nombreVendes;
+
+    @ManyToMany
+    @JsonIgnore
+    private Collection<Producte> favorits;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
+    @JsonIgnore
+    private Collection<Producte> prodVenda;
 
     public User()
     {
@@ -75,80 +154,6 @@ public class User implements Serializable
         this(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya);
         this.ubicacio = ubicacio;
     }
-
-    //-------------------- ATRIBUTS DE LA CLASSE --------------------//
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
-    protected Long id;
-
-    @NotNull
-    @JsonIgnore
-    private String contrasenya;
-
-    @NotNull
-    @JsonView(Views.Private.class)
-    @Column(unique = true)
-    private String correu;
-
-    @NotNull
-    @JsonView(Views.Public.class)
-    private String nom;
-
-    @NotNull
-    @JsonView(Views.Private.class)
-    private String cognoms;
-
-    @Basic
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @JsonView(Views.Public.class)
-    private Sexe sexe;
-
-    @NotNull
-    @JsonView(Views.Private.class)
-    @Column(unique = true)
-    private String telefon;
-
-    @NotNull
-    @JsonView(Views.Private.class)
-    @Temporal(TemporalType.DATE)
-    @JsonSerialize(using = JsonDateSerializer.class)
-    @JsonDeserialize(as = JsonDateDeserializer.class)
-    private java.util.Date dataNaix;
-
-    //-------------------- ATRIBUTS AMB RELACIÓ AMB ALTRES ENTITATS --------------------//
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JsonView(Views.Private.class)
-    private Ubicacio ubicacio;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "propietari")
-    @JsonView(Views.Complete.class)
-    private Collection<Conversacio> converses;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
-    private Collection<Valoracio> valoracions;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comprador")
-    @JsonView(Views.Complete.class)
-    private Collection<Transaccio> compres;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
-    @JsonView(Views.Complete.class)
-    private Collection<Transaccio> vendes;
-
-    @OneToMany
-    @JsonView(Views.Complete.class)
-    private Collection<Producte> favorits;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedor")
-    @JsonView(Views.Complete.class)
-    private Collection<Producte> prodVenda;
-
-    //-------------------- GETTERS I SETTERS --------------------//
 
     public Long getId()
     {
@@ -239,8 +244,6 @@ public class User implements Serializable
     {
         this.ubicacio = ubicacio;
     }
-
-    //-------------------- OPERACIONS AMB LES COLECCIONS --------------------//
 
     public Collection<Conversacio> getConverses()
     {

@@ -1,12 +1,11 @@
 package org.udg.pds.cheapy.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
-import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 
@@ -18,7 +17,7 @@ import java.io.Serializable;
 public class Missatge implements Serializable, Cloneable
 {
     public enum Estat {
-        PENDENT_ENVIAMENT("pendent"), ENVIAT("enviat"), LLEGIT("llegit");
+        ENVIAT("enviat"), LLEGIT("llegit");
 
         private String value;
 
@@ -42,7 +41,7 @@ public class Missatge implements Serializable, Cloneable
                     return estat;
             }
 
-            return PENDENT_ENVIAMENT;
+            return ENVIAT;
         }
     }
 
@@ -50,30 +49,33 @@ public class Missatge implements Serializable, Cloneable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Basic.class)
     protected Long id;
 
-    @JsonView(Views.Private.class)
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(optional = false)
     private Conversacio conversacio;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JsonView(Views.Basic.class)
     private User emisor;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JsonView(Views.Basic.class)
     private User receptor;
 
     @Basic
     @Enumerated(EnumType.STRING)
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     private Estat estat;
 
     @NotNull
+    @JsonView(Views.Basic.class)
     private String missatge;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     @JsonSerialize(using = JsonDateTimeSerializer.class)
     @JsonDeserialize(using = JsonDateTimeDeserializer.class)
     private java.sql.Timestamp dataEnviament;
@@ -89,7 +91,7 @@ public class Missatge implements Serializable, Cloneable
         this.emisor         = emisor;
         this.receptor       = receptor;
         this.missatge       = missatge;
-        this.estat          = Estat.PENDENT_ENVIAMENT;
+        this.estat          = Estat.ENVIAT;
     }
 
     private Missatge(Conversacio c, User emisor, User receptor, String missatge, Estat estat)

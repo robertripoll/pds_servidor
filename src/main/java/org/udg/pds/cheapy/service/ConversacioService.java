@@ -3,19 +3,14 @@ package org.udg.pds.cheapy.service;
 import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Missatge;
 import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.rest.ConversacioRESTService;
 
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -25,10 +20,14 @@ public class ConversacioService
     @PersistenceContext
     protected EntityManager em;
 
-    public Collection<Conversacio> getConversacions(long id){
-
-        User u = em.find(User.class, id);
-        return u.getConverses();
+    @SuppressWarnings("unchecked")
+    public List<Conversacio> getConversacions(long id, int limit, int offset)
+    {
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari")
+                .setParameter("usuari", id)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     public Conversacio get(long id)
@@ -40,7 +39,7 @@ public class ConversacioService
     {
         try
         {
-            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM Missatge m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
+            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatges m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
             typedQuery.setFirstResult(offset);
             typedQuery.setMaxResults(limit);
             typedQuery.setParameter("idConversa", idConversa);
@@ -54,5 +53,62 @@ public class ConversacioService
             // We catch the normal exception and then transform it in a EJBException
             throw new EJBException(ex);
         }
+    }
+
+    public long totalConverses(Long userId)
+    {
+        return (long)em.createQuery("SELECT COUNT(conversacio) FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari")
+                .setParameter("usuari", userId)
+                .getSingleResult();
+    }
+
+    public long totalMissatges(Long id)
+    {
+        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio.id = :conversacio")
+                .setParameter("conversacio", id)
+                .getSingleResult();
+    }
+
+    private Conversacio conversaSimetrica(Conversacio c)
+    {
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
+                .setParameter("usuari", c.getUsuari().getId())
+                .setParameter("producte", c.getProducte().getId())
+                .getSingleResult();
+    }
+
+    public Missatge enviarMissatge(Long id, ConversacioRESTService.R_Missatge missatge)
+    {
+        Conversacio convEmisor = get(id);
+        User emisor = convEmisor.getPropietari();
+        User receptor = convEmisor.getUsuari();
+
+        Missatge missEmisor = new Missatge(convEmisor, emisor, receptor, missatge.text);
+        em.persist(missEmisor);
+        convEmisor.addMissatge(missEmisor);
+
+        Conversacio convReceptor = conversaSimetrica(convEmisor);
+        Missatge missReceptor = missEmisor.clone(convReceptor);
+        em.persist(missReceptor);
+        convReceptor.addMissatge(missReceptor);
+
+        return missEmisor;
+    }
+
+    public Conversacio llegirMissatges(Long id, Long userID)
+    {
+        em.createQuery("UPDATE missatges missatge SET missatge.estat = 'LLEGIT' WHERE missatge.conversacio.id = :conversa AND missatge.receptor.id = :receptor")
+                .setParameter("conversa", id)
+                .setParameter("receptor", userID)
+                .executeUpdate();
+
+        Conversacio c = conversaSimetrica(get(id));
+
+        em.createQuery("UPDATE missatges missatge SET missatge.estat = 'LLEGIT' WHERE missatge.conversacio.id = :conversa AND missatge.emisor.id = :emisor")
+                .setParameter("conversa", c.getId())
+                .setParameter("emisor", c.getPropietari().getId())
+                .executeUpdate();
+
+        return get(id);
     }
 }

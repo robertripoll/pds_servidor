@@ -22,7 +22,6 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-// This class is used to process all the authentication related URLs
 @Path("/usuaris")
 @RequestScoped
 public class UserRESTService extends RESTService
@@ -45,7 +44,6 @@ public class UserRESTService extends RESTService
                          @CookieParam("JSESSIONID") Cookie cookie,
                          @Valid LoginUser user)
     {
-
         checkNotLoggedIn(req);
 
         User u = userService.matchPassword(user.correu, user.contrasenya);
@@ -55,12 +53,8 @@ public class UserRESTService extends RESTService
 
     @Path("/desautenticar")
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response desAuth(@Context HttpServletRequest req, @Context HttpServletResponse response){
-
-        Long loggedUserId = getLoggedUser(req);
-
+    public Response desAuth(@Context HttpServletRequest req, @Context HttpServletResponse response)
+    {
         HttpSession session = req.getSession(false);
         session.removeAttribute("simpleapp_auth_id");
         session.getMaxInactiveInterval();
@@ -68,27 +62,26 @@ public class UserRESTService extends RESTService
         return Response.ok().build();
     }
 
-    @Path("/favorits")
+    @Path("jo/favorits")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesFavorits(@Context HttpServletRequest req){
-
-        Long loggedUserId = getLoggedUser(req);
-
-        return buildResponseWithView(Views.Public.class, userService.getFavorits(loggedUserId));
-    }
-
-    @Path("{id}")
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureProductesFavorits(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
         Long loggedUserId = getLoggedUser(req);
 
-        if (!loggedUserId.equals(userId))
-            throw new WebApplicationException("Cannot delet other users!");
+        long total = userService.totalFavorits(loggedUserId);
+        Data data = new Data(userService.getFavorits(loggedUserId, limit, offset), limit, offset, offset + limit, total);
 
-        return buildResponse(userService.remove(userId));
+        return buildResponseWithView(Views.Summary.class, data);
+    }
+
+    @Path("jo")
+    @DELETE
+    public Response deleteUser(@Context HttpServletRequest req)
+    {
+        userService.remove(getLoggedUser(req));
+
+        return Response.ok().build();
     }
 
     @Path("/registrar")
@@ -100,7 +93,7 @@ public class UserRESTService extends RESTService
 
         Ubicacio ubicacio = new Ubicacio(ru.ubicacio.coordLat, ru.ubicacio.coordLng, ru.ubicacio.ciutat, ru.ubicacio.pais);
 
-        User usuari = userService.register(ru.nom, ru.cognom, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaix, ubicacio);
+        User usuari = userService.register(ru.nom, ru.cognoms, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaixement, ubicacio);
 
         return buildResponseWithView(Views.Private.class, usuari);
     }
@@ -108,17 +101,41 @@ public class UserRESTService extends RESTService
     @Path("/{id}/compres")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureCompresUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId){
+    public Response veureProductesComprats(@Context HttpServletRequest req, @PathParam("id") Long userId, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
+    {
+        long total = userService.totalCompres(userId);
+        Data data = new Data(userService.getProductesComprats(userId, limit, offset), limit, offset, offset + limit, total);
 
-        return buildResponseWithView(Views.Public.class, userService.getCompres(userId));
+        return buildResponseWithView(Views.Summary.class, data);
+    }
+
+    @Path("/jo/compres")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureProductesCompratsPropis(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
+    {
+        Long userID = getLoggedUser(req);
+        return veureProductesComprats(req, userID, limit, offset);
     }
 
     @Path("/{id}/vendes")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureVendesUsuariConcret(@Context HttpServletRequest req, @PathParam("id") Long userId){
+    public Response veureProductesVenuts(@Context HttpServletRequest req, @PathParam("id") Long userId, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
+    {
+        long total = userService.totalVendes(userId);
+        Data data = new Data(userService.getProductesVenuts(userId, limit, offset), limit, offset, offset + limit, total);
 
-        return buildResponseWithView(Views.Public.class, userService.getVendes(userId));
+        return buildResponseWithView(Views.Summary.class, data);
+    }
+
+    @Path("/jo/vendes")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veureProductesVenutsPropis(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
+    {
+        Long userID = getLoggedUser(req);
+        return veureProductesVenuts(req, userID, limit, offset);
     }
 
     @Path("{id}")
@@ -126,85 +143,66 @@ public class UserRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response veurePerfil(@Context HttpServletRequest req, @PathParam("id") Long userId)
     {
-        Long loggedUserId = getLoggedUser(req);
+        Long loggedUserId = getLoggedUserWithoutException(req);
+        User u = userService.getUserComplete(userId);
 
-        if (!loggedUserId.equals(userId))
-        {
-            throw new WebApplicationException("Cannot get profile from other users!");
-        }
+        if (loggedUserId.equals(userId))
+            return buildResponseWithView(Views.Private.class, u);
 
-        return buildResponseWithView(Views.Private.class, userService.getUserComplete(loggedUserId));
+        return buildResponseWithView(Views.Public.class, u);
+    }
+
+    @Path("/jo")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response veurePerfilPropi(@Context HttpServletRequest req)
+    {
+        Long userID = getLoggedUser(req);
+        return veurePerfil(req, userID);
     }
 
     @Path("{id}/valoracions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureValoracions(@Context HttpServletRequest req, @PathParam("id") Long userId, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
+        long total = userService.totalValoracions(userId);
+        Data data = new Data(userService.getValoracions(userId, limit, offset), limit, offset, offset + limit, total);
 
-        Long loggedUserId = getLoggedUser(req);
-
-        if (!loggedUserId.equals(userId))
-        {
-            throw new WebApplicationException("Cannot get marks from other users");
-        }
-
-        return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
+        return buildResponseWithView(Views.Public.class, data);
     }
 
-    @Path("{id}/productes")
+    @Path("/jo/valoracions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response veureProductesEnVenda(@Context HttpServletRequest req, @PathParam("id") Long userId)
+    public Response veureValoracionsPropies(@Context HttpServletRequest req, @DefaultValue("25") @QueryParam("limit") int limit, @DefaultValue("0") @QueryParam("offset") int offset)
     {
-
-        Long loggedUserId = getLoggedUser(req);
-
-        if (!loggedUserId.equals(userId))
-        {
-            throw new WebApplicationException("Cannot get marks from other users");
-        }
-
-        return buildResponseWithView(Views.Private.class, (User) userService.getValoracions(loggedUserId));
-
+        Long userID = getLoggedUser(req);
+        return veureValoracions(req, userID, limit, offset);
     }
 
-    @Path("{id}/converses")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response veureConverses(@Context HttpServletRequest req, @PathParam("id") Long userId){
-
-        Long loggedUserId = getLoggedUser(req);
-
-        if(!loggedUserId.equals(userId)){
-            throw new WebApplicationException("Cannot get conversations from other users");
-        }
-
-        return buildResponseWithView(Views.Private.class, userService.getConverses(loggedUserId));
-    }
-
-    @Path("/favorits/{id}")
+    @Path("jo/favorits/{id}")
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response afegirAFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId){
-
+    public Response afegirAFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId)
+    {
         Producte p = producteService.get(productId); // obtenim el producte
         Long id = getLoggedUser(req);
 
-        return buildResponseWithView(Views.Public.class, userService.afegirProducteAFavorit(id,p));
+        userService.afegirProducteAFavorit(id, p);
 
+        return Response.ok().build();
     }
 
-    @Path("/favorits/{id}")
+    @Path("jo/favorits/{id}")
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response suprimirDeFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId){
-
+    public Response suprimirDeFavorits(@Context HttpServletRequest req, @PathParam("id") Long productId)
+    {
         Producte p = producteService.get(productId); // obtenim el producte
         Long id = getLoggedUser(req);
 
-        return buildResponseWithView(Views.Public.class, userService.suprimirProducteDeFavorits(id,p));
+        userService.suprimirProducteDeFavorits(id, p);
 
+        return Response.ok().build();
     }
 
     static class LoginUser
@@ -236,24 +234,14 @@ public class UserRESTService extends RESTService
         @NotNull
         public String contrasenya;
         @NotNull
-        public String cognom;
+        public String cognoms;
         @NotNull
         public User.Sexe sexe;
         @NotNull
         public String telefon;
         @NotNull
-        public java.util.Date dataNaix;
+        public java.util.Date dataNaixement;
         public R_Ubicacio ubicacio;
     }
-
-    /*static class ID
-    {
-        public Long id;
-
-        public ID(Long id)
-        {
-            this.id = id;
-        }
-    }*/
 }
 

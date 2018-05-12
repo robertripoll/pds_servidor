@@ -3,15 +3,12 @@ package org.udg.pds.cheapy.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
-import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity(name = "productes")
 public class Producte implements Serializable
@@ -21,52 +18,52 @@ public class Producte implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Basic.class)
     protected Long id;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     private String nom;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Summary.class)
     private Double preu;
 
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Summary.class)
     private String descripcio;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Summary.class)
     @JsonSerialize(using = JsonDateTimeSerializer.class)
     @JsonDeserialize(using = JsonDateTimeDeserializer.class)
     private java.sql.Timestamp dataPublicacio;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Summary.class)
     private Boolean preuNegociable;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Summary.class)
     private Boolean intercanviAcceptat;
 
     @NotNull
-    @JsonView(Views.Private.class)
+    @JsonView(Views.Summary.class)
     private Integer numVisites = 0;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Summary.class)
     private Boolean reservat = false;
 
     @ManyToOne(optional = false)
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Summary.class)
     private User venedor; // Nomes hauria de retornar el nom de l'Usuari
 
-    @OneToOne
-    @JsonView(Views.Private.class)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonView(Views.Interactor.class)
     private Transaccio transaccio; // Nomes interessa a venedor i comprador
 
     @ManyToOne(optional = false)
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Summary.class)
     private Categoria categoria;
 
     public Producte()
@@ -206,5 +203,10 @@ public class Producte implements Serializable
     public boolean equals(Object o)
     {
         return ((Producte)o).id.equals(this.id);
+    }
+
+    public void setNumVisites(Integer numVisites)
+    {
+        this.numVisites = numVisites;
     }
 }

@@ -272,9 +272,12 @@ public class ProducteService
             if (nouProducte.descripcio != null)
                 p.setDescripcio(nouProducte.descripcio);
 
-            if (nouProducte.idCategoria != null)
+            if (nouProducte.numVisites != null)
+                p.setNumVisites(nouProducte.numVisites);
+
+            if (nouProducte.categoria != null)
             {
-                Categoria novaCategoria = em.find(Categoria.class, nouProducte.idCategoria.id);
+                Categoria novaCategoria = em.find(Categoria.class, nouProducte.categoria.id);
                 p.setCategoria(novaCategoria);
             }
 
@@ -299,11 +302,14 @@ public class ProducteService
         Producte p = em.find(Producte.class, idProducte);
 
         Transaccio t = p.getTransaccio();
+        p.setTransaccio(null);
 
         if(t != null) { // si hi ha transacció llavors obtenim les valoracions i la borrem
             
             Valoracio vComprador = t.getValoracioComprador();
+            t.setValoracioComprador(null);
             Valoracio vVenedor = t.getValoracioVenedor();
+            t.setValoracioVenedor(null);
             if(vComprador != null) em.remove(vComprador);
             if(vVenedor != null) em.remove(vVenedor);
             em.remove(t);
@@ -339,7 +345,7 @@ public class ProducteService
         return em.merge(p);
     }
 
-    public Transaccio valorarTransaccio(Producte p, User comprador, ProducteRESTService.R_Valoracio v)
+    public Producte valorarTransaccio(Producte p, User comprador, ProducteRESTService.R_Valoracio v)
     {
         Valoracio valoracio;
 
@@ -354,6 +360,19 @@ public class ProducteService
         Transaccio transaccio = p.getTransaccio();
         transaccio.setValoracioComprador(valoracio);
 
-        return em.merge(transaccio);
+        return p;
+    }
+
+    public Producte esborrarValoracioComprador(long prodId)
+    {
+        Producte p = em.find(Producte.class, prodId);
+        em.remove(p.getTransaccio().getValoracioComprador());
+        p.getTransaccio().setValoracioComprador(null);
+        return em.merge(p);
+    }
+
+    public long totalDeProductesEnVenda()
+    {
+        return (long)em.createQuery("SELECT COUNT(producte) FROM productes producte WHERE producte.transaccio IS NULL").getSingleResult();
     }
 }

@@ -15,15 +15,15 @@ public class Categoria implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     protected Long id;
 
     @NotNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Basic.class)
     private String nom;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria")
-    @JsonView(Views.Complete.class)
+    @JsonIgnore
     private Collection<Producte> productes;
 
     public Categoria()
