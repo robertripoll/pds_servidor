@@ -200,7 +200,9 @@ public class UserService
         Conversacio c = em.find(Conversacio.class, idConv);
         Missatge m = c.getMissatge(idMiss);
         User u = c.getUsuari();
+        User u2 = c.getPropietari();
         u.removeMessageFromConversation(idConv,idMiss);
+        u2.removeMessageFromConversation(idConv,idMiss);
 
         em.remove(m);
 
