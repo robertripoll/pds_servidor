@@ -2,20 +2,13 @@ package org.udg.pds.cheapy.service;
 
 import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Missatge;
-import org.udg.pds.cheapy.model.User;
 
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -44,7 +37,7 @@ public class ConversacioService
     {
         try
         {
-            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatges m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
+            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatges m WHERE m.conversacio1.id = :idConversa OR m.conversacio2.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
             typedQuery.setFirstResult(offset);
             typedQuery.setMaxResults(limit);
             typedQuery.setParameter("idConversa", idConversa);
@@ -69,8 +62,21 @@ public class ConversacioService
 
     public long totalMissatges(Long id)
     {
-        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio.id = :conversacio")
+        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio1.id = :conversacio OR missatge.conversacio2.id = :conversacio")
                 .setParameter("conversacio", id)
                 .getSingleResult();
+    }
+
+    public Missatge getMissatge(Long id)
+    {
+        return em.find(Missatge.class, id);
+    }
+
+    public Missatge llegirMissatge(Long id)
+    {
+        Missatge m = getMissatge(id);
+        m.setEstat(Missatge.Estat.LLEGIT);
+
+        return em.merge(m);
     }
 }
