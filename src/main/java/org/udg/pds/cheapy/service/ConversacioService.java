@@ -3,19 +3,14 @@ package org.udg.pds.cheapy.service;
 import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Missatge;
 import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.rest.ConversacioRESTService;
 
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -72,5 +67,31 @@ public class ConversacioService
         return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio.id = :conversacio")
                 .setParameter("conversacio", id)
                 .getSingleResult();
+    }
+
+    private Conversacio conversaSimetrica(Conversacio c)
+    {
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
+                .setParameter("usuari", c.getUsuari().getId())
+                .setParameter("producte", c.getProducte().getId())
+                .getSingleResult();
+    }
+
+    public Missatge enviarMissatge(Long id, ConversacioRESTService.R_Missatge missatge)
+    {
+        Conversacio convEmisor = get(id);
+        User emisor = convEmisor.getPropietari();
+        User receptor = convEmisor.getUsuari();
+
+        Missatge missEmisor = new Missatge(convEmisor, emisor, receptor, missatge.text);
+        em.persist(missEmisor);
+        convEmisor.addMissatge(missEmisor);
+
+        Conversacio convReceptor = conversaSimetrica(convEmisor);
+        Missatge missReceptor = missEmisor.clone(convReceptor);
+        em.persist(missReceptor);
+        convReceptor.addMissatge(missReceptor);
+
+        return missEmisor;
     }
 }
