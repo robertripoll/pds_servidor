@@ -52,7 +52,7 @@ public class Missatge implements Serializable, Cloneable
     protected Long id;
 
     @JsonView(Views.Private.class)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Conversacio conversacio;
 
     @ManyToOne
