@@ -1,6 +1,9 @@
 package org.udg.pds.cheapy.rest;
 
 import org.udg.pds.cheapy.model.Conversacio;
+import org.udg.pds.cheapy.model.Missatge;
+import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Views;
 import org.udg.pds.cheapy.service.ConversacioService;
 import org.udg.pds.cheapy.util.ToJSON;
@@ -76,6 +79,24 @@ public class ConversacioRESTService extends RESTService
             return accessDenied();
 
         return buildResponseWithView(Views.Basic.class, service.enviarMissatge(id, missatge));
+    }
+
+    @Path("{conversacio_id}/missatges/{missatge_id}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response llegirMissatge(@Context HttpServletRequest req,
+                                   @PathParam("conversacio_id") Long convId,
+                                   @PathParam("missatge_id") Long missId)
+    {
+        Long userId = getLoggedUser(req);
+
+        Conversacio c = service.get(convId);
+        Missatge m = service.getMissatge(missId);
+
+        if (!c.getPropietari().getId().equals(userId) || !m.getReceptor().getId().equals(userId))
+            return accessDenied();
+
+        return buildResponseWithView(Views.Basic.class, service.llegirMissatge(missId));
     }
 
     public static class R_Missatge

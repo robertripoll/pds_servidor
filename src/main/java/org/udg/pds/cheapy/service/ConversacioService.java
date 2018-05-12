@@ -64,9 +64,22 @@ public class ConversacioService
 
     public long totalMissatges(Long id)
     {
-        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio.id = :conversacio")
+        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio1.id = :conversacio OR missatge.conversacio2.id = :conversacio")
                 .setParameter("conversacio", id)
                 .getSingleResult();
+    }
+
+    public Missatge getMissatge(Long id)
+    {
+        return em.find(Missatge.class, id);
+    }
+
+    public Missatge llegirMissatge(Long id)
+    {
+        Missatge m = getMissatge(id);
+        m.setEstat(Missatge.Estat.LLEGIT);
+
+        return em.merge(m);
     }
 
     private Conversacio conversaSimetrica(Conversacio c)
