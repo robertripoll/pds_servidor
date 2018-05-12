@@ -3,15 +3,12 @@ package org.udg.pds.cheapy.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
-import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity(name = "productes")
 public class Producte implements Serializable
@@ -57,15 +54,15 @@ public class Producte implements Serializable
     @JsonView(Views.Public.class)
     private Boolean reservat = false;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JsonView(Views.Public.class)
     private User venedor; // Nomes hauria de retornar el nom de l'Usuari
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonView(Views.Private.class)
     private Transaccio transaccio; // Nomes interessa a venedor i comprador
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JsonView(Views.Public.class)
     private Categoria categoria;
 
