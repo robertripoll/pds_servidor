@@ -58,6 +58,11 @@ public class Conversacio implements Serializable
         this.usuari     = usuari;
     }
 
+    public Long getId()
+    {
+        return id;
+    }
+
     public User getUsuari()
     {
         return usuari;

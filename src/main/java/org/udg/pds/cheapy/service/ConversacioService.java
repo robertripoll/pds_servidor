@@ -69,19 +69,6 @@ public class ConversacioService
                 .getSingleResult();
     }
 
-    public Missatge getMissatge(Long id)
-    {
-        return em.find(Missatge.class, id);
-    }
-
-    public Missatge llegirMissatge(Long id)
-    {
-        Missatge m = getMissatge(id);
-        m.setEstat(Missatge.Estat.LLEGIT);
-
-        return em.merge(m);
-    }
-
     private Conversacio conversaSimetrica(Conversacio c)
     {
         return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
@@ -113,6 +100,13 @@ public class ConversacioService
         em.createQuery("UPDATE missatges missatge SET missatge.estat = 'LLEGIT' WHERE missatge.conversacio.id = :conversa AND missatge.receptor.id = :receptor")
                 .setParameter("conversa", id)
                 .setParameter("receptor", userID)
+                .executeUpdate();
+
+        Conversacio c = conversaSimetrica(get(id));
+
+        em.createQuery("UPDATE missatges missatge SET missatge.estat = 'LLEGIT' WHERE missatge.conversacio.id = :conversa AND missatge.emisor.id = :emisor")
+                .setParameter("conversa", c.getId())
+                .setParameter("emisor", c.getPropietari().getId())
                 .executeUpdate();
 
         return get(id);
