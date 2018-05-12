@@ -185,6 +185,14 @@ public class UserService
                 .getSingleResult();
     }
 
+    public Conversacio esborrarConversaUsuari(Long convId){
+
+        Conversacio c = em.find(Conversacio.class, convId);
+        em.remove(c);
+
+        return em.merge(c);
+    }
+
     public User actualitzar(User u, UserRESTService.R_User_Update nouUser) throws IllegalArgumentException {
         try{
             if(nouUser.nom != null) u.setNom(nouUser.nom);
