@@ -82,15 +82,15 @@ public class UserRESTService extends RESTService
     }
 
     @DELETE
-    @Path("{idUser}/converses/{idConv}")
-    public Response deleteConvers(@Context HttpServletRequest req, @PathParam("idUser") Long idU, @PathParam("idConv") Long idC){
+    @Path("conversacions/{idConv}")
+    public Response deleteConvers(@Context HttpServletRequest req, @PathParam("idConv") Long idC){
 
         Long userId = getLoggedUser(req); // obtenim id usuari en linia
         User u = userService.getUser(userId);
 
         Conversacio c = u.getConversa(idC); // obtenim la conversa en concret de l'usuari
 
-        if(!u.getId().equals(idU) || c == null){
+        if(c == null){
             return accessDenied();
         }
 
