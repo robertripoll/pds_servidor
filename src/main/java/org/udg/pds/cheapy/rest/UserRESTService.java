@@ -1,9 +1,6 @@
 package org.udg.pds.cheapy.rest;
 
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.Ubicacio;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
 import org.udg.pds.cheapy.util.ToJSON;
@@ -228,6 +225,22 @@ public class UserRESTService extends RESTService
 
         return buildResponseWithView(Views.Public.class, userService.suprimirProducteDeFavorits(id,p));
 
+    }
+
+    @DELETE
+    @Path("{idUser}/converses/{idConv}")
+    public Response deleteConvers(@Context HttpServletRequest req, @PathParam("idUser") Long idU, @PathParam("idConv") Long idC){
+
+        Long userId = getLoggedUser(req); // obtenim id usuari en linia
+        User u = userService.getUser(userId);
+
+        Conversacio c = u.getConversa(idC); // obtenim la conversa en concret de l'usuari
+
+        if(!u.getId().equals(idU) || c == null){
+            return accessDenied();
+        }
+
+        return buildResponseWithView(Views.Public.class, userService.esborrarConversaUsuari(idC));
     }
 
     static class LoginUser

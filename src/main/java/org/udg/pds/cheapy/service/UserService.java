@@ -207,4 +207,11 @@ public class UserService
         u.getProdVenda().size();
         return u;
     }
+
+    public Conversacio esborrarConversaUsuari(Long convId) {
+
+        Conversacio c = em.find(Conversacio.class, convId);
+        em.remove(c);
+        return em.merge(c);
+    }
 }

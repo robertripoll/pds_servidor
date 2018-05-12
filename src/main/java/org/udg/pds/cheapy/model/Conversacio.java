@@ -31,6 +31,11 @@ public class Conversacio implements Serializable
 
     }
 
+    public Long getId(){
+
+        return id;
+    }
+
     public Conversacio(User propietari, User usuari)
     {
         this.propietari = propietari;

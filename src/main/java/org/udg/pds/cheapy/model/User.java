@@ -10,12 +10,9 @@ import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 
 import javax.persistence.*;
-import javax.swing.text.View;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Entity(name = "usuaris")
@@ -246,6 +243,15 @@ public class User implements Serializable
     {
         converses.size();
         return converses;
+    }
+
+    public Conversacio getConversa(Long id){
+
+        for(Conversacio c: converses){
+            if(c.getId().equals(id)) return c;
+        }
+
+        return null;
     }
 
     public void setConverses(List<Conversacio> cv)
