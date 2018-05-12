@@ -1,22 +1,18 @@
 package org.udg.pds.cheapy.rest;
 
-import org.udg.pds.cheapy.model.*;
+import org.udg.pds.cheapy.model.Conversacio;
+import org.udg.pds.cheapy.model.Views;
 import org.udg.pds.cheapy.service.ConversacioService;
-import org.udg.pds.cheapy.service.ProducteService;
-import org.udg.pds.cheapy.service.UserService;
 import org.udg.pds.cheapy.util.ToJSON;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -63,6 +59,29 @@ public class ConversacioRESTService extends RESTService
         Data data = new Data(service.getMissatges(id, limit, offset), limit, offset, offset + limit, total);
 
         return buildResponseWithView(Views.Basic.class, data);
+    }
+
+    @Path("{id}/missatges")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response enviarMissatge(@Context HttpServletRequest req,
+                                   @PathParam("id") Long id,
+                                   @Valid R_Missatge missatge)
+    {
+        Long userID = getLoggedUser(req);
+        Conversacio c = service.get(id);
+
+        if (!c.getPropietari().getId().equals(userID))
+            return accessDenied();
+
+        return buildResponseWithView(Views.Basic.class, service.enviarMissatge(id, missatge));
+    }
+
+    public static class R_Missatge
+    {
+        @NotNull
+        public String text;
     }
 }
 
