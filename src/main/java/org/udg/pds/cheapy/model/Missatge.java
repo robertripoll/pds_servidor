@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Missatge implements Serializable, Cloneable
 {
     public enum Estat {
-        PENDENT_ENVIAMENT("pendent"), ENVIAT("enviat"), LLEGIT("llegit");
+        ENVIAT("enviat"), LLEGIT("llegit");
 
         private String value;
 
@@ -41,7 +41,7 @@ public class Missatge implements Serializable, Cloneable
                     return estat;
             }
 
-            return PENDENT_ENVIAMENT;
+            return ENVIAT;
         }
     }
 
@@ -91,7 +91,7 @@ public class Missatge implements Serializable, Cloneable
         this.emisor         = emisor;
         this.receptor       = receptor;
         this.missatge       = missatge;
-        this.estat          = Estat.PENDENT_ENVIAMENT;
+        this.estat          = Estat.ENVIAT;
     }
 
     private Missatge(Conversacio c, User emisor, User receptor, String missatge, Estat estat)
