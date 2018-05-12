@@ -65,4 +65,20 @@ public class Ubicacio implements Serializable
     {
         return pais;
     }
+
+    public void setCoordLat(Double coordLat) {
+        this.coordLat = coordLat;
+    }
+
+    public void setCoordLng(Double coordLng) {
+        this.coordLng = coordLng;
+    }
+
+    public void setCiutat(String ciutat) {
+        this.ciutat = ciutat;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
 }

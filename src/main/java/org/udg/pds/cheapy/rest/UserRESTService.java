@@ -1,9 +1,6 @@
 package org.udg.pds.cheapy.rest;
 
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.Ubicacio;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
 import org.udg.pds.cheapy.util.ToJSON;
@@ -96,6 +93,29 @@ public class UserRESTService extends RESTService
         User usuari = userService.register(ru.nom, ru.cognoms, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaixement, ubicacio);
 
         return buildResponseWithView(Views.Private.class, usuari);
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(@Valid R_User_Update nouUser, @Context HttpServletRequest req, @PathParam("id") Long id){
+
+        Long userId = getLoggedUser(req);
+
+        if(userService.getUser(id).equals(userService.getUser(userId))){
+            try {
+                userService.actualitzar(userService.getUser(id), nouUser);
+                return Response.ok().build();
+            }
+
+            catch (IllegalArgumentException ex) {
+                return clientError("Missing parameters in Ubicacio");
+            }
+
+        }
+
+        return accessDenied();
     }
 
     @Path("/{id}/compres")
@@ -205,6 +225,22 @@ public class UserRESTService extends RESTService
         return Response.ok().build();
     }
 
+    @DELETE
+    @Path("{idUser}/converses/{idConv}")
+    public Response deleteConvers(@Context HttpServletRequest req, @PathParam("idUser") Long idU, @PathParam("idConv") Long idC){
+
+        Long userId = getLoggedUser(req); // obtenim id usuari en linia
+        User u = userService.getUser(userId);
+
+        Conversacio c = u.getConversa(idC); // obtenim la conversa en concret de l'usuari
+
+        if(!u.getId().equals(idU) || c == null){
+            return accessDenied();
+        }
+
+        return buildResponseWithView(Views.Public.class, userService.esborrarConversaUsuari(idC));
+    }
+
     static class LoginUser
     {
         @NotNull
@@ -242,6 +278,27 @@ public class UserRESTService extends RESTService
         @NotNull
         public java.util.Date dataNaixement;
         public R_Ubicacio ubicacio;
+    }
+
+    public static class R_Ubicacio_Update
+    {
+        public String pais;
+        public String ciutat;
+        public Double coordLat;
+        public Double coordLng;
+    }
+
+    public static class R_User_Update
+    {
+        public String nom;
+        public String cognom;
+        public String correu;
+        public String contrasenya;
+        public User.Sexe sexe;
+        public String telefon;
+        public java.util.Date dataNaixement;
+        public R_Ubicacio_Update ubicacio;
+
     }
 }
 

@@ -251,6 +251,15 @@ public class User implements Serializable
         return converses;
     }
 
+    public Conversacio getConversa(Long id){
+
+        for(Conversacio c: converses){
+            if(c.getId().equals(id)) return c;
+        }
+
+        return null;
+    }
+
     public void setConverses(List<Conversacio> cv)
     {
         this.converses = cv;
