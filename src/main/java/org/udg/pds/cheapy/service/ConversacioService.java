@@ -64,7 +64,7 @@ public class ConversacioService
 
     public long totalMissatges(Long id)
     {
-        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio1.id = :conversacio OR missatge.conversacio2.id = :conversacio")
+        return (long)em.createQuery("SELECT COUNT(missatge) FROM missatges missatge WHERE missatge.conversacio.id = :conversacio")
                 .setParameter("conversacio", id)
                 .getSingleResult();
     }
@@ -106,5 +106,15 @@ public class ConversacioService
         convReceptor.addMissatge(missReceptor);
 
         return missEmisor;
+    }
+
+    public Conversacio llegirMissatges(Long id, Long userID)
+    {
+        em.createQuery("UPDATE missatges missatge SET missatge.estat = 'LLEGIT' WHERE missatge.conversacio.id = :conversa AND missatge.receptor.id = :receptor")
+                .setParameter("conversa", id)
+                .setParameter("receptor", userID)
+                .executeUpdate();
+
+        return get(id);
     }
 }

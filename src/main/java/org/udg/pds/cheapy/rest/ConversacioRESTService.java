@@ -5,6 +5,8 @@ import org.udg.pds.cheapy.model.Missatge;
 import org.udg.pds.cheapy.model.Views;
 import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Views;
+import org.udg.pds.cheapy.model.Conversacio;
+import org.udg.pds.cheapy.model.Views;
 import org.udg.pds.cheapy.service.ConversacioService;
 import org.udg.pds.cheapy.util.ToJSON;
 
@@ -41,6 +43,21 @@ public class ConversacioRESTService extends RESTService
         Data data = new Data(service.getConversacions(loggedUserId, limit, offset), limit, offset, offset + limit, total);
 
         return buildResponseWithView(Views.Basic.class, data);
+    }
+
+    @Path("{id}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response missatgesLlegits(@Context HttpServletRequest req, @PathParam("id") Long id)
+    {
+        Long userID = getLoggedUser(req);
+
+        Conversacio c = service.get(id);
+
+        if (!c.getPropietari().getId().equals(userID))
+            return accessDenied();
+
+        return buildResponseWithView(Views.Basic.class, service.llegirMissatges(id, userID));
     }
 
     @Path("{id}/missatges")
