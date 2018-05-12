@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.udg.pds.cheapy.rest.serializer.JsonDateDeserializer;
-import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeDeserializer;
 import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 
@@ -54,7 +52,7 @@ public class Missatge implements Serializable, Cloneable
     protected Long id;
 
     @JsonView(Views.Private.class)
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Conversacio conversacio;
 
     @ManyToOne

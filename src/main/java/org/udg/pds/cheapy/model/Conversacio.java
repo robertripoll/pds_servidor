@@ -23,7 +23,7 @@ public class Conversacio implements Serializable
     @ManyToOne
     private User propietari;
 
-    @OneToMany(mappedBy = "conversacio")
+    @OneToMany(mappedBy = "conversacio", cascade = CascadeType.ALL)
     private Collection<Missatge> missatges;
 
     public Conversacio()
