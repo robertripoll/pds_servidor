@@ -90,7 +90,7 @@ public class UserRESTService extends RESTService
 
         Conversacio c = u.getConversa(idC); // obtenim la conversa en concret de l'usuari
 
-        if(c == null || !c.getUsuari().getId().equals(userId)){ // si no existeix conversació o no és de l'usuari
+        if(c == null || !c.getPropietari().getId().equals(userId)){ // si no existeix conversació o no és de l'usuari
             return accessDenied();
         }
 
@@ -120,7 +120,7 @@ public class UserRESTService extends RESTService
         User u = userService.getUser(userId);
         Conversacio c = u.getConversa(idConv); // obtenim la conversa
 
-        if(c == null || !c.getUsuari().getId().equals(userId)){
+        if(c == null || !c.getPropietari().getId().equals(userId)){
             return accessDenied();
         }
 

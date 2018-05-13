@@ -188,7 +188,7 @@ public class UserService
     public Conversacio esborrarConversaUsuari(Long convId){
 
         Conversacio c = em.find(Conversacio.class, convId);
-        User u = c.getUsuari();
+        User u = c.getPropietari();
         u.removeConversation(c);
         em.remove(c);
 
@@ -199,8 +199,8 @@ public class UserService
 
         User propietariProducte = p.getVenedor();
         User u = getUser(userId);
-        Conversacio c = new Conversacio(p,propietariProducte,u); // creem la conversació
-        Conversacio c2 = new Conversacio(p,u,propietariProducte);
+        Conversacio c = new Conversacio(p,u,propietariProducte); // creem la conversació
+        Conversacio c2 = new Conversacio(p,propietariProducte,u);
         u.addConversacio(c);
         propietariProducte.addConversacio(c2);
 
@@ -214,7 +214,7 @@ public class UserService
 
         Conversacio c = em.find(Conversacio.class, idConv);
         Missatge m = c.getMissatge(idMiss);
-        User u = c.getUsuari();
+        User u = c.getPropietari();
         u.removeMessageFromConversation(idConv,idMiss);
 
         em.remove(m);
