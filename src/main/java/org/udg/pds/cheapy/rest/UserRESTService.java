@@ -100,7 +100,7 @@ public class UserRESTService extends RESTService
     @POST
     @Path("jo/conversacions/{idProd}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response creaConversacioProducte(@Context HttpServletRequest req, @PathParam("idProd") Long idProd, @Valid ProducteRESTService.R_Producte_Conversa prod){
+    public Response creaConversacioProducte(@Context HttpServletRequest req, @PathParam("idProd") Long idProd, @Valid ConversacioRESTService.R_Conversa prod){
 
         Long userId = getLoggedUser(req);
         Producte p = producteService.get(prod.idProd.id); // obtenim el producte

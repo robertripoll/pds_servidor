@@ -98,5 +98,11 @@ public class ConversacioRESTService extends RESTService
         @NotNull
         public String text;
     }
+
+    public static class R_Conversa{
+
+        @NotNull
+        public ID idProd;
+    }
 }
 

@@ -249,12 +249,6 @@ public class ProducteRESTService extends RESTService
         public ID categoria;
     }
 
-    public static class R_Producte_Conversa{
-
-        @NotNull
-        public ID idProd;
-    }
-
     public static class R_Producte_Update
     {
         public String nom;
