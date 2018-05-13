@@ -200,10 +200,12 @@ public class UserService
         User propietariProducte = p.getVenedor();
         User u = getUser(userId);
         Conversacio c = new Conversacio(p,propietariProducte,u); // creem la conversació
+        Conversacio c2 = new Conversacio(p,u,propietariProducte);
         u.addConversacio(c);
-        propietariProducte.addConversacio(c);
+        propietariProducte.addConversacio(c2);
 
         em.persist(c);
+        em.persist(c2);
 
         return c;
     }
