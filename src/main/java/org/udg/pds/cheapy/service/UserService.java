@@ -195,6 +195,19 @@ public class UserService
         return em.merge(c);
     }
 
+    public Conversacio creaConversaAmbProducte(Long userId, Producte p) {
+
+        User propietariProducte = p.getVenedor();
+        User u = getUser(userId);
+        Conversacio c = new Conversacio(p,propietariProducte,u); // creem la conversació
+        u.addConversacio(c);
+        propietariProducte.addConversacio(c);
+
+        em.persist(c);
+
+        return c;
+    }
+
     public Missatge esborrarMissatgeConversa(Long idConv, Long idMiss) {
 
         Conversacio c = em.find(Conversacio.class, idConv);

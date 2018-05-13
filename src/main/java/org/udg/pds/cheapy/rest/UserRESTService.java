@@ -97,6 +97,21 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Public.class, userService.esborrarConversaUsuari(idC));
     }
 
+    @POST
+    @Path("jo/conversacions/{idProd}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response creaConversacioProducte(@Context HttpServletRequest req, @PathParam("idProd") Long idProd){
+
+        Long userId = getLoggedUser(req);
+        Producte p = producteService.get(idProd); // obtenim el producte
+
+        if(p == null){
+            return accessDenied(); // no existeix el producte amb  aquesta id
+        }
+
+        return buildResponseWithView(Views.Public.class, userService.creaConversaAmbProducte(userId, p));
+    }
+
     @DELETE
     @Path("conversacions/{idConv}/missatges/{idMiss}")
     public Response deleteMessage(@Context HttpServletRequest req, @PathParam("idConv") Long idConv, @PathParam("idMiss") Long idMiss){
