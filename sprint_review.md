@@ -88,3 +88,17 @@
 ## Joaquim Pascual Solà
 * [Formulari Anunci Producte](http://94.130.183.121:8080/browse/PDS3-38) 55
 * [POST Formulari Anunci Producte](http://94.130.183.121:8080/browse/PDS3-39) 34
+
+# Sprint 4
+## Luis Alejandro Leon Corcuera
+
+## Alex Segura Soler
+
+## Robert Ripoll López
+
+## Daniel Re Latigue
+
+## Sergi Boadas Vilagran
+
+## Joaquim Pascual Solà
+* [Refactor Publicar Anunci](http://94.130.183.121:8080/browse/PDS3-132) X
