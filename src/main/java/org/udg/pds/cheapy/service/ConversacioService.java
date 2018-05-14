@@ -2,6 +2,7 @@ package org.udg.pds.cheapy.service;
 
 import org.udg.pds.cheapy.model.Conversacio;
 import org.udg.pds.cheapy.model.Missatge;
+import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.rest.ConversacioRESTService;
 
@@ -33,6 +34,29 @@ public class ConversacioService
     public Conversacio get(long id)
     {
         return em.find(Conversacio.class, id);
+    }
+
+    public Conversacio crearConversa(long userID, long prodID)
+    {
+        User propietariConv = em.find(User.class, userID);
+        Producte p = em.find(Producte.class, prodID);
+        User propietariProd = p.getVenedor();
+
+        Conversacio c1 = new Conversacio(p, propietariConv, propietariProd); // creem la conversació
+        Conversacio c2 = new Conversacio(p, propietariProd, propietariConv);
+
+        propietariConv.addConversacio(c1);
+        propietariProd.addConversacio(c2);
+
+        em.persist(c1);
+        em.persist(c2);
+
+        return c1;
+    }
+
+    public void esborrarConversa(Long id)
+    {
+        em.remove(get(id));
     }
 
     public List<Missatge> getMissatges(Long idConversa, int limit, int offset)
@@ -110,5 +134,11 @@ public class ConversacioService
                 .executeUpdate();
 
         return get(id);
+    }
+
+    public void esborrarMissatgeConversa(Long idConv, Long idMiss)
+    {
+        Missatge m = em.find(Missatge.class, idMiss);
+        em.remove(m);
     }
 }
