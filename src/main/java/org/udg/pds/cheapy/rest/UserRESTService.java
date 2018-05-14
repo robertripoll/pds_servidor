@@ -103,7 +103,7 @@ public class UserRESTService extends RESTService
     public Response creaConversacioProducte(@Context HttpServletRequest req, @PathParam("idProd") Long idProd, @Valid ConversacioRESTService.R_Conversa prod){
 
         Long userId = getLoggedUser(req);
-        Producte p = producteService.get(prod.idProd.id); // obtenim el producte
+        Producte p = producteService.get(prod.producte.id); // obtenim el producte
 
         if(p == null){
             return accessDenied(); // no existeix el producte amb  aquesta id
@@ -146,26 +146,20 @@ public class UserRESTService extends RESTService
     }
 
     @PUT
-    @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@Valid R_User_Update nouUser, @Context HttpServletRequest req, @PathParam("id") Long id){
+    public Response updateUser(@Valid R_User_Update nouUser, @Context HttpServletRequest req){
 
         Long userId = getLoggedUser(req);
 
-        if(userService.getUser(id).equals(userService.getUser(userId))){
-            try {
-                userService.actualitzar(userService.getUser(id), nouUser);
-                return Response.ok().build();
-            }
-
-            catch (IllegalArgumentException ex) {
-                return clientError("Missing parameters in Ubicacio");
-            }
-
+        try {
+            userService.actualitzar(userService.getUser(userId), nouUser);
+            return Response.ok().build();
         }
 
-        return accessDenied();
+        catch (IllegalArgumentException ex) {
+            return clientError("Missing parameters in Ubicacio");
+        }
     }
 
     @Path("/{id}/compres")
