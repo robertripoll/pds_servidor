@@ -110,6 +110,11 @@
 * [Marcar tots els missatges com a llegits](http://94.130.183.121:8080/browse/PDS3-131) 13
 
 ## Daniel Re Latigue
+* [Crear una conversa en relació a un Producte](http://94.130.183.121:8080/browse/PDS3-95) 34
+* [Esborrar un missatge](http://94.130.183.121:8080/browse/PDS3-102) 13
+* [Esborrar una conversa](http://94.130.183.121:8080/browse/PDS3-96) 13
+* [Esborrar dades associades d'un Producte](http://94.130.183.121:8080/browse/PDS3-123) 13
+* [editar perfil Usuari](http://94.130.183.121:8080/browse/PDS3-122) 34
 
 ## Sergi Boadas Vilagran
 
