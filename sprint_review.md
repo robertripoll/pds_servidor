@@ -95,6 +95,17 @@
 ## Alex Segura Soler
 
 ## Robert Ripoll López
+* [Modificar JSON's Apiary](http://94.130.183.121:8080/browse/PDS3-71) 34
+* [Modificar backend per mostrar dades que s'hauríen de mostrar](http://94.130.183.121:8080/browse/PDS3-129) 55
+* [Crear entitat Conversa](http://94.130.183.121:8080/browse/PDS3-97) 8
+* [Veure missatges d'una conversa específica](http://94.130.183.121:8080/browse/PDS3-99) 13
+* [Enviar un missatge a una conversa específica](http://94.130.183.121:8080/browse/PDS3-100) 21
+* [Crear entitat Missatge](http://94.130.183.121:8080/browse/PDS3-103) 13
+* [Backend: esborrar dades associades d'un Usuari](http://94.130.183.121:8080/browse/PDS3-118) 5
+* [Backend: afegir metadades](http://94.130.183.121:8080/browse/PDS3-119) 34
+* [Backend: incrementar comptador visites d'un Producte](http://94.130.183.121:8080/browse/PDS3-120) 8
+* [Backend: esborrar Valoració](http://94.130.183.121:8080/browse/PDS3-127) 13
+* [Marcar tots els missatges com a llegits](http://94.130.183.121:8080/browse/PDS3-131) 13
 
 ## Daniel Re Latigue
 
