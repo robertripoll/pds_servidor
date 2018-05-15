@@ -101,4 +101,5 @@
 ## Sergi Boadas Vilagran
 
 ## Joaquim Pascual Solà
-* [Refactor Publicar Anunci](http://94.130.183.121:8080/browse/PDS3-132) X
+* [Refactor Publicar Anunci](http://94.130.183.121:8080/browse/PDS3-132) 5
+* [Modificar Vista Llista Productes i Detall Producte](http://94.130.183.121:8080/browse/PDS3-133) 89
