@@ -95,9 +95,9 @@
 * [Enviar un missatge ANDROID](http://94.130.183.121:8080/browse/PDS3-49) 21
 
 ## Alex Segura Soler
-* [Obtenir informació Producte per Editar] (http://94.130.183.121:8080/browse/PDS3-19) 34
-* [Mostrar informació Producte per Pantalla] (http://94.130.183.121:8080/browse/PDS3-20) 55
-* [Refactor Noves Entitats] (http://94.130.183.121:8080/browse/PDS3-130) 34
+* [Obtenir informació Producte per Editar](http://94.130.183.121:8080/browse/PDS3-19) 34
+* [Mostrar informació Producte per Pantalla](http://94.130.183.121:8080/browse/PDS3-20) 55
+* [Refactor Noves Entitats](http://94.130.183.121:8080/browse/PDS3-130) 34
 
 ## Robert Ripoll López
 * [Modificar JSON's Apiary](http://94.130.183.121:8080/browse/PDS3-71) 34
