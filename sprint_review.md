@@ -91,6 +91,8 @@
 
 # Sprint 4
 ## Luis Alejandro Leon Corcuera
+* [Obtenir i Mostrar últims missatges ANDROID](http://94.130.183.121:8080/browse/PDS3-47) 55 
+* [Enviar un missatge ANDROID](http://94.130.183.121:8080/browse/PDS3-49) 21
 
 ## Alex Segura Soler
 
