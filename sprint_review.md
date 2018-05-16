@@ -88,3 +88,39 @@
 ## Joaquim Pascual Solà
 * [Formulari Anunci Producte](http://94.130.183.121:8080/browse/PDS3-38) 55
 * [POST Formulari Anunci Producte](http://94.130.183.121:8080/browse/PDS3-39) 34
+
+# Sprint 4
+## Luis Alejandro Leon Corcuera
+* [Obtenir i Mostrar últims missatges ANDROID](http://94.130.183.121:8080/browse/PDS3-47) 55 
+* [Enviar un missatge ANDROID](http://94.130.183.121:8080/browse/PDS3-49) 21
+
+## Alex Segura Soler
+* [Obtenir informació Producte per Editar](http://94.130.183.121:8080/browse/PDS3-19) 34
+* [Mostrar informació Producte per Pantalla](http://94.130.183.121:8080/browse/PDS3-20) 55
+* [Refactor Noves Entitats](http://94.130.183.121:8080/browse/PDS3-130) 34
+
+## Robert Ripoll López
+* [Modificar JSON's Apiary](http://94.130.183.121:8080/browse/PDS3-71) 34
+* [Modificar backend per mostrar dades que s'hauríen de mostrar](http://94.130.183.121:8080/browse/PDS3-129) 55
+* [Crear entitat Conversa](http://94.130.183.121:8080/browse/PDS3-97) 8
+* [Veure missatges d'una conversa específica](http://94.130.183.121:8080/browse/PDS3-99) 13
+* [Enviar un missatge a una conversa específica](http://94.130.183.121:8080/browse/PDS3-100) 21
+* [Crear entitat Missatge](http://94.130.183.121:8080/browse/PDS3-103) 13
+* [Backend: esborrar dades associades d'un Usuari](http://94.130.183.121:8080/browse/PDS3-118) 5
+* [Backend: afegir metadades](http://94.130.183.121:8080/browse/PDS3-119) 34
+* [Backend: incrementar comptador visites d'un Producte](http://94.130.183.121:8080/browse/PDS3-120) 8
+* [Backend: esborrar Valoració](http://94.130.183.121:8080/browse/PDS3-127) 13
+* [Marcar tots els missatges com a llegits](http://94.130.183.121:8080/browse/PDS3-131) 13
+
+## Daniel Re Latigue
+* [Crear una conversa en relació a un Producte](http://94.130.183.121:8080/browse/PDS3-95) 34
+* [Esborrar un missatge](http://94.130.183.121:8080/browse/PDS3-102) 13
+* [Esborrar una conversa](http://94.130.183.121:8080/browse/PDS3-96) 13
+* [Esborrar dades associades d'un Producte](http://94.130.183.121:8080/browse/PDS3-123) 13
+* [editar perfil Usuari](http://94.130.183.121:8080/browse/PDS3-122) 34
+
+## Sergi Boadas Vilagran
+
+## Joaquim Pascual Solà
+* [Refactor Publicar Anunci](http://94.130.183.121:8080/browse/PDS3-132) 5
+* [Modificar Vista Llista Productes i Detall Producte](http://94.130.183.121:8080/browse/PDS3-133) 89
