@@ -1,9 +1,6 @@
 package org.udg.pds.cheapy.service;
 
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.Ubicacio;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Valoracio;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.rest.RESTService;
 import org.udg.pds.cheapy.rest.UserRESTService;
 
@@ -43,7 +40,7 @@ public class UserService
             throw new EJBException("Password does not match");
     }
 
-    public User register(String nom, String cognoms, String correu, String contrasenya, User.Sexe sexe, String telefon, Date dataNaix, Ubicacio ubicacio)
+    public User register(String nom, String cognoms, String correu, String contrasenya, User.Sexe sexe, String telefon, Date dataNaix, Ubicacio ubicacio, String imatge)
     {
         Query q = em.createQuery("select u from usuaris u where u.correu=:correu");
         q.setParameter("correu", correu);
@@ -62,6 +59,10 @@ public class UserService
         em.persist(ubicacio);
 
         User nu = new User(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya, ubicacio);
+
+        if (imatge != null)
+            nu.setImatge(new Imatge(imatge));
+
         em.persist(nu);
         return nu;
     }
