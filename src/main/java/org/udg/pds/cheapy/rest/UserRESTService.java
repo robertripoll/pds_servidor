@@ -1,6 +1,9 @@
 package org.udg.pds.cheapy.rest;
 
-import org.udg.pds.cheapy.model.*;
+import org.udg.pds.cheapy.model.Producte;
+import org.udg.pds.cheapy.model.Ubicacio;
+import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.model.Views;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
 import org.udg.pds.cheapy.util.ToJSON;
@@ -79,56 +82,6 @@ public class UserRESTService extends RESTService
         userService.remove(getLoggedUser(req));
 
         return Response.ok().build();
-    }
-
-    @DELETE
-    @Path("conversacions/{idConv}")
-    public Response deleteConvers(@Context HttpServletRequest req, @PathParam("idConv") Long idC){
-
-        Long userId = getLoggedUser(req); // obtenim id usuari en linia
-        User u = userService.getUser(userId);
-
-        Conversacio c = u.getConversa(idC); // obtenim la conversa en concret de l'usuari
-
-        if(c == null || !c.getPropietari().getId().equals(userId)){ // si no existeix conversació o no és de l'usuari
-            return accessDenied();
-        }
-
-        return buildResponseWithView(Views.Public.class, userService.esborrarConversaUsuari(idC));
-    }
-
-    @POST
-    @Path("jo/conversacions/{idProd}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response creaConversacioProducte(@Context HttpServletRequest req, @PathParam("idProd") Long idProd, @Valid ConversacioRESTService.R_Conversa prod){
-
-        Long userId = getLoggedUser(req);
-        Producte p = producteService.get(prod.producte.id); // obtenim el producte
-
-        if(p == null){
-            return accessDenied(); // no existeix el producte amb  aquesta id
-        }
-
-        return buildResponseWithView(Views.Public.class, userService.creaConversaAmbProducte(userId, p));
-    }
-
-    @DELETE
-    @Path("conversacions/{idConv}/missatges/{idMiss}")
-    public Response deleteMessage(@Context HttpServletRequest req, @PathParam("idConv") Long idConv, @PathParam("idMiss") Long idMiss){
-
-        Long userId = getLoggedUser(req); // obtenim id de l'usuari en linia
-        User u = userService.getUser(userId);
-        Conversacio c = u.getConversa(idConv); // obtenim la conversa
-
-        if(c == null || !c.getPropietari().getId().equals(userId)){
-            return accessDenied();
-        }
-
-        Missatge m = c.getMissatge(idMiss);
-
-        if(m == null) return accessDenied();
-
-        return buildResponseWithView(Views.Public.class, userService.esborrarMissatgeConversa(idConv,idMiss));
     }
 
     @Path("/registrar")
@@ -326,7 +279,6 @@ public class UserRESTService extends RESTService
         public String telefon;
         public java.util.Date dataNaixement;
         public R_Ubicacio_Update ubicacio;
-
     }
 }
 

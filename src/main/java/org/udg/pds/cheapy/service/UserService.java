@@ -1,6 +1,9 @@
 package org.udg.pds.cheapy.service;
 
-import org.udg.pds.cheapy.model.*;
+import org.udg.pds.cheapy.model.Producte;
+import org.udg.pds.cheapy.model.Ubicacio;
+import org.udg.pds.cheapy.model.User;
+import org.udg.pds.cheapy.model.Valoracio;
 import org.udg.pds.cheapy.rest.RESTService;
 import org.udg.pds.cheapy.rest.UserRESTService;
 
@@ -185,43 +188,6 @@ public class UserService
                 .getSingleResult();
     }
 
-    public Conversacio esborrarConversaUsuari(Long convId){
-
-        Conversacio c = em.find(Conversacio.class, convId);
-        User u = c.getPropietari();
-        u.removeConversation(c);
-        em.remove(c);
-
-        return em.merge(c);
-    }
-
-    public Conversacio creaConversaAmbProducte(Long userId, Producte p) {
-
-        User propietariProducte = p.getVenedor();
-        User u = getUser(userId);
-        Conversacio c = new Conversacio(p,u,propietariProducte); // creem la conversació
-        Conversacio c2 = new Conversacio(p,propietariProducte,u);
-        u.addConversacio(c);
-        propietariProducte.addConversacio(c2);
-
-        em.persist(c);
-        em.persist(c2);
-
-        return c;
-    }
-
-    public Missatge esborrarMissatgeConversa(Long idConv, Long idMiss) {
-
-        Conversacio c = em.find(Conversacio.class, idConv);
-        Missatge m = c.getMissatge(idMiss);
-        User u = c.getPropietari();
-        u.removeMessageFromConversation(idConv,idMiss);
-
-        em.remove(m);
-
-        return em.merge(m);
-    }
-
     public User actualitzar(User u, UserRESTService.R_User_Update nouUser) throws IllegalArgumentException {
         try{
             if(nouUser.nom != null) u.setNom(nouUser.nom);
@@ -270,5 +236,4 @@ public class UserService
             throw new EJBException(ex);
         }
     }
-
 }
