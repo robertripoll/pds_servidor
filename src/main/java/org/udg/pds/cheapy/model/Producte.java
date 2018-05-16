@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -9,6 +10,7 @@ import org.udg.pds.cheapy.rest.serializer.JsonDateTimeSerializer;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity(name = "productes")
 public class Producte implements Serializable
@@ -65,6 +67,10 @@ public class Producte implements Serializable
     @ManyToOne(optional = false)
     @JsonView(Views.Summary.class)
     private Categoria categoria;
+
+    @OneToMany(orphanRemoval = true)
+    @JsonView(Views.Summary.class)
+    private Collection<Imatge> imatges;
 
     public Producte()
     {
@@ -208,5 +214,21 @@ public class Producte implements Serializable
     public void setNumVisites(Integer numVisites)
     {
         this.numVisites = numVisites;
+    }
+
+    @JsonIgnore
+    public Collection<Imatge> getImatges()
+    {
+        return imatges;
+    }
+
+    public void addImatge(Imatge i)
+    {
+        imatges.add(i);
+    }
+
+    public void removeImatge(Imatge i)
+    {
+        imatges.remove(i);
     }
 }
