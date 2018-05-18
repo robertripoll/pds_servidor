@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.rest;
 
+import io.minio.MinioClient;
 import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
@@ -150,7 +151,7 @@ public class ProducteRESTService extends RESTService
         return Response.ok().build();
     }
 
-    /*@POST
+    @POST
     @Path("{id}/imatges")
     public Response addImatge(@Context HttpServletRequest req, @PathParam("id") Long id, @Valid R_Imatge imatge)
     {
@@ -165,8 +166,11 @@ public class ProducteRESTService extends RESTService
         if (minioClient == null)
             throw new WebApplicationException("Minio client not configured");
 
+        String[] splittedUrl = imatge.imatge.split("/");
+        String fileName = splittedUrl[splittedUrl.length - 1];
+
         try {
-            minioClient.statObject(global.getMinioBucket(), imatge.imatge);
+            minioClient.statObject(global.getMinioBucket(), fileName);
         }
 
         catch (Exception ex) {
@@ -193,7 +197,7 @@ public class ProducteRESTService extends RESTService
         producteService.removeImatge(prodId, imId);
 
         return Response.ok().build();
-    }*/
+    }
 
     @POST
     @Path("{id}/transaccio")

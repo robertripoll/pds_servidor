@@ -98,6 +98,7 @@ public class UserRESTService extends RESTService
         return buildResponseWithView(Views.Private.class, usuari);
     }
 
+    @Path("/jo")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

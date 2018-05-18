@@ -227,7 +227,9 @@ public class ProducteService
     {
         try
         {
-            return em.find(Producte.class, id);
+            Producte p = em.find(Producte.class, id);
+            p.getImatges().size();
+            return p;
         }
         catch (Exception ex)
         {
@@ -381,7 +383,7 @@ public class ProducteService
         return (long)em.createQuery("SELECT COUNT(producte) FROM productes producte WHERE producte.transaccio IS NULL").getSingleResult();
     }
 
-    /*public void afegirImatge(Long pId, String imatge)
+    public void afegirImatge(Long pId, String imatge)
     {
         Imatge i = new Imatge(imatge);
         em.persist(i);
@@ -396,5 +398,5 @@ public class ProducteService
         Producte p = em.find(Producte.class, prodId);
         p.removeImatge(i);
         em.remove(i);
-    }*/
+    }
 }

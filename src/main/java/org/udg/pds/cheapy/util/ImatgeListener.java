@@ -15,7 +15,8 @@ public class ImatgeListener
     @PostRemove
     public void removeFile(Imatge i)
     {
-        String filename = i.getRuta();
+        String[] splittedUrl = i.getRuta().split("/");
+        String filename = splittedUrl[splittedUrl.length - 1];
 
         MinioClient minioClient = global.getMinioClient();
         if (minioClient == null)

@@ -158,6 +158,7 @@ public class UserService
         u.getFavorits().size();
         u.getValoracions().size();
         u.getProdVenda().size();
+        u.getImatge();
         return u;
     }
 
@@ -228,6 +229,22 @@ public class UserService
                         userUbi.setPais(ubi.pais);
 
                     em.merge(userUbi);
+                }
+            }
+            if (nouUser.imatge != null)
+            {
+                if (u.getImatge() != null) {
+                    Imatge old = u.getImatge();
+                    Imatge newImatge = new Imatge(nouUser.imatge);
+                    em.persist(newImatge);
+                    u.setImatge(newImatge);
+                    em.remove(em.merge(old));
+                }
+
+                else {
+                    Imatge i = new Imatge(nouUser.imatge);
+                    em.persist(i);
+                    u.setImatge(i);
                 }
             }
 
