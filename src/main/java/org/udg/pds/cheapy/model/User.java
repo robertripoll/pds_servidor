@@ -94,6 +94,10 @@ public class User implements Serializable
     @JsonView(Views.Summary.class)
     private Ubicacio ubicacio;
 
+    @OneToOne(orphanRemoval = true)
+    @JsonView(Views.Basic.class)
+    private Imatge imatge;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "propietari")
     @JsonIgnore
     private Collection<Conversacio> converses;
@@ -149,9 +153,21 @@ public class User implements Serializable
         this.dataNaix = dataNaix;
     }
 
+    public User(Sexe sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya, Imatge i)
+    {
+        this(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya);
+        this.imatge = i;
+    }
+
     public User(Sexe sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya, Ubicacio ubicacio)
     {
         this(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya);
+        this.ubicacio = ubicacio;
+    }
+
+    public User(Sexe sexe, String nom, String cognoms, String telefon, java.util.Date dataNaix, String correu, String contrasenya, Ubicacio ubicacio, Imatge i)
+    {
+        this(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya, i);
         this.ubicacio = ubicacio;
     }
 
@@ -363,5 +379,15 @@ public class User implements Serializable
     public void addProdVenda(Producte prod)
     {
         prodVenda.add(prod);
+    }
+
+    public Imatge getImatge()
+    {
+        return imatge;
+    }
+
+    public void setImatge(Imatge i)
+    {
+        this.imatge = i;
     }
 }

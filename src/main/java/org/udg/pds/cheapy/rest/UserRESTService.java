@@ -93,11 +93,12 @@ public class UserRESTService extends RESTService
 
         Ubicacio ubicacio = new Ubicacio(ru.ubicacio.coordLat, ru.ubicacio.coordLng, ru.ubicacio.ciutat, ru.ubicacio.pais);
 
-        User usuari = userService.register(ru.nom, ru.cognoms, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaixement, ubicacio);
+        User usuari = userService.register(ru.nom, ru.cognoms, ru.correu, ru.contrasenya, ru.sexe, ru.telefon, ru.dataNaixement, ubicacio, ru.imatge);
 
         return buildResponseWithView(Views.Private.class, usuari);
     }
 
+    @Path("/jo")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -258,7 +259,9 @@ public class UserRESTService extends RESTService
         public String telefon;
         @NotNull
         public java.util.Date dataNaixement;
+        @NotNull
         public R_Ubicacio ubicacio;
+        public String imatge;
     }
 
     public static class R_Ubicacio_Update
@@ -279,6 +282,7 @@ public class UserRESTService extends RESTService
         public String telefon;
         public java.util.Date dataNaixement;
         public R_Ubicacio_Update ubicacio;
+        public String imatge;
     }
 }
 

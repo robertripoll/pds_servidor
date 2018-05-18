@@ -1,9 +1,6 @@
 package org.udg.pds.cheapy.service;
 
-import org.udg.pds.cheapy.model.Producte;
-import org.udg.pds.cheapy.model.Ubicacio;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.model.Valoracio;
+import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.rest.RESTService;
 import org.udg.pds.cheapy.rest.UserRESTService;
 
@@ -43,7 +40,7 @@ public class UserService
             throw new EJBException("Password does not match");
     }
 
-    public User register(String nom, String cognoms, String correu, String contrasenya, User.Sexe sexe, String telefon, Date dataNaix, Ubicacio ubicacio)
+    public User register(String nom, String cognoms, String correu, String contrasenya, User.Sexe sexe, String telefon, Date dataNaix, Ubicacio ubicacio, String imatge)
     {
         Query q = em.createQuery("select u from usuaris u where u.correu=:correu");
         q.setParameter("correu", correu);
@@ -62,6 +59,10 @@ public class UserService
         em.persist(ubicacio);
 
         User nu = new User(sexe, nom, cognoms, telefon, dataNaix, correu, contrasenya, ubicacio);
+
+        if (imatge != null)
+            nu.setImatge(new Imatge(imatge));
+
         em.persist(nu);
         return nu;
     }
@@ -157,6 +158,7 @@ public class UserService
         u.getFavorits().size();
         u.getValoracions().size();
         u.getProdVenda().size();
+        u.getImatge();
         return u;
     }
 
@@ -227,6 +229,22 @@ public class UserService
                         userUbi.setPais(ubi.pais);
 
                     em.merge(userUbi);
+                }
+            }
+            if (nouUser.imatge != null)
+            {
+                if (u.getImatge() != null) {
+                    Imatge old = u.getImatge();
+                    Imatge newImatge = new Imatge(nouUser.imatge);
+                    em.persist(newImatge);
+                    u.setImatge(newImatge);
+                    em.remove(em.merge(old));
+                }
+
+                else {
+                    Imatge i = new Imatge(nouUser.imatge);
+                    em.persist(i);
+                    u.setImatge(i);
                 }
             }
 

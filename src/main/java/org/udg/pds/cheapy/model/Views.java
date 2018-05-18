@@ -14,10 +14,6 @@ public class Views
     {
     }
 
-    public static class Complete extends Public
-    {
-    }
-
     public static class Interactor extends Public
     {
     }
