@@ -227,7 +227,9 @@ public class ProducteService
     {
         try
         {
-            return em.find(Producte.class, id);
+            Producte p = em.find(Producte.class, id);
+            p.getImatges().size();
+            return p;
         }
         catch (Exception ex)
         {
@@ -235,6 +237,11 @@ public class ProducteService
             // We catch the normal exception and then transform it in a EJBException
             throw new EJBException(ex);
         }
+    }
+
+    public Imatge getImatge(Long id)
+    {
+        return em.find(Imatge.class, id);
     }
 
     public Producte crear(Categoria categoria, User venedor, String nom, Double preu, String descripcio, Boolean preuNegociable, Boolean intercanviAcceptat)
@@ -374,5 +381,22 @@ public class ProducteService
     public long totalDeProductesEnVenda()
     {
         return (long)em.createQuery("SELECT COUNT(producte) FROM productes producte WHERE producte.transaccio IS NULL").getSingleResult();
+    }
+
+    public void afegirImatge(Long pId, String imatge)
+    {
+        Imatge i = new Imatge(imatge);
+        em.persist(i);
+
+        Producte p = em.find(Producte.class, pId);
+        p.addImatge(i);
+    }
+
+    public void removeImatge(Long prodId, Long imId)
+    {
+        Imatge i = getImatge(imId);
+        Producte p = em.find(Producte.class, prodId);
+        p.removeImatge(i);
+        em.remove(i);
     }
 }

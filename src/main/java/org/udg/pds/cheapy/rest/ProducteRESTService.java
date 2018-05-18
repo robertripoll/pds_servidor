@@ -1,9 +1,11 @@
 package org.udg.pds.cheapy.rest;
 
+import io.minio.MinioClient;
 import org.udg.pds.cheapy.model.*;
 import org.udg.pds.cheapy.service.CategoriaService;
 import org.udg.pds.cheapy.service.ProducteService;
 import org.udg.pds.cheapy.service.UserService;
+import org.udg.pds.cheapy.util.Global;
 import org.udg.pds.cheapy.util.ToJSON;
 
 import javax.ejb.EJB;
@@ -34,6 +36,9 @@ public class ProducteRESTService extends RESTService
     @Inject
     ToJSON toJSON;
 
+    @Inject
+    Global global;
+
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,7 +53,10 @@ public class ProducteRESTService extends RESTService
             if (p.getTransaccio().getComprador() != null)
                 comprador = p.getTransaccio().getComprador();
 
-        if (p.getVenedor().getId().equals(userID) || (comprador != null && comprador.getId().equals(userID)))
+        if (p.getVenedor().getId().equals(userID))
+            return buildResponseWithView(Views.Private.class, p);
+
+        else if (comprador != null && comprador.getId().equals(userID))
             return buildResponseWithView(Views.Interactor.class, p);
 
         else
@@ -145,6 +153,55 @@ public class ProducteRESTService extends RESTService
 
         return Response.ok().build();
     }
+
+    @POST
+    @Path("{id}/imatges")
+    public Response addImatge(@Context HttpServletRequest req, @PathParam("id") Long id, @Valid R_Imatge imatge)
+    {
+        Long userId = getLoggedUser(req);
+
+        Producte p = producteService.get(id);
+
+        if (!p.getVenedor().getId().equals(userId))
+            return accessDenied();
+
+        MinioClient minioClient = global.getMinioClient();
+        if (minioClient == null)
+            throw new WebApplicationException("Minio client not configured");
+
+        String[] splittedUrl = imatge.imatge.split("/");
+        String fileName = splittedUrl[splittedUrl.length - 1];
+
+        try {
+            minioClient.statObject(global.getMinioBucket(), fileName);
+        }
+
+        catch (Exception ex) {
+            return clientError("Image does not exist");
+        }
+
+        producteService.afegirImatge(id, imatge.imatge);
+
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{prodId}/imatges/{imId}")
+    public Response removeImatge(@Context HttpServletRequest req, @PathParam("prodId") Long prodId, @PathParam("imId") Long imId)
+    {
+        Long userId = getLoggedUser(req);
+
+        Producte p = producteService.get(prodId);
+        Imatge i = producteService.getImatge(imId);
+
+        if (!p.getVenedor().getId().equals(userId) || !p.getImatges().contains(i))
+            return accessDenied();
+
+        producteService.removeImatge(prodId, imId);
+
+        return Response.ok().build();
+    }
+
     @POST
     @Path("{id}/transaccio")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -219,6 +276,12 @@ public class ProducteRESTService extends RESTService
             return accessDenied();
 
         return buildResponseWithView(Views.Interactor.class, producteService.esborrarValoracioComprador(id));
+    }
+
+    static class R_Imatge
+    {
+        @NotNull
+        public String imatge;
     }
 
     public static class R_Valoracio

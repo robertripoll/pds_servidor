@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.util;
 
+import io.minio.MinioClient;
 import org.apache.log4j.Logger;
 import org.udg.pds.cheapy.model.Categoria;
 import org.udg.pds.cheapy.model.Ubicacio;
@@ -24,19 +25,62 @@ public class Global
     private Logger logger;
 
     @EJB
-    UserService userService;
+    private UserService userService;
 
     @EJB
-    ProducteService producteService;
+    private ProducteService producteService;
 
     @EJB
-    CategoriaService categoriaService;
+    private CategoriaService categoriaService;
 
     @EJB
-    UbicacioService ubicacioService;
+    private UbicacioService ubicacioService;
+
+    private MinioClient minioClient;
+    private String minioBucket;
+    private String BASE_URL;
 
     @PostConstruct
     void init()
+    {
+        String minioURL = null;
+        String minioAccessKey = null;
+        String minioSecretKey = null;
+
+        try {
+            minioURL = System.getProperty("swarm.project.minio.url");
+            minioAccessKey = System.getProperty("swarm.project.minio.access-key");
+            minioSecretKey = System.getProperty("swarm.project.minio.secret-key");
+            minioClient = new MinioClient(minioURL, minioAccessKey, minioSecretKey);
+            minioBucket = System.getProperty("swarm.project.minio.bucket");
+        } catch (Exception e) {
+            logger.warn("Cannot initialize minio service with url:" + minioURL + ", access-key:" + minioAccessKey + ", secret-key:" + minioSecretKey);
+        }
+
+        if (minioBucket == null) {
+            logger.warn("Cannot initialize minio bucket: " + minioBucket);
+            minioClient = null;
+        }
+
+        if (System.getProperty("swarm.project.base-url") != null)
+            BASE_URL = System.getProperty("swarm.project.base-url");
+
+        else {
+            String port = System.getProperty("swarm.http.port") != null ? System.getProperty("swarm.http.port") : "8080";
+            BASE_URL = "http://localhost:" + port;
+        }
+
+        createData();
+
+        // Prova amb tots els tipus de llançar missatges al logger
+        logger.fatal("Error fatal");
+        logger.error("Error");
+        logger.warn("Alerta");
+        logger.info("Missatge informatiu");
+        logger.debug("Missatge debug");
+    }
+
+    private void createData()
     {
         // Creació de Ubicacions de mostra
         Ubicacio ub1 = ubicacioService.create(41.9794005,2.82142640,"Girona", "Catalunya");
@@ -66,12 +110,20 @@ public class Global
         producteService.crear(c1, u1, "Frens Brembo", 87.90, null, true, true);
         producteService.crear(c11, u2, "Sicario", 150.0, null, true, false);
         producteService.crear(c11, u3, "Deportaciones", 1650.0, null, false, false);
+    }
 
-        // Prova amb tots els tipus de llançar missatges al logger
-        logger.fatal("Error fatal");
-        logger.error("Error");
-        logger.warn("Alerta");
-        logger.info("Missatge informatiu");
-        logger.debug("Missatge debug");
+    public MinioClient getMinioClient()
+    {
+        return minioClient;
+    }
+
+    public String getMinioBucket()
+    {
+        return minioBucket;
+    }
+
+    public String getBaseURL()
+    {
+        return BASE_URL;
     }
 }
