@@ -95,7 +95,7 @@ public class User implements Serializable
     private Ubicacio ubicacio;
 
     @OneToOne(orphanRemoval = true)
-    @JsonView(Views.Summary.class)
+    @JsonView(Views.Basic.class)
     private Imatge imatge;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "propietari")
