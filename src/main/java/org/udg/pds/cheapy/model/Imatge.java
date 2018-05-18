@@ -15,7 +15,7 @@ public class Imatge implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Basic.class)
+    @JsonView(Views.Private.class)
     protected Long id;
 
     @NotNull

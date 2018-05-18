@@ -53,7 +53,10 @@ public class ProducteRESTService extends RESTService
             if (p.getTransaccio().getComprador() != null)
                 comprador = p.getTransaccio().getComprador();
 
-        if (p.getVenedor().getId().equals(userID) || (comprador != null && comprador.getId().equals(userID)))
+        if (p.getVenedor().getId().equals(userID))
+            return buildResponseWithView(Views.Private.class, p);
+
+        else if (comprador != null && comprador.getId().equals(userID))
             return buildResponseWithView(Views.Interactor.class, p);
 
         else
