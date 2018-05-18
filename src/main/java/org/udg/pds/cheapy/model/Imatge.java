@@ -27,7 +27,7 @@ public class Imatge implements Serializable
 
     }
 
-    public Imatge(String nom)
+    public Imatge(String ruta)
     {
         this.ruta = ruta;
     }
