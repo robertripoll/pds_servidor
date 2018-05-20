@@ -68,7 +68,7 @@ public class Producte implements Serializable
     @JsonView(Views.Summary.class)
     private Categoria categoria;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonView(Views.Summary.class)
     private Collection<Imatge> imatges;
 
