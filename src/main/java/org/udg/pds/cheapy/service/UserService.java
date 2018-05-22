@@ -255,4 +255,9 @@ public class UserService
             throw new EJBException(ex);
         }
     }
+
+    public void setToken(Long loggedUserId, String token) {
+        User u = em.find(User.class, loggedUserId);
+        u.setToken(token);
+    }
 }

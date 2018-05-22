@@ -3,43 +3,27 @@
 
 package org.udg.pds.cheapy.util;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
-import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
-import de.bytefish.fcmjava.model.topics.Topic;
-import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
-import de.bytefish.fcmjava.responses.TopicMessageResponse;
+import de.bytefish.fcmjava.requests.notification.NotificationPayload;
+import de.bytefish.fcmjava.requests.notification.NotificationUnicastMessage;
+import de.bytefish.fcmjava.responses.FcmMessageResponse;
+import org.udg.pds.cheapy.model.Missatge;
+import org.udg.pds.cheapy.model.User;
 
+import javax.inject.Inject;
 import java.time.Duration;
+
 
 public class FirebaseClient {
 
-    private class PersonData {
+    @Inject
+    Global global;
 
-        private final String firstName;
-        private final String lastName;
-
-        public PersonData(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
-
-        @JsonProperty("firstName")
-        public String getFirstName() {
-            return firstName;
-        }
-
-        @JsonProperty("lastName")
-        public String getLastName() {
-            return lastName;
-        }
-    }
-
-    public void SendTopicMessageTest() throws Exception {
+    public void enviaNotificacioMissatge(User u, Missatge m) throws Exception {
 
         // Create the Client using system-properties-based settings:
-        try (FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault())) {
+        try (FcmClient client = global.getFirebaseClient()) {
 
             // Message Options:
             FcmMessageOptions options = FcmMessageOptions.builder()
@@ -47,7 +31,8 @@ public class FirebaseClient {
                     .build();
 
             // Send a Message:
-            TopicMessageResponse response = client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
+            FcmMessageResponse response = client.send(new NotificationUnicastMessage(options, u.getToken(),new NotificationPayload(null,m.getMissatge(),null,null,null,"Nou missatge","white",null,null,null, null, null, null)));
+            //TopicMessageResponse response = client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
         }
     }
 }

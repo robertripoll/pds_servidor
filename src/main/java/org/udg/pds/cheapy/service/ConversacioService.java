@@ -5,10 +5,13 @@ import org.udg.pds.cheapy.model.Missatge;
 import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.rest.ConversacioRESTService;
+import org.udg.pds.cheapy.util.FirebaseClient;
+import org.udg.pds.cheapy.util.Global;
 
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -20,6 +23,9 @@ public class ConversacioService
 {
     @PersistenceContext
     protected EntityManager em;
+
+    @Inject
+    Global global;
 
     @SuppressWarnings("unchecked")
     public List<Conversacio> getConversacions(long id, int limit, int offset)
@@ -118,8 +124,7 @@ public class ConversacioService
                 .getSingleResult();
     }
 
-    public Missatge enviarMissatge(Long id, ConversacioRESTService.R_Missatge missatge)
-    {
+    public Missatge enviarMissatge(Long id, ConversacioRESTService.R_Missatge missatge) throws Exception {
         Conversacio convEmisor = get(id);
         User emisor = convEmisor.getPropietari();
         User receptor = convEmisor.getUsuari();
@@ -132,6 +137,10 @@ public class ConversacioService
         Missatge missReceptor = missEmisor.clone(convReceptor);
         em.persist(missReceptor);
         convReceptor.addMissatge(missReceptor);
+
+        // enviem la notificació client firebase
+        FirebaseClient clientFirebase = new FirebaseClient();
+        clientFirebase.enviaNotificacioMissatge(receptor,missEmisor);
 
         return missEmisor;
     }

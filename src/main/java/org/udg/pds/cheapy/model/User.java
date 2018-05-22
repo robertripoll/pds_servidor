@@ -59,6 +59,9 @@ public class User implements Serializable
     @JsonIgnore
     private String contrasenya;
 
+    @JsonIgnore
+    private String token;
+
     @NotNull
     @JsonView(Views.Private.class)
     @Column(unique = true)
@@ -260,6 +263,8 @@ public class User implements Serializable
         return ubicacio;
     }
 
+    public String getToken(){ return this.token;}
+
     public void setUbicacio(Ubicacio ubicacio)
     {
         this.ubicacio = ubicacio;
@@ -269,6 +274,10 @@ public class User implements Serializable
     {
         conversesComComprador.size();
         return conversesComComprador;
+    }
+
+    public void setToken(String token){
+        this.token = token;
     }
 
     public Collection<Conversacio> getConversesComVenedor(){
@@ -305,7 +314,6 @@ public class User implements Serializable
     public void addConversacioComComprador(Conversacio conversacio)
     {
         conversesComComprador.add(conversacio);
-        System.out.println("Correcte");
     }
 
     public void addConversacioComVenedor(Conversacio conversacio){

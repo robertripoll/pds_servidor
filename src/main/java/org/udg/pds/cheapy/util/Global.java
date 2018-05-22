@@ -1,5 +1,6 @@
 package org.udg.pds.cheapy.util;
 
+import de.bytefish.fcmjava.client.FcmClient;
 import io.minio.MinioClient;
 import org.apache.log4j.Logger;
 import org.udg.pds.cheapy.model.*;
@@ -36,6 +37,8 @@ public class Global
 
     
     protected MinioClient minioClient;
+    protected FcmClientSettingsTest fClient;
+    protected FcmClient clientFirebase;
     private String minioBucket;
     private String BASE_URL;
 
@@ -47,6 +50,7 @@ public class Global
         String minioSecretKey = null;
 
         try {
+            clientFirebase = fClient.createClient("AAAACmcXDWE:APA91bG-T1k-Pd5I7ahE6rdYqCVNikbFqSGFI8fbLG9L-vutz0t9ultjE8eieyrTJNEiNRW7jc2fsttxOV2S4ROSrbYNzDSRWaNvPDywTE5AlYQFdESktORB4I2tu9YGSWkNACaBfYKE");
             minioURL = System.getProperty("swarm.project.minio.url");
             minioAccessKey = System.getProperty("swarm.project.minio.access-key");
             minioSecretKey = System.getProperty("swarm.project.minio.secret-key");
@@ -123,6 +127,8 @@ public class Global
     {
         return minioClient;
     }
+
+    public FcmClient getFirebaseClient() { return clientFirebase;}
 
     public String getMinioBucket()
     {
