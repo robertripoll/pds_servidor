@@ -2,13 +2,8 @@ package org.udg.pds.cheapy.util;
 
 import io.minio.MinioClient;
 import org.apache.log4j.Logger;
-import org.udg.pds.cheapy.model.Categoria;
-import org.udg.pds.cheapy.model.Ubicacio;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.service.CategoriaService;
-import org.udg.pds.cheapy.service.ProducteService;
-import org.udg.pds.cheapy.service.UbicacioService;
-import org.udg.pds.cheapy.service.UserService;
+import org.udg.pds.cheapy.model.*;
+import org.udg.pds.cheapy.service.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -36,7 +31,11 @@ public class Global
     @EJB
     private UbicacioService ubicacioService;
 
-    private MinioClient minioClient;
+    @EJB
+    private ConversacioService conversacioService;
+
+    
+    protected MinioClient minioClient;
     private String minioBucket;
     private String BASE_URL;
 

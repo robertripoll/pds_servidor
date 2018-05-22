@@ -20,11 +20,11 @@ public class Conversacio implements Serializable
 
     @ManyToOne(optional = false)
     @JsonView(Views.Basic.class)
-    private User usuari;
+    private User venedorConversa;
 
     @ManyToOne(optional = false)
     @JsonIgnore
-    private User propietari;
+    private User compradorConversa;
 
     @ManyToOne(optional = false)
     @JsonView(Views.Basic.class)
@@ -54,8 +54,8 @@ public class Conversacio implements Serializable
     public Conversacio(Producte producte, User propietari, User usuari)
     {
         this.producte   = producte;
-        this.propietari = propietari;
-        this.usuari     = usuari;
+        this.compradorConversa = propietari;
+        this.venedorConversa = usuari;
     }
 
     public Long getId()
@@ -65,12 +65,12 @@ public class Conversacio implements Serializable
 
     public User getUsuari()
     {
-        return usuari;
+        return venedorConversa;
     }
 
     public User getPropietari()
     {
-        return propietari;
+        return compradorConversa;
     }
 
     public Producte getProducte()

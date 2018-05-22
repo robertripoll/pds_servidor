@@ -142,6 +142,10 @@ public class ConversacioRESTService extends RESTService
     {
         @NotNull
         public String text;
+
+        public R_Missatge(String text){
+            this.text = text;
+        }
     }
 
     public static class R_Conversa
