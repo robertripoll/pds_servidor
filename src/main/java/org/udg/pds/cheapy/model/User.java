@@ -101,11 +101,11 @@ public class User implements Serializable
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedorConversa")
     @JsonIgnore
-    private Collection<Conversacio> conversesComVenedor = new ArrayList<>();
+    private Collection<Conversacio> conversesComVenedor = new ArrayList<Conversacio>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "compradorConversa")
     @JsonIgnore
-    private Collection<Conversacio> conversesComComprador = new ArrayList<>();
+    private Collection<Conversacio> conversesComComprador = new ArrayList<Conversacio>();
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")

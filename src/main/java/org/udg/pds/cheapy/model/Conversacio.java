@@ -6,6 +6,7 @@ import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity(name = "conversacions")
@@ -32,7 +33,7 @@ public class Conversacio implements Serializable
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conversacio")
-    private Collection<Missatge> missatges;
+    private Collection<Missatge> missatges = new ArrayList<Missatge>();
 
     @Formula("(SELECT COUNT(missatge.id) FROM missatges missatge WHERE missatge.conversacio_id = id)")
     @JsonView(Views.Basic.class)

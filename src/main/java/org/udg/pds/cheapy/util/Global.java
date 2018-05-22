@@ -111,8 +111,12 @@ public class Global
         producteService.crear(c11, u3, "Deportaciones", 1650.0, null, false, false);
 
         // Creació de Converses de mostra
-        conversacioService.crearConversaAutomatica(u2,p1);
+        Conversacio conv1 = conversacioService.crearConversaAutomatica(u2,p1);
 
+        // Creació de Missatges de mostra
+
+        conversacioService.enviarMissatgeAutomaticament(conv1, "Tinc ganes de muñeca hinchable");
+        conversacioService.enviarMissatgeAutomaticament(conv1, "Gas al matalas");
     }
 
     public MinioClient getMinioClient()

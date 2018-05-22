@@ -115,7 +115,7 @@ public class ConversacioService
 
     private Conversacio conversaSimetrica(Conversacio c)
     {
-        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.compradorConversa.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.venedorConversa.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
                 .setParameter("usuari", c.getUsuari().getId())
                 .setParameter("producte", c.getProducte().getId())
                 .getSingleResult();
@@ -135,6 +135,20 @@ public class ConversacioService
         Missatge missReceptor = missEmisor.clone(convReceptor);
         em.persist(missReceptor);
         convReceptor.addMissatge(missReceptor);
+
+        return missEmisor;
+    }
+
+    public Missatge enviarMissatgeAutomaticament(Conversacio c, String missatge){
+
+        Missatge missEmisor = new Missatge(c, c.getPropietari(), c.getUsuari(), missatge);
+        em.persist(missEmisor);
+        c.getPropietari().getConversaComComprador(c.getId()).addMissatge(missEmisor);
+
+        //Conversacio convReceptor = conversaSimetrica(c);
+        Missatge missReceptor = missEmisor.clone(c);
+        em.persist(missReceptor);
+        c.getUsuari().getConversaComVenedor(c.getId()).addMissatge(missReceptor);
 
         return missEmisor;
     }
