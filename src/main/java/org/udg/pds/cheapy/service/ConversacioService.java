@@ -24,7 +24,7 @@ public class ConversacioService
     @SuppressWarnings("unchecked")
     public List<Conversacio> getConversacions(long id, int limit, int offset)
     {
-        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari")
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.compradorConversa.id = :usuari OR conversacio.venedorConversa = :usuari")
                 .setParameter("usuari", id)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
@@ -45,11 +45,31 @@ public class ConversacioService
         Conversacio c1 = new Conversacio(p, propietariConv, propietariProd); // creem la conversació
         Conversacio c2 = new Conversacio(p, propietariProd, propietariConv);
 
-        propietariConv.addConversacio(c1);
-        propietariProd.addConversacio(c2);
-
         em.persist(c1);
         em.persist(c2);
+
+        propietariConv.addConversacioComComprador(c1);
+        propietariProd.addConversacioComVenedor(c2);
+
+        em.merge(propietariProd);
+        em.merge(propietariConv);
+
+        return c1;
+    }
+
+    public Conversacio crearConversaAutomatica(User u, Producte p){
+
+        User propietariProducte = p.getVenedor();
+
+        Conversacio c1 = new Conversacio(p,u,propietariProducte);
+
+        em.persist(c1);
+
+        u.addConversacioComComprador(c1);
+        propietariProducte.addConversacioComVenedor(c1);
+
+        em.merge(u);
+        em.merge(propietariProducte);
 
         return c1;
     }
@@ -81,7 +101,7 @@ public class ConversacioService
 
     public long totalConverses(Long userId)
     {
-        return (long)em.createQuery("SELECT COUNT(conversacio) FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari")
+        return (long)em.createQuery("SELECT COUNT(conversacio) FROM conversacions conversacio WHERE conversacio.venedorConversa.id = :usuari OR conversacio.compradorConversa.id = :usuari")
                 .setParameter("usuari", userId)
                 .getSingleResult();
     }
@@ -95,7 +115,7 @@ public class ConversacioService
 
     private Conversacio conversaSimetrica(Conversacio c)
     {
-        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.propietari.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.compradorConversa.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
                 .setParameter("usuari", c.getUsuari().getId())
                 .setParameter("producte", c.getProducte().getId())
                 .getSingleResult();

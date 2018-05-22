@@ -106,9 +106,13 @@ public class Global
         categoriaService.create("Altres");
 
         // Creació de Productes de mostra
-        producteService.crear(c1, u1, "Frens Brembo", 87.90, null, true, true);
+        Producte p1 = producteService.crear(c1, u1, "Frens Brembo", 87.90, null, true, true);
         producteService.crear(c11, u2, "Sicario", 150.0, null, true, false);
         producteService.crear(c11, u3, "Deportaciones", 1650.0, null, false, false);
+
+        // Creació de Converses de mostra
+        conversacioService.crearConversaAutomatica(u2,p1);
+
     }
 
     public MinioClient getMinioClient()

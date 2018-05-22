@@ -153,7 +153,8 @@ public class UserService
     {
         User u = getUser(loggedId);
         u.getCompres().size();
-        u.getConverses().size();
+        u.getConversesComComprador().size();
+        u.getConversesComVenedor().size();
         u.getVendes().size();
         u.getFavorits().size();
         u.getValoracions().size();
