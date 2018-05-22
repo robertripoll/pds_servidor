@@ -65,9 +65,6 @@ public class ConversacioService
 
         em.persist(c1);
 
-        u.addConversacioComComprador(c1);
-        propietariProducte.addConversacioComVenedor(c1);
-
         em.merge(u);
         em.merge(propietariProducte);
 
@@ -143,12 +140,10 @@ public class ConversacioService
 
         Missatge missEmisor = new Missatge(c, c.getPropietari(), c.getUsuari(), missatge);
         em.persist(missEmisor);
-        c.getPropietari().getConversaComComprador(c.getId()).addMissatge(missEmisor);
 
         //Conversacio convReceptor = conversaSimetrica(c);
         Missatge missReceptor = missEmisor.clone(c);
         em.persist(missReceptor);
-        c.getUsuari().getConversaComVenedor(c.getId()).addMissatge(missReceptor);
 
         return missEmisor;
     }

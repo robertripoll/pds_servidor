@@ -13,7 +13,6 @@ import org.udg.pds.cheapy.rest.serializer.JsonDateSerializer;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -101,11 +100,11 @@ public class User implements Serializable
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedorConversa")
     @JsonIgnore
-    private Collection<Conversacio> conversesComVenedor = new ArrayList<Conversacio>();
+    private Collection<Conversacio> conversesComVenedor;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "compradorConversa")
     @JsonIgnore
-    private Collection<Conversacio> conversesComComprador = new ArrayList<Conversacio>();
+    private Collection<Conversacio> conversesComComprador;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
