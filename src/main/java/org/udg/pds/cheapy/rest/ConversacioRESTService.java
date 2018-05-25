@@ -110,13 +110,12 @@ public class ConversacioRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response enviarMissatge(@Context HttpServletRequest req,
                                    @PathParam("id") Long id,
-                                   @Valid R_Missatge missatge)
-    {
+                                   @Valid R_Missatge missatge) throws Exception {
         Long userID = getLoggedUser(req);
         Conversacio c = conversacioService.get(id);
 
-        if (!c.getPropietari().getId().equals(userID))
-            return accessDenied();
+        /*if (!c.getPropietari().getId().equals(userID))
+            return accessDenied();*/
 
         return buildResponseWithView(Views.Basic.class, conversacioService.enviarMissatge(id, missatge));
     }
@@ -142,10 +141,6 @@ public class ConversacioRESTService extends RESTService
     {
         @NotNull
         public String text;
-
-        public R_Missatge(String text){
-            this.text = text;
-        }
     }
 
     public static class R_Conversa

@@ -67,7 +67,7 @@ public class UserRESTService extends RESTService
     public Response actualitzaToken(@Context HttpServletRequest req, String token){
 
         Long loggedUserId = getLoggedUser(req);
-        User u = userService.setToken(loggedUserId, token);
+        userService.setToken(loggedUserId, token);
 
         return Response.ok().build();
     }

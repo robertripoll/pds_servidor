@@ -3,7 +3,6 @@
 
 package org.udg.pds.cheapy.util;
 
-import de.bytefish.fcmjava.client.FcmClient;
 import de.bytefish.fcmjava.constants.Constants;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 
@@ -28,13 +27,13 @@ public class FixedFcmClientSettings implements IFcmClientSettings {
 
 class FcmClientSettingsTest {
 
-    public FcmClient createClient(String apiKey) {
+    public IFcmClientSettings createClient(String apiKey) {
 
         // Construct the FCM Client Settings with your API Key:
         IFcmClientSettings clientSettings = new FixedFcmClientSettings(apiKey);
 
         // Instantiate the FcmClient with the API Key:
-        return new FcmClient(clientSettings);
+        return clientSettings;
     }
 
 }

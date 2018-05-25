@@ -5,7 +5,6 @@ import org.udg.pds.cheapy.model.Missatge;
 import org.udg.pds.cheapy.model.Producte;
 import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.rest.ConversacioRESTService;
-import org.udg.pds.cheapy.util.FirebaseClient;
 import org.udg.pds.cheapy.util.Global;
 
 import javax.ejb.EJBException;
@@ -30,7 +29,7 @@ public class ConversacioService
     @SuppressWarnings("unchecked")
     public List<Conversacio> getConversacions(long id, int limit, int offset)
     {
-        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.compradorConversa.id = :usuari OR conversacio.venedorConversa = :usuari")
+        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.compradorConversa.id = :usuari OR conversacio.venedorConversa.id = :usuari")
                 .setParameter("usuari", id)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
@@ -139,9 +138,10 @@ public class ConversacioService
         convReceptor.addMissatge(missReceptor);
 
         // enviem la notificació client firebase
-        FirebaseClient clientFirebase = new FirebaseClient();
-        clientFirebase.enviaNotificacioMissatge(receptor,missEmisor);
+        //FcmClient clientFirebase = global.getFirebaseClient();
+        //clientFirebase.enviaNotificacioMissatge(receptor,missEmisor);
 
+        global.enviaNotificacioMissatge(receptor,missEmisor);
         return missEmisor;
     }
 
