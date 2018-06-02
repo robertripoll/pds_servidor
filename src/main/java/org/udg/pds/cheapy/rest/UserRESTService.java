@@ -62,6 +62,15 @@ public class UserRESTService extends RESTService
         return Response.ok().build();
     }
 
+    @Path("/comprovar")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkAuth(@Context HttpServletRequest req)
+    {
+        Long userID = getLoggedUserWithoutException(req);
+        return Response.ok(userID != null).build();
+    }
+
     @Path("jo/favorits")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
