@@ -71,6 +71,16 @@ public class UserRESTService extends RESTService
         return Response.ok(userID != null).build();
     }
 
+    @Path("jo/token")
+    @PUT
+    public Response actualitzaToken(@Context HttpServletRequest req, String token){
+
+        Long loggedUserId = getLoggedUser(req);
+        userService.setToken(loggedUserId, token);
+
+        return Response.ok().build();
+    }
+
     @Path("jo/favorits")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

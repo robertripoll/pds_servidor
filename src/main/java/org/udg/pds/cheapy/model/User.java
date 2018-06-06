@@ -59,6 +59,9 @@ public class User implements Serializable
     @JsonIgnore
     private String contrasenya;
 
+    @JsonIgnore
+    private String token;
+
     @NotNull
     @JsonView(Views.Private.class)
     @Column(unique = true)
@@ -98,9 +101,13 @@ public class User implements Serializable
     @JsonView(Views.Basic.class)
     private Imatge imatge;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "propietari")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venedorConversa")
     @JsonIgnore
-    private Collection<Conversacio> converses;
+    private Collection<Conversacio> conversesComVenedor;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compradorConversa")
+    @JsonIgnore
+    private Collection<Conversacio> conversesComComprador;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "valorat")
@@ -256,34 +263,61 @@ public class User implements Serializable
         return ubicacio;
     }
 
+    public String getToken(){ return this.token;}
+
     public void setUbicacio(Ubicacio ubicacio)
     {
         this.ubicacio = ubicacio;
     }
 
-    public Collection<Conversacio> getConverses()
+    public Collection<Conversacio> getConversesComComprador()
     {
-        converses.size();
-        return converses;
+        conversesComComprador.size();
+        return conversesComComprador;
     }
 
-    public Conversacio getConversa(Long id){
+    public void setToken(String token){
+        this.token = token;
+    }
 
-        for(Conversacio c: converses){
+    public Collection<Conversacio> getConversesComVenedor(){
+        conversesComVenedor.size();
+        return conversesComVenedor;
+    }
+
+    public Conversacio getConversaComComprador(Long id){
+
+        for(Conversacio c: conversesComComprador){
             if(c.getId().equals(id)) return c;
         }
 
         return null;
     }
 
-    public void setConverses(List<Conversacio> cv)
-    {
-        this.converses = cv;
+    public Conversacio getConversaComVenedor(Long id){
+        for(Conversacio c: conversesComVenedor){
+            if(c.getId().equals(id)) return c;
+        }
+
+        return null;
     }
 
-    public void addConversacio(Conversacio conversacio)
+    public void setConversesComComprador(List<Conversacio> cv)
     {
-        converses.add(conversacio);
+        this.conversesComComprador = cv;
+    }
+
+    public void setConversesComVenedor(List<Conversacio> cv){
+        this.conversesComVenedor = cv;
+    }
+
+    public void addConversacioComComprador(Conversacio conversacio)
+    {
+        conversesComComprador.add(conversacio);
+    }
+
+    public void addConversacioComVenedor(Conversacio conversacio){
+        conversesComVenedor.add(conversacio);
     }
 
     @JsonIgnore
@@ -356,11 +390,19 @@ public class User implements Serializable
         favorits.remove(prod);
     }
 
-    public void removeConversation(Conversacio con) { converses.remove(con);}
+    public void removeConversationComComprador(Conversacio con) { conversesComComprador.remove(con);}
 
-    public void removeMessageFromConversation(Long idConv, Long idMiss){
+    public void removeConversationComVenedor(Conversacio con){ conversesComVenedor.remove(con);}
 
-        for(Conversacio c: converses){
+    public void removeMessageFromConversationComComprador(Long idConv, Long idMiss){
+
+        for(Conversacio c: conversesComComprador){
+            if(c.getId().equals(idConv)) c.deleteMissatge(c.getMissatge(idMiss));
+        }
+    }
+
+    public void removeMessageFromConversationComVenedor(Long idConv, Long idMiss){
+        for(Conversacio c: conversesComVenedor){
             if(c.getId().equals(idConv)) c.deleteMissatge(c.getMissatge(idMiss));
         }
     }

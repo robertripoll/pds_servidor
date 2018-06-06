@@ -1,20 +1,23 @@
 package org.udg.pds.cheapy.util;
 
+import de.bytefish.fcmjava.client.FcmClient;
+import de.bytefish.fcmjava.http.client.IFcmClient;
+import de.bytefish.fcmjava.http.options.IFcmClientSettings;
+import de.bytefish.fcmjava.model.options.FcmMessageOptions;
+import de.bytefish.fcmjava.requests.notification.NotificationPayload;
+import de.bytefish.fcmjava.requests.notification.NotificationUnicastMessage;
+import de.bytefish.fcmjava.responses.FcmMessageResponse;
 import io.minio.MinioClient;
 import org.apache.log4j.Logger;
-import org.udg.pds.cheapy.model.Categoria;
-import org.udg.pds.cheapy.model.Ubicacio;
-import org.udg.pds.cheapy.model.User;
-import org.udg.pds.cheapy.service.CategoriaService;
-import org.udg.pds.cheapy.service.ProducteService;
-import org.udg.pds.cheapy.service.UbicacioService;
-import org.udg.pds.cheapy.service.UserService;
+import org.udg.pds.cheapy.model.*;
+import org.udg.pds.cheapy.service.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.time.Duration;
 import java.util.Date;
 
 @Singleton
@@ -36,13 +39,32 @@ public class Global
     @EJB
     private UbicacioService ubicacioService;
 
-    private MinioClient minioClient;
+    @EJB
+    private ConversacioService conversacioService;
+
+    
+    protected MinioClient minioClient;
+    protected IFcmClient clientFirebase;
     private String minioBucket;
     private String BASE_URL;
+    private FcmClientSettingsTest fx;
 
     @PostConstruct
     void init()
     {
+        try{
+            // Creem els parametres per el client de firebase
+
+            IFcmClientSettings clientSettings = new FixedFcmClientSettings("AAAACmcXDWE:APA91bG-T1k-Pd5I7ahE6rdYqCVNikbFqSGFI8fbLG9L-vutz0t9ultjE8eieyrTJNEiNRW7jc2fsttxOV2S4ROSrbYNzDSRWaNvPDywTE5AlYQFdESktORB4I2tu9YGSWkNACaBfYKE");
+
+            // Instanciem el Client amb els parametres en aquest cas la api key
+
+            clientFirebase = new FcmClient(clientSettings);
+
+        }catch (Exception e){ // mostrem error per el canal d'errors
+            System.err.print(e);
+        }
+
         String minioURL = null;
         String minioAccessKey = null;
         String minioSecretKey = null;
@@ -107,15 +129,25 @@ public class Global
         categoriaService.create("Altres");
 
         // Creació de Productes de mostra
-        producteService.crear(c1, u1, "Frens Brembo", 87.90, null, true, true);
+        Producte p1 = producteService.crear(c1, u1, "Frens Brembo", 87.90, null, true, true);
         producteService.crear(c11, u2, "Sicario", 150.0, null, true, false);
         producteService.crear(c11, u3, "Deportaciones", 1650.0, null, false, false);
+
+        // Creació de Converses de mostra
+        Conversacio conv1 = conversacioService.crearConversaAutomatica(u2,p1);
+
+        // Creació de Missatges de mostra
+
+        conversacioService.enviarMissatgeAutomaticament(conv1, u1.getId(), "Tinc ganes de muñeca hinchable");
+        conversacioService.enviarMissatgeAutomaticament(conv1, u2.getId(), "Gas al matalas");
     }
 
     public MinioClient getMinioClient()
     {
         return minioClient;
     }
+
+    public IFcmClient getFirebaseClient() { return clientFirebase;}
 
     public String getMinioBucket()
     {
@@ -125,5 +157,24 @@ public class Global
     public String getBaseURL()
     {
         return BASE_URL;
+    }
+
+    public void enviaNotificacioMissatge(User u, Missatge m) throws Exception {
+
+        // primer de tot definim les propietats dels missatges
+
+        FcmMessageOptions options = FcmMessageOptions.builder()
+                .setTimeToLive(Duration.ofHours(1))
+                .build();
+
+        // Creem el missatge que volem enviar
+
+        NotificationPayload missatge = NotificationPayload.builder().setTitle("New message").setBody(m.getMissatge()).setColor("Blue").build();
+
+        // enviem el missatge
+
+        FcmMessageResponse response = clientFirebase.send(new NotificationUnicastMessage(options,u.getToken(), missatge));
+
+        response.toString();
     }
 }

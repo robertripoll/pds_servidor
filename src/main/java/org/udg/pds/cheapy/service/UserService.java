@@ -153,7 +153,8 @@ public class UserService
     {
         User u = getUser(loggedId);
         u.getCompres().size();
-        u.getConverses().size();
+        u.getConversesComComprador().size();
+        u.getConversesComVenedor().size();
         u.getVendes().size();
         u.getFavorits().size();
         u.getValoracions().size();
@@ -253,5 +254,10 @@ public class UserService
         catch (Exception ex){
             throw new EJBException(ex);
         }
+    }
+
+    public void setToken(Long loggedUserId, String token) {
+        User u = em.find(User.class, loggedUserId);
+        u.setToken(token);
     }
 }

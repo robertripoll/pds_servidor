@@ -62,8 +62,9 @@ public class ConversacioRESTService extends RESTService
 
         Conversacio c = conversacioService.get(id);
 
-        if (!c.getPropietari().getId().equals(userID))
+        if (!c.getVenedorConversa().getId().equals(userID) && !c.getCompradorConversa().getId().equals(userID))
             return accessDenied();
+
 
         return buildResponseWithView(Views.Basic.class, conversacioService.llegirMissatges(id, userID));
     }
@@ -75,7 +76,7 @@ public class ConversacioRESTService extends RESTService
         Long userId = getLoggedUser(req); // obtenim id usuari en linia
         Conversacio c = conversacioService.get(id); // obtenim la conversa en concret de l'usuari
 
-        if (!c.getPropietari().getId().equals(userId)) // si no existeix conversació o no és de l'usuari
+        if (!c.getVenedorConversa().getId().equals(userId) && !c.getCompradorConversa().getId().equals(userId))
             return accessDenied();
 
         conversacioService.esborrarConversa(id);
@@ -95,7 +96,7 @@ public class ConversacioRESTService extends RESTService
 
         Conversacio c = conversacioService.get(id);
 
-        if (!c.getPropietari().getId().equals(loggedUserId))
+        if (!c.getVenedorConversa().getId().equals(loggedUserId) && !c.getCompradorConversa().getId().equals(loggedUserId))
             return accessDenied();
 
         long total = conversacioService.totalMissatges(id);
@@ -110,15 +111,14 @@ public class ConversacioRESTService extends RESTService
     @Produces(MediaType.APPLICATION_JSON)
     public Response enviarMissatge(@Context HttpServletRequest req,
                                    @PathParam("id") Long id,
-                                   @Valid R_Missatge missatge)
-    {
+                                   @Valid R_Missatge missatge) throws Exception {
         Long userID = getLoggedUser(req);
         Conversacio c = conversacioService.get(id);
 
-        if (!c.getPropietari().getId().equals(userID))
+        if (!c.getVenedorConversa().getId().equals(userID) && !c.getCompradorConversa().getId().equals(userID))
             return accessDenied();
 
-        return buildResponseWithView(Views.Basic.class, conversacioService.enviarMissatge(id, missatge));
+        return buildResponseWithView(Views.Basic.class, conversacioService.enviarMissatge(id, userID, missatge));
     }
 
     @DELETE
@@ -126,14 +126,12 @@ public class ConversacioRESTService extends RESTService
     public Response deleteMessage(@Context HttpServletRequest req, @PathParam("idConv") Long idConv, @PathParam("idMiss") Long idMiss)
     {
         Long userId = getLoggedUser(req); // obtenim id de l'usuari en linia
-        Conversacio c = conversacioService.get(idConv); // obtenim la conversa
+        Missatge m = conversacioService.getMissatge(idMiss);
 
-        if (!c.getPropietari().getId().equals(userId))
+        if (!m.getEmisor().getId().equals(userId) || !m.getConversacio().getId().equals(idConv))
             return accessDenied();
 
-        Missatge m = c.getMissatge(idMiss);
-
-        conversacioService.esborrarMissatgeConversa(idConv, idMiss);
+        conversacioService.esborrarMissatgeConversa(idMiss);
 
         return Response.ok().build();
     }

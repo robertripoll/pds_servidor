@@ -20,11 +20,11 @@ public class Conversacio implements Serializable
 
     @ManyToOne(optional = false)
     @JsonView(Views.Basic.class)
-    private User usuari;
+    private User venedorConversa;
 
     @ManyToOne(optional = false)
-    @JsonIgnore
-    private User propietari;
+    @JsonView(Views.Basic.class)
+    private User compradorConversa;
 
     @ManyToOne(optional = false)
     @JsonView(Views.Basic.class)
@@ -42,7 +42,7 @@ public class Conversacio implements Serializable
     @JsonView(Views.Basic.class)
     private Missatge ultimMissatge;
 
-    @Formula("(SELECT COUNT(missatge.id) FROM missatges missatge WHERE missatge.conversacio_id = id AND missatge.estat NOT LIKE \"%LLEGIT%\" AND missatge.receptor_id = propietari_id)")
+    @Formula("(SELECT COUNT(missatge.id) FROM missatges missatge WHERE missatge.conversacio_id = id AND missatge.estat NOT LIKE \"%LLEGIT%\" AND missatge.receptor_id = compradorConversa_id)")
     @JsonView(Views.Basic.class)
     private Boolean missatgesPerLlegir;
 
@@ -51,11 +51,11 @@ public class Conversacio implements Serializable
 
     }
 
-    public Conversacio(Producte producte, User propietari, User usuari)
+    public Conversacio(Producte producte, User comprador, User venedor)
     {
-        this.producte   = producte;
-        this.propietari = propietari;
-        this.usuari     = usuari;
+        this.producte = producte;
+        this.compradorConversa = comprador;
+        this.venedorConversa = venedor;
     }
 
     public Long getId()
@@ -63,14 +63,14 @@ public class Conversacio implements Serializable
         return id;
     }
 
-    public User getUsuari()
+    public User getVenedorConversa()
     {
-        return usuari;
+        return venedorConversa;
     }
 
-    public User getPropietari()
+    public User getCompradorConversa()
     {
-        return propietari;
+        return compradorConversa;
     }
 
     public Producte getProducte()
@@ -89,8 +89,9 @@ public class Conversacio implements Serializable
         return missatges;
     }
 
-    public Missatge getMissatge(Long id){
-
+    public Missatge getMissatge(Long id)
+    {
+        missatges.size();
         for(Missatge m: missatges){
             if(m.getId().equals(id)) return m;
         }
@@ -101,7 +102,6 @@ public class Conversacio implements Serializable
     public void addMissatge(Missatge m)
     {
         ultimMissatge = m;
-        missatges.add(m);
     }
 
     public void deleteMissatge(Missatge m) { missatges.remove(m);}
