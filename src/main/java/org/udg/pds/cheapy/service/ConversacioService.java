@@ -43,21 +43,12 @@ public class ConversacioService
 
     public Conversacio crearConversa(long userID, long prodID)
     {
-        User propietariConv = em.find(User.class, userID);
+        User comprador = em.find(User.class, userID);
         Producte p = em.find(Producte.class, prodID);
-        User propietariProd = p.getVenedor();
+        User venedor = p.getVenedor();
 
-        Conversacio c1 = new Conversacio(p, propietariConv, propietariProd); // creem la conversació
-        Conversacio c2 = new Conversacio(p, propietariProd, propietariConv);
-
+        Conversacio c1 = new Conversacio(p, comprador, venedor); // creem la conversació
         em.persist(c1);
-        em.persist(c2);
-
-        propietariConv.addConversacioComComprador(c1);
-        propietariProd.addConversacioComVenedor(c2);
-
-        em.merge(propietariProd);
-        em.merge(propietariConv);
 
         return c1;
     }
@@ -85,7 +76,7 @@ public class ConversacioService
     {
         try
         {
-            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatges m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC", Missatge.class);
+            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatges m WHERE m.conversacio.id = :idConversa ORDER BY m.dataEnviament DESC, m.id DESC", Missatge.class);
             typedQuery.setFirstResult(offset);
             typedQuery.setMaxResults(limit);
             typedQuery.setParameter("idConversa", idConversa);
@@ -115,27 +106,15 @@ public class ConversacioService
                 .getSingleResult();
     }
 
-    private Conversacio conversaSimetrica(Conversacio c)
+    public Missatge enviarMissatge(Long convId, Long emisorID, ConversacioRESTService.R_Missatge missatge) throws Exception
     {
-        return em.createQuery("SELECT conversacio FROM conversacions conversacio WHERE conversacio.venedorConversa.id = :usuari AND conversacio.producte.id = :producte", Conversacio.class)
-                .setParameter("usuari", c.getUsuari().getId())
-                .setParameter("producte", c.getProducte().getId())
-                .getSingleResult();
-    }
+        Conversacio conv = get(convId);
+        User emisor = em.find(User.class, emisorID);
+        User receptor = (conv.getVenedorConversa().getId().equals(emisorID)) ? conv.getCompradorConversa() : conv.getVenedorConversa();
 
-    public Missatge enviarMissatge(Long id, ConversacioRESTService.R_Missatge missatge) throws Exception {
-        Conversacio convEmisor = get(id);
-        User emisor = convEmisor.getPropietari();
-        User receptor = convEmisor.getUsuari();
-
-        Missatge missEmisor = new Missatge(convEmisor, emisor, receptor, missatge.text);
+        Missatge missEmisor = new Missatge(conv, emisor, receptor, missatge.text);
         em.persist(missEmisor);
-        convEmisor.addMissatge(missEmisor);
-
-        Conversacio convReceptor = conversaSimetrica(convEmisor);
-        Missatge missReceptor = missEmisor.clone(convReceptor);
-        em.persist(missReceptor);
-        convReceptor.addMissatge(missReceptor);
+        conv.addMissatge(missEmisor);
 
         // enviem la notificació client firebase
         //FcmClient clientFirebase = global.getFirebaseClient();
@@ -145,16 +124,15 @@ public class ConversacioService
         return missEmisor;
     }
 
-    public Missatge enviarMissatgeAutomaticament(Conversacio c, String missatge){
+    public Missatge enviarMissatgeAutomaticament(Conversacio c, Long emisorID, String missatge)
+    {
+        User emisor = em.find(User.class, emisorID);
+        User receptor = (c.getVenedorConversa().getId().equals(emisorID)) ? c.getCompradorConversa() : c.getVenedorConversa();
+        Missatge missatgeConv = new Missatge(c, emisor, receptor, missatge);
+        em.persist(missatgeConv);
+        c.addMissatge(missatgeConv);
 
-        Missatge missEmisor = new Missatge(c, c.getPropietari(), c.getUsuari(), missatge);
-        em.persist(missEmisor);
-
-        //Conversacio convReceptor = conversaSimetrica(c);
-        Missatge missReceptor = missEmisor.clone(c);
-        em.persist(missReceptor);
-
-        return missEmisor;
+        return missatgeConv;
     }
 
     public Conversacio llegirMissatges(Long id, Long userID)
@@ -164,19 +142,35 @@ public class ConversacioService
                 .setParameter("receptor", userID)
                 .executeUpdate();
 
-        Conversacio c = conversaSimetrica(get(id));
-
-        em.createQuery("UPDATE missatges missatge SET missatge.estat = 'LLEGIT' WHERE missatge.conversacio.id = :conversa AND missatge.emisor.id = :emisor")
-                .setParameter("conversa", c.getId())
-                .setParameter("emisor", c.getPropietari().getId())
-                .executeUpdate();
-
         return get(id);
     }
 
-    public void esborrarMissatgeConversa(Long idConv, Long idMiss)
+    public void esborrarMissatgeConversa(Long idMiss)
     {
         Missatge m = em.find(Missatge.class, idMiss);
+
+        Conversacio c = get(m.getConversacio().getId());
+
+        if (c.getUltimMissatge().getId().equals(m.getId())) {
+            // select * from missatges where conversacio_id = 1 and id != 2 order by id DESC limit 1;
+
+            TypedQuery<Missatge> typedQuery = em.createQuery("SELECT m FROM missatges m WHERE m.conversacio.id = :conversacio AND m.id <> :missatge ORDER BY m.id DESC", Missatge.class);
+            typedQuery.setMaxResults(1);
+            typedQuery.setParameter("missatge", m.getId());
+            typedQuery.setParameter("conversacio", c.getId());
+
+            Missatge ultim = typedQuery.getSingleResult();
+            c.addMissatge(ultim);
+
+            em.persist(c);
+        }
+
         em.remove(m);
+        em.persist(c);
+    }
+
+    public Missatge getMissatge(Long idMiss)
+    {
+        return em.find(Missatge.class, idMiss);
     }
 }

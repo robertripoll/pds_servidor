@@ -23,7 +23,7 @@ public class Conversacio implements Serializable
     private User venedorConversa;
 
     @ManyToOne(optional = false)
-    @JsonIgnore
+    @JsonView(Views.Basic.class)
     private User compradorConversa;
 
     @ManyToOne(optional = false)
@@ -51,11 +51,11 @@ public class Conversacio implements Serializable
 
     }
 
-    public Conversacio(Producte producte, User propietari, User usuari)
+    public Conversacio(Producte producte, User comprador, User venedor)
     {
-        this.producte   = producte;
-        this.compradorConversa = propietari;
-        this.venedorConversa = usuari;
+        this.producte = producte;
+        this.compradorConversa = comprador;
+        this.venedorConversa = venedor;
     }
 
     public Long getId()
@@ -63,12 +63,12 @@ public class Conversacio implements Serializable
         return id;
     }
 
-    public User getUsuari()
+    public User getVenedorConversa()
     {
         return venedorConversa;
     }
 
-    public User getPropietari()
+    public User getCompradorConversa()
     {
         return compradorConversa;
     }
@@ -89,8 +89,9 @@ public class Conversacio implements Serializable
         return missatges;
     }
 
-    public Missatge getMissatge(Long id){
-
+    public Missatge getMissatge(Long id)
+    {
+        missatges.size();
         for(Missatge m: missatges){
             if(m.getId().equals(id)) return m;
         }
@@ -101,7 +102,6 @@ public class Conversacio implements Serializable
     public void addMissatge(Missatge m)
     {
         ultimMissatge = m;
-        missatges.add(m);
     }
 
     public void deleteMissatge(Missatge m) { missatges.remove(m);}

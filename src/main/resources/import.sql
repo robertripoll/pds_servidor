@@ -51,13 +51,13 @@ CREATE FUNCTION distancia
 -- INSERT INTO productes (dataPublicacio, intercanviAcceptat, nom, numVisites, preu, preuNegociable, reservat, categoria_id, venedor_id) VALUES (STR_TO_DATE('15/04/2018', '%d/%m/%Y'), FALSE, 'Deportaciones', 0, 1650.00, FALSE, FALSE, 11, 3);
 
 -- Converses
---INSERT INTO conversacions (producte_id, propietari_id, usuari_id) VALUES (1, 1, 2);
---INSERT INTO conversacions (producte_id, propietari_id, usuari_id) VALUES (1, 2, 1);
+-- INSERT INTO conversacions (producte_id, propietari_id, usuari_id) VALUES (1, 1, 2);
+-- INSERT INTO conversacions (producte_id, propietari_id, usuari_id) VALUES (1, 2, 1);
 
 -- Missatges
---INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Tinc ganes de muñeca hinchable", 1, 1, 2);
---INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Tinc ganes de muñeca hinchable", 2, 1, 2);
---INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Gas al matalas", 1, 1, 1);
---INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Gas al matalas", 2, 1, 2);
+-- INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Tinc ganes de muñeca hinchable", 1, 1, 2);
+-- INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Tinc ganes de muñeca hinchable", 2, 1, 2);
+-- INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Gas al matalas", 1, 1, 1);
+-- INSERT INTO missatges (estat, missatge, conversacio_id, emisor_id, receptor_id) VALUES ("ENVIAT", "Gas al matalas", 2, 1, 2);
 
 SET foreign_key_checks = 1;

@@ -138,8 +138,8 @@ public class Global
 
         // Creació de Missatges de mostra
 
-        conversacioService.enviarMissatgeAutomaticament(conv1, "Tinc ganes de muñeca hinchable");
-        conversacioService.enviarMissatgeAutomaticament(conv1, "Gas al matalas");
+        conversacioService.enviarMissatgeAutomaticament(conv1, u1.getId(), "Tinc ganes de muñeca hinchable");
+        conversacioService.enviarMissatgeAutomaticament(conv1, u2.getId(), "Gas al matalas");
     }
 
     public MinioClient getMinioClient()
