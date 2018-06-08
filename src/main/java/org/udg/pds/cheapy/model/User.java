@@ -97,7 +97,7 @@ public class User implements Serializable
     @JsonView(Views.Summary.class)
     private Ubicacio ubicacio;
 
-    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonView(Views.Basic.class)
     private Imatge imatge;
 
