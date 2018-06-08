@@ -1,6 +1,5 @@
 package org.udg.pds.cheapy.rest;
 
-import org.udg.pds.cheapy.model.User;
 import org.udg.pds.cheapy.util.ToJSON;
 
 import javax.inject.Inject;
@@ -102,6 +101,10 @@ public class RESTService
     public static class ID
     {
         public Long id;
+
+        public ID(){
+            id = null;
+        }
 
         public ID(Long id)
         {
