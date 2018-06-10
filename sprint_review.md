@@ -127,6 +127,11 @@
 
 # Sprint 5
 ## Luis Alejandro Leon Corcuera
+* [Esborrar Missatges ANDROID](http://94.130.183.121:8080/browse/PDS3-125) 34
+* [Esborrar Conversa ANDROID](http://94.130.183.121:8080/browse/PDS3-126) 34
+* [Rebre missatges API FirebaseCloudMessaging ANDROID](http://94.130.183.121:8080/browse/PDS3-147) 55
+* [Fusionar Server + Android](http://94.130.183.121:8080/browse/PDS3-148) 55
+* [Ajudar a fer la crida postImage(@Part("description")... ANDROID](http://94.130.183.121:8080/browse/PDS3-149) 21
 
 ## Alex Segura Soler
 
