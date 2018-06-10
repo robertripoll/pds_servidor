@@ -134,6 +134,10 @@
 * [Ajudar a fer la crida postImage(@Part("description")... ANDROID](http://94.130.183.121:8080/browse/PDS3-149) 34
 
 ## Alex Segura Soler
+* [Obtenir informació Producte per Editar](http://94.130.183.121:8080/browse/PDS3-19) 21
+* [Mostrar informació Producte per Pantalla](http://94.130.183.121:8080/browse/PDS3-20) 13
+* [Mostrar Producte per Editar per Pantalla](http://94.130.183.121:8080/browse/PDS3-115) 34
+* [Gestionar la part legal](http://94.130.183.121:8080/browse/PDS3-25) 55
 
 ## Robert Ripoll López
 * [Implementar API Minio](http://94.130.183.121:8080/browse/PDS3-136) 8
