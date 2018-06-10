@@ -47,11 +47,11 @@ public class ProducteService
         switch (operator)
         {
             case "lt":
-                predicate += "< " + value;
+                predicate += "<= " + value;
                 break;
 
             case "gt":
-                predicate += "> " + value;
+                predicate += ">= " + value;
                 break;
 
             case "eq":
@@ -131,7 +131,7 @@ public class ProducteService
                     break;
 
                 case "nom":
-                    predicates.add("producte.nom LIKE '" + filterQuery[0] + "'");
+                    predicates.add("producte.nom LIKE '%" + filterQuery[0] + "%'");
                     break;
 
                 case "preu":
