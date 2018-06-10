@@ -136,6 +136,9 @@
 ## Alex Segura Soler
 
 ## Robert Ripoll López
+* [Implementar API Minio](http://94.130.183.121:8080/browse/PDS3-136) 8
+* [Crear REST Service Minio](http://94.130.183.121:8080/browse/PDS3-137) 5
+* [Afegir imatges a les entitats](http://94.130.183.121:8080/browse/PDS3-138) 13
 
 ## Daniel Re Lartigue
 * [Creació automàtica de Missatges aleatoris](http://94.130.183.121:8080/browse/PDS3-144) 13
@@ -146,9 +149,9 @@
 
 ## Sergi Boadas Vilagran
 * [MostrarUbicació del Usuari](http://94.130.183.121:8080/browse/PDS3-124) 55
-* [Refactor de les classes de perfil i enllaç de les llistes de converses del perfil amb la conversa corresponent](http://94.130.183.121:8080/browse/PDS3-143) 21
-imagtes(falta mirarho amb en luis)
-* [Arreglar menu de navegacio del perfil](http://94.130.183.121:8080/browse/PDS3-134) 21
+* [Refactor de les classes de perfil i enllaç de les llistes de converses del perfil amb la conversa corresponent](http://94.130.183.121:8080/browse/PDS3-143) 34
+* [Arreglar menu de navegacio del perfil](http://94.130.183.121:8080/browse/PDS3-134) 34
 * [Creació d'una splash screen](http://94.130.183.121:8080/browse/PDS3-146) 55
+* [Crida postImage(fet juntament amb en Luis) android + picasso d'imatges de perfil](http://94.130.183.121:8080/browse/PDS3-151) 34
 
 ## Joaquim Pascual Solà
