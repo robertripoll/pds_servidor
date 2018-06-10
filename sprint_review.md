@@ -145,10 +145,6 @@
 * [Backend: correcció d'entitats](http://94.130.183.121:8080/browse/PDS3-142) 21
 
 ## Sergi Boadas Vilagran
-* [MostrarUbicació del Usuari](http://94.130.183.121:8080/browse/PDS3-124) 55
-* [Refactor de les classes de perfil i enllaç de les llistes de converses del perfil amb la conversa corresponent](http://94.130.183.121:8080/browse/PDS3-143) 21
-imagtes(falta mirarho amb en luis)
-* [Arreglar menu de navegacio del perfil](http://94.130.183.121:8080/browse/PDS3-134) 21
-* [Creació d'una splash screen](http://94.130.183.121:8080/browse/PDS3-146) 55
+
 
 ## Joaquim Pascual Solà
