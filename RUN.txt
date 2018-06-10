@@ -1,0 +1,18 @@
+/***** USUARIS CREATS PER DEFECTE EN LA NOSTRA APLICACIÓ *****/
+
+· En la nostra aplicació per poder fer login s'ha de fer amb el correu de l'usuari i amb la contasenya per tant en comptes de posar-te l'username et posem el correu
+
+Usuari 1 -> correu: "seatleon84@zmail.com" password: "tetejohnny"
+Usuari 2 -> correu: "escobar@colombia.com" password: "narco33"
+Usuari 3 -> correu: "admin@whitehouse.gov" password: "bigwall50"
+
+/***** PARAMETRES DEL JAR UTILITZATS *****/
+
+· Com a parametres del jar en tenim per tal de configurar el minio client que són els següents:
+
+-Dswarm.project.minio.url="http://94.130.183.121:9000" 
+-Dswarm.project.minio.access-key="VE0Q7IGCJL9H3VHL5W5I"
+-Dswarm.project.minio.secret-key="kil04NQpkBycI0tg2JwPqGTnEJUljR/XPZWXUFGA"
+-Dswarm.project.minio.bucket=pds3
+
+Com podem veure els següents parametres és composen de -nomParametres=valor
