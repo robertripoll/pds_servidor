@@ -136,6 +136,9 @@
 ## Alex Segura Soler
 
 ## Robert Ripoll López
+* [Implementar API Minio](http://94.130.183.121:8080/browse/PDS3-136) 8
+* [Crear REST Service Minio](http://94.130.183.121:8080/browse/PDS3-137) 5
+* [Afegir imatges a les entitats](http://94.130.183.121:8080/browse/PDS3-138) 13
 
 ## Daniel Re Lartigue
 * [Creació automàtica de Missatges aleatoris](http://94.130.183.121:8080/browse/PDS3-144) 13
