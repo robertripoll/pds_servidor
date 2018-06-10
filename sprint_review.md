@@ -73,7 +73,7 @@
 * [Crear entitat Missatge](http://94.130.183.121:8080/browse/PDS3-103) 21
 * [Crear entitat Conversació](http://94.130.183.121:8080/browse/PDS3-97) 21
 
-## Daniel Re Latigue
+## Daniel Re Lartigue
 * [Fer log out](http://94.130.183.121:8080/browse/PDS3-80) 13
 * [Creació automàtica d'Usuaris aleatoris](http://94.130.183.121:8080/browse/PDS3-91) 13
 * [Veure converses de l'usuari amb sessió iniciada](http://94.130.183.121:8080/browse/PDS3-94) 13
@@ -112,7 +112,7 @@
 * [Backend: esborrar Valoració](http://94.130.183.121:8080/browse/PDS3-127) 13
 * [Marcar tots els missatges com a llegits](http://94.130.183.121:8080/browse/PDS3-131) 13
 
-## Daniel Re Latigue
+## Daniel Re Lartigue
 * [Crear una conversa en relació a un Producte](http://94.130.183.121:8080/browse/PDS3-95) 34
 * [Esborrar un missatge](http://94.130.183.121:8080/browse/PDS3-102) 13
 * [Esborrar una conversa](http://94.130.183.121:8080/browse/PDS3-96) 13
@@ -124,3 +124,21 @@
 ## Joaquim Pascual Solà
 * [Refactor Publicar Anunci](http://94.130.183.121:8080/browse/PDS3-132) 5
 * [Modificar Vista Llista Productes i Detall Producte](http://94.130.183.121:8080/browse/PDS3-133) 89
+
+# Sprint 5
+## Luis Alejandro Leon Corcuera
+
+## Alex Segura Soler
+
+## Robert Ripoll López
+
+## Daniel Re Lartigue
+* [Creació automàtica de Missatges aleatoris](http://94.130.183.121:8080/browse/PDS3-144) 13
+* [Creació automàtica de Converses aleatories](http://94.130.183.121:8080/browse/PDS3-145) 13
+* [Implementar API Firebase Cloud Messaging](http://94.130.183.121:8080/browse/PDS3-140) 21
+* [Fer ús de la API](http://94.130.183.121:8080/browse/PDS3-141) 21
+* [Backend: correcció d'entitats](http://94.130.183.121:8080/browse/PDS3-142) 21
+
+## Sergi Boadas Vilagran
+
+## Joaquim Pascual Solà
