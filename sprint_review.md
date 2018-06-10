@@ -159,3 +159,7 @@
 * [Crida postImage(fet juntament amb en Luis) android + picasso d'imatges de perfil](http://94.130.183.121:8080/browse/PDS3-151) 34
 
 ## Joaquim Pascual Solà
+* [Filtrar cerca Llista Productes](http://94.130.183.121:8080/browse/PDS3-75) 89
+* [Editar Producte: Preseleccionar categoria i preu negociable / intercanvi](http://94.130.183.121:8080/browse/PDS3-153) 34
+* [Arreglar POST publicar anunci](http://94.130.183.121:8080/browse/PDS3-150) 21
+* [Arreglar Visibilitat botons Missatge i Editar Producte](http://94.130.183.121:8080/browse/PDS3-152) 21
